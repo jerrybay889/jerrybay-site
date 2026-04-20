@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>배제협 | AI 교육·사업기획·정부지원 컨설턴트</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Noto+Sans+KR:wght@300;400;500;700;900&amp;family=Space+Grotesk:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#131318",
+                      "on-tertiary-fixed-variant": "#703700",
+                      "on-background": "#e4e1e9",
+                      "on-secondary-fixed": "#001f26",
+                      "inverse-on-surface": "#303036",
+                      "on-tertiary-container": "#452000",
+                      "tertiary-fixed-dim": "#ffb783",
+                      "tertiary": "#ffb783",
+                      "surface-container-lowest": "#0e0e13",
+                      "on-primary": "#1000a9",
+                      "surface-variant": "#35343a",
+                      "surface-container-highest": "#35343a",
+                      "on-tertiary": "#4f2500",
+                      "secondary-container": "#03b5d3",
+                      "surface-tint": "#c0c1ff",
+                      "surface-dim": "#131318",
+                      "error": "#ffb4ab",
+                      "primary": "#c0c1ff",
+                      "surface-container": "#1f1f25",
+                      "on-secondary-container": "#00424e",
+                      "on-tertiary-fixed": "#301400",
+                      "tertiary-container": "#d97721",
+                      "outline": "#908fa0",
+                      "tertiary-fixed": "#ffdcc5",
+                      "surface-bright": "#39383e",
+                      "secondary": "#4cd7f6",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-primary-fixed": "#07006c",
+                      "on-surface": "#e4e1e9",
+                      "primary-fixed": "#e1e0ff",
+                      "background": "#131318",
+                      "primary-container": "#8083ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "on-error": "#690005",
+                      "inverse-surface": "#e4e1e9",
+                      "on-secondary": "#003640",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "inverse-primary": "#494bd6",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "surface-container-high": "#2a292f",
+                      "on-primary-container": "#0d0096",
+                      "surface-container-low": "#1b1b20",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "secondary-fixed": "#acedff",
+                      "outline-variant": "#464554"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk", "Noto Sans KR"],
+                      "body": ["Inter", "Noto Sans KR"],
+                      "label": ["Inter", "Noto Sans KR"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { background-color: #131318; color: #e4e1e9; font-family: 'Inter', 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-nav { background: rgba(19, 19, 24, 0.7); backdrop-filter: blur(20px); }
+        .bento-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .bento-card:hover { transform: translateY(-4px); background-color: #2a292f; }
+        .text-gradient { background: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ghost-border { border: 1px solid rgba(70, 69, 84, 0.2); }
+        .active-nav-link { color: #6366F1; border-bottom: 2px solid #6366F1; padding-bottom: 4px; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-primary/30 selection:text-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav border-none shadow-2xl shadow-indigo-500/5">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold tracking-tighter text-[#E4E1E9] font-headline">배제협 · JerryBay</div>
+<div class="hidden md:flex gap-8 font-['Space_Grotesk'] tracking-tight text-sm uppercase">
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#hero">소개</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#career">경력</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#expertise">역량</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#projects">프로젝트</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#lectures">강의</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#press">언론</a>
+<a class="text-[#C7C4D7] hover:text-[#06B6D4] transition-colors duration-300" href="#contact">문의</a>
+</div>
+<button class="bg-gradient-to-r from-[#6366F1] to-[#06B6D4] text-white px-5 py-2 rounded-lg text-sm font-bold scale-95 active:scale-90 transition-transform">
+                Consultation
+            </button>
+</div>
+</nav>
+<main class="flex-grow pt-24">
+<!-- Hero Section -->
+<section class="px-8 py-20 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16" id="hero">
+<!-- Left: Profile Image -->
+<div class="relative flex-shrink-0">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+<img alt="Profile" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl relative z-10 ghost-border grayscale hover:grayscale-0 transition-all duration-500 shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVLX1X87EeFVOzXTCr5u_qRrf6tdOAxkSvwJlxnmu6j83bToRDzQXsf7m4OYqxvopOwmIRUDk6IvOdG90xchbpcKzV9rFyEUPVLU9mjbWtsDZErmK5hDCi_FIF2xJCCR45jSt70wVFtyZ7sP7IDVppHIoPxYnjgI53bGa8FHbXhH5QNzTAzD4lYHzOQdNNcqELsC0A9omaNBqZQT3PgKMYEA7XOzbddrgDYjFokqnHQEoWSRapeo_yBEyR7rdw2CDQb-nvp4LZL1E"/>
+</div>
+<!-- Right: Text Content -->
+<div class="flex-1 flex flex-col">
+<p class="text-sm font-medium mb-2 tracking-tight text-[#4F8EF7] font-['Noto_Sans_KR']">
+            IT 전략 · AI 교육 · 정부지원 컨설턴트
+        </p>
+<h1 class="text-5xl md:text-7xl font-bold font-headline mb-8 tracking-tighter text-[#F8F8FF] flex items-baseline gap-4 flex-wrap">
+<span>배제협</span>
+<span class="text-4xl md:text-5xl font-medium text-on-surface-variant/70">· JerryBay</span>
+</h1>
+<div class="text-base md:text-lg text-on-surface-variant/90 mb-10 font-body leading-[1.8] font-['Noto_Sans_KR'] space-y-4">
+<p>
+                1999년부터 IT 사업 현장에 있었습니다. 인터넷 창업기, 모바일 전환기, SNS 마케팅 시대, Web3 붐, 그리고 지금의 생성형 AI 시대까지 — 각 국면마다 직접 기획하고 실행했습니다.
+            </p>
+<p>
+                현재는 기업·기관 대상 AI 교육 설계 및 강의, IT·AI 사업 기획 컨설팅, 정부지원사업 PM을 중심으로 활동합니다.
+            </p>
+</div>
+<div class="flex flex-wrap gap-4 text-xs text-on-surface-variant/60 font-body uppercase tracking-wider">
+<span class="">#AI교육</span>
+<span class="">#사업기획</span>
+<span class="">#정부지원사업</span>
+<span class="">#No-CodeAI</span>
+<span class="">#MVP설계</span>
+<span class="">#워크플로우자동화</span>
+</div>
+</div>
+</section>
+<!-- Career & Contact Section -->
+<section class="bg-surface-container-low py-24" id="career">
+<div class="max-w-7xl mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+<!-- Left Column: Contact & Education -->
+<div class="md:col-span-4 space-y-12">
+<div class="space-y-6">
+<h2 class="text-2xl font-bold font-headline tracking-tight border-b border-primary/20 pb-4">연락처</h2>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">call</span>
+<span>전화: 010-388-9581</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">mail</span>
+<span>이메일: <a class="text-primary hover:underline" href="mailto:jerrybay889@gmail.com">jerrybay889@gmail.com</a></span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">chat_bubble</span>
+<span>카카오톡: jerrybay</span>
+</li>
+</ul>
+</div>
+<div class="space-y-6">
+<h2 class="text-2xl font-bold font-headline tracking-tight border-b border-primary/20 pb-4">학력</h2>
+<div class="text-sm text-on-surface-variant leading-relaxed">
+<p>2003년 2월 | 한국항공대학교 경영학과 졸업 (학사)</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Career -->
+<div class="md:col-span-8 space-y-8">
+<h2 class="text-2xl font-bold font-headline tracking-tight border-b border-primary/20 pb-4">경력</h2>
+<div class="space-y-10">
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-1 before:h-full before:bg-gradient-to-b before:from-primary before:to-transparent">
+<p class="text-sm mb-1"><strong>2026.01 ~ 현재</strong></p>
+<h4 class="text-lg font-bold text-on-surface mb-2">㈜글로보더 | 대표이사</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">AI 사업 기획·컨설팅 총괄. 기업 AI 전환 전략 수립 및 정부지원사업 연계</p>
+</div>
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-[1px] before:h-full before:bg-outline-variant">
+<p class="text-sm mb-1"><strong>2024.10 ~ 2025.12</strong></p>
+<h4 class="text-lg font-bold text-on-surface mb-2">재미와의미 | 대표</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">생성형 AI 기반 서비스 기획·운영 총괄. AI 커리큘럼 설계 및 교육사업 PM</p>
+</div>
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-[1px] before:h-full before:bg-outline-variant">
+<p class="text-sm mb-1"><strong>2022.04 ~ 2024.09</strong></p>
+<h4 class="text-lg font-bold text-on-surface mb-2">재미와의미 | 대표</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Web3·NFT·AI 융합 사업 그룹 총괄. AI 이미지 제너레이터 외주 프로젝트 다수 수행 (현대차·르노코리아 등)</p>
+</div>
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-[1px] before:h-full before:bg-outline-variant">
+<p class="text-sm mb-1"><strong>2017.10 ~ 2022.03</strong></p>
+<h4 class="text-lg font-bold text-on-surface mb-2">재미와의미 | 대표</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">중소기업·스타트업 온라인 마케팅 컨설팅 사업 기획·운영</p>
+</div>
+<div class="relative pl-6">
+<p class="text-sm mb-1 text-outline"><strong>이전 주요 경력</strong></p>
+<p class="text-sm text-on-surface-variant leading-relaxed">1999년 온라인 쇼핑몰 창업 후, (주)우리기술 자회사 'morning365', (주)지란지교소프트 이커머스 사업부를 거쳐 온라인 커머스 및 마케팅 회사 창업·운영.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Expertise Section -->
+<section class="py-32 max-w-7xl mx-auto px-8" id="expertise">
+<h2 class="text-4xl font-bold font-headline mb-16 tracking-tight text-center">역량</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Column 1 -->
+<div class="space-y-10">
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-primary">
+<span>🎓</span> AI 교육 설계 · 강의
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            기업·기관 맞춤형 AI 커리큘럼 설계 및 강의 진행. 현대차, 르노코리아, 대한상공회의소, 명지전문대, 패션산업협회 등 수행. 생성형 AI 실무 활용 / AI 크리에이터 양성 / 임직원 AI 역량강화 과정
+                        </p>
+</div>
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-primary">
+<span>🧩</span> IT · AI 사업 기획
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            문제 정의 → 서비스 기획 → MVP 설계 → 수익모델 → 실행 로드맵 전 과정. 스타트업 및 중소기업 IT 전략 수립, 신사업 기획 컨설팅
+                        </p>
+</div>
+</div>
+<!-- Column 2 -->
+<div class="space-y-10">
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-secondary">
+<span>🏛️</span> 정부지원사업 PM
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            중기부, 고용부, 정통부, 해수부 등 8개 부처 사업 수행 이력. 사업계획서 작성, 컨소시엄 구성, 프로젝트 총괄 관리
+                        </p>
+</div>
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-secondary">
+<span>⚙️</span> No-Code AI 개발
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            Claude, Gemini, Perplexity API 기반 AI 앱 기획 및 직접 구축. 코딩 없이 기능하는 AI 서비스 프로토타입 → MVP 전환 경험 다수
+                        </p>
+</div>
+</div>
+<!-- Column 3 -->
+<div class="space-y-10">
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-tertiary">
+<span>🔄</span> AI 워크플로우 자동화
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            n8n, Notion, Make 기반 업무 자동화 시스템 설계. 반복 업무 제거 및 AI 에이전트 연동 워크플로우 구축
+                        </p>
+</div>
+<div class="space-y-4">
+<h3 class="text-lg font-bold flex items-center gap-2 text-tertiary">
+<span>📣</span> 디지털 마케팅 · 콘텐츠 전략
+                        </h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            2009년~2021년 온라인 마케팅 컨설팅 사업 직접 운영. SEO, 퍼포먼스 마케팅, 콘텐츠 기획 전반
+                        </p>
+</div>
+</div>
+<div class="pt-12 border-t border-outline-variant/30 mt-16 col-span-full">
+<h4 class="text-xs font-bold uppercase tracking-widest text-outline mb-6 text-center">주요 도구 · 기술 스택</h4>
+<div class="flex flex-wrap gap-4 w-full justify-center">
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">LLM 프롬프트 엔지니어링</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">No-Code 툴 개발</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">Supabase · Vercel</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">정부 사업계획서 작성</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">정부 R&amp;D 프로젝트 관리</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">n8n · Make 자동화</span>
+<span class="px-[18px] py-[10px] rounded-full bg-surface-container-high text-on-surface-variant text-sm border border-outline-variant/30">Notion 프로젝트 관리</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects Section -->
+<section class="bg-surface py-24" id="projects">
+<div class="max-w-7xl mx-auto px-8">
+<h2 class="text-4xl font-bold font-headline mb-16 tracking-tight">프로젝트 (최근 3년)</h2>
+<!-- 1. 기업 의뢰 프로젝트 -->
+<div class="mb-20">
+<h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[1px] bg-primary"></span>
+<span class="text-primary/90">기업 의뢰 프로젝트</span>
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Item 1 -->
+<div class="bg-surface-container-high rounded-2xl overflow-hidden ghost-border flex flex-col h-full hover:border-primary/30 transition-all group">
+<div class="p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded uppercase tracking-wider">2024</span>
+<span class="text-xs text-on-surface-variant">Client: 현대자동차</span>
+</div>
+<h4 class="text-xl font-bold mb-3 group-hover:text-primary transition-colors">캐스퍼 AI 그리기 앱</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-8 flex-grow">2024 모터쇼 캐스퍼 일렉트릭 출시 기념 AI 이미지 제너레이터</p>
+<a class="inline-flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2.5 rounded-lg text-sm font-bold transition-colors w-full" href="https://ditoday.com/project/%EC%BA%90%EC%8A%A4%ED%8D%BC-%EC%9D%BC%EB%A0%89%ED%8A%B8%EB%A6%AD-ai-%EA%B7%B8%EB%A6%AC%EA%B8%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8/" target="_blank">
+                        자세히 보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-high rounded-2xl overflow-hidden ghost-border flex flex-col h-full hover:border-primary/30 transition-all group">
+<div class="p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded uppercase tracking-wider">2024</span>
+<span class="text-xs text-on-surface-variant">Client: 르노코리아</span>
+</div>
+<h4 class="text-xl font-bold mb-3 group-hover:text-primary transition-colors">SM6 AI 그리기 앱</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-8 flex-grow">SM6 전용 AI 이미지 제너레이터 시스템 기획·구축</p>
+<a class="inline-flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2.5 rounded-lg text-sm font-bold transition-colors w-full" href="https://www.gttkorea.com/news/articleView.html?idxno=6632" target="_blank">
+                        자세히 보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-high rounded-2xl overflow-hidden ghost-border flex flex-col h-full hover:border-primary/30 transition-all group">
+<div class="p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded uppercase tracking-wider">2024</span>
+<span class="text-xs text-on-surface-variant">Client: 패션산업협회</span>
+</div>
+<h4 class="text-xl font-bold mb-3 group-hover:text-primary transition-colors">패션 AI 제너레이터</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-8 flex-grow">패션 디자인 특화 AI 이미지 생성 시스템 기획·구축</p>
+<a class="inline-flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2.5 rounded-lg text-sm font-bold transition-colors w-full" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202308310049" target="_blank">
+                        자세히 보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. 자체 개발 서비스 -->
+<div>
+<h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[1px] bg-secondary"></span>
+<span class="text-secondary/90">자체 개발 서비스</span>
+</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Item 1 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-secondary border border-white/5">IN</div>
+<span class="px-2 py-1 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded uppercase tracking-wider">개발 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">INVIT</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">투자 성향·심리 기반 AI 투자 코칭 앱. Claude API 연동</p>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-secondary border border-white/5">QT</div>
+<span class="px-2 py-1 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded uppercase tracking-wider">개발 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">OMYQT</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">개인 맞춤형 AI 큐티(묵상) 서비스. 매일 AI가 콘텐츠 생성</p>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-indigo-400/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-indigo-400 border border-white/5">AQ</div>
+<span class="px-2 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] font-bold rounded uppercase tracking-wider">기획·개발 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">수산양식 AI</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">수질 모니터링·질병 탐지·사료 최적화 AI 에이전트 (새우·광어·뱀장어 특화)</p>
+</div>
+<!-- Item 4 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-green-400/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-green-400 border border-white/5">NI</div>
+<span class="px-2 py-1 bg-green-500/10 text-green-400 text-[10px] font-bold rounded uppercase tracking-wider">운영 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">NeoInvisible</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">AI 기반 내부 프로젝트 관리 자동화 시스템</p>
+</div>
+<!-- Item 5 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-slate-400/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-slate-400 border border-white/5">HD</div>
+<span class="px-2 py-1 bg-slate-500/10 text-slate-400 text-[10px] font-bold rounded uppercase tracking-wider">기획 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">한식당 (Hansikdang)</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">글로벌 한식당 네트워크 앱</p>
+</div>
+<!-- Item 6 -->
+<div class="bg-surface-container-low p-6 rounded-2xl ghost-border hover:border-slate-400/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center font-bold text-slate-400 border border-white/5">MD</div>
+<span class="px-2 py-1 bg-slate-500/10 text-slate-400 text-[10px] font-bold rounded uppercase tracking-wider">기획 중</span>
+</div>
+<h4 class="font-bold text-lg mb-2">마이셀프데이터</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">개인 데이터 이동·전송 중개 플랫폼</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Lectures Table -->
+<section class="py-32 max-w-7xl mx-auto px-8" id="lectures">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="text-4xl font-bold font-headline tracking-tight">강의 이력</h2>
+<p class="text-on-surface-variant mt-2 font-body">지식의 공유를 통한 성장의 가속화</p>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/30">
+<th class="py-4 font-label text-xs uppercase tracking-widest text-outline">연도</th>
+<th class="py-4 font-label text-xs uppercase tracking-widest text-outline">기관 및 과정명</th>
+<th class="py-4 font-label text-xs uppercase tracking-widest text-outline">링크</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10 font-body">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2023</td>
+<td class="py-6 font-bold text-on-surface">CEO 대상 AI 세미나 강연</td>
+<td class="py-6 text-primary"><a class="hover:underline inline-flex items-center gap-1" href="https://bit.ly/3T0gN7b" target="_blank">보기<span class="material-symbols-outlined text-[14px]">open_in_new</span></a></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2023~2024</td>
+<td class="py-6 font-bold text-on-surface">현대차·르노코리아 임직원 AI 활용 전략 강의</td>
+<td class="py-6 text-on-surface-variant">—</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2024</td>
+<td class="py-6 font-bold text-on-surface">전문대 홍보관계자 AI 교육 강의</td>
+<td class="py-6 text-primary"><a class="hover:underline inline-flex items-center gap-1" href="https://bit.ly/3TCY9Co" target="_blank">보기<span class="material-symbols-outlined text-[14px]">open_in_new</span></a></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2024</td>
+<td class="py-6 font-bold text-on-surface">대한상공회의소 AI 교육사업 전문 강사</td>
+<td class="py-6 text-primary"><a class="hover:underline inline-flex items-center gap-1" href="https://bit.ly/3HTCX8G" target="_blank">보기<span class="material-symbols-outlined text-[14px]">open_in_new</span></a></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2024</td>
+<td class="py-6 font-bold text-on-surface">패션산업협회 'AI 활용 전략' 강사</td>
+<td class="py-6 text-on-surface-variant">—</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2024</td>
+<td class="py-6 font-bold text-on-surface">고용부 청년일경험지원사업 'AI 크리에이터' 과정 PM·강사 (한국경제TV 컨소시엄)</td>
+<td class="py-6 text-on-surface-variant">—</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2025</td>
+<td class="py-6 font-bold text-on-surface">K-MOOC 'AI 콘텐츠 크리에이터 양성과정' 온라인 강사</td>
+<td class="py-6 text-primary"><a class="hover:underline inline-flex items-center gap-1" href="https://www.kmooc.kr/view/course/detail/17701" target="_blank">보기<span class="material-symbols-outlined text-[14px]">open_in_new</span></a></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 text-sm opacity-60">2025</td>
+<td class="py-6 font-bold text-on-surface">명지전문대학교 교직원 AI 직무역량 강화 강사 (하계·동계)</td>
+<td class="py-6 text-on-surface-variant">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Press Section -->
+<section class="bg-surface-container-lowest py-24" id="press">
+<div class="max-w-7xl mx-auto px-8">
+<h2 class="text-3xl font-bold font-headline mb-12 tracking-tight text-center">언론 · 인터뷰</h2>
+<div class="grid grid-cols-1 gap-x-12 gap-y-6 max-w-4xl mx-auto">
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://www.meconomynews.com/news/articleView.html?idxno=80356" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ① <strong>스타트업人 인터뷰</strong> — 메코노미뉴스
+    </span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202308310049" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ② <strong>펜타브리드 AI 이미지 제너레이터</strong> — 한국경제TV
+    </span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202306080281" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ③ <strong>마이데이터 시대 기업 보안</strong> — 한국경제TV
+    </span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://www.fi.co.kr/main/view.asp?idx=79217" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ④ <strong>패션산업 AI 강의</strong> — 패션인사이트
+    </span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://news.unn.net/news/articleView.html?idxno=561266" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ⑤ <strong>대학 AI 교육</strong> — 한국대학신문
+    </span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-high transition-all group border border-transparent hover:border-outline-variant/30 w-full" href="https://vo.la/yOZhahQ" target="_blank">
+<span class="font-body text-on-surface-variant group-hover:text-on-surface transition-colors">
+        ⑥ <strong>언론 인터뷰</strong>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">arrow_outward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Contact & Inquiry Section -->
+<section class="py-24 max-w-7xl mx-auto px-8 border-t border-outline-variant/20" id="contact">
+<h2 class="text-4xl font-bold font-headline mb-16 tracking-tight text-center">CONTACT</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
+<!-- Left Column: Personal Info -->
+<div class="space-y-8">
+<div class="pb-6 border-b border-outline-variant/20">
+<h3 class="text-2xl font-bold text-on-surface mb-1">배제협</h3>
+<p class="text-primary font-medium">㈜글로보더 대표이사</p>
+</div>
+<ul class="space-y-6 font-body text-on-surface-variant" style="line-height: 1.8;">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">call</span>
+<span>전화: 010-388-9581</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">mail</span>
+<span>이메일: <a class="text-on-surface hover:text-primary transition-colors border-b border-on-surface-variant/30 hover:border-primary" href="mailto:jerrybay889@gmail.com">jerrybay889@gmail.com</a></span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+<span>카카오톡: jerrybay</span>
+</li>
+</ul>
+</div>
+<!-- Right Column: Inquiry Types -->
+<div class="space-y-12">
+<!-- Type 1 -->
+<div class="space-y-3">
+<h4 class="text-lg font-bold text-on-surface">① AI 교육 설계 · 강의 의뢰</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">기업·기관 특강, 커리큘럼 설계, 강사 파견</p>
+</div>
+<!-- Type 2 -->
+<div class="space-y-3">
+<h4 class="text-lg font-bold text-on-surface">② IT · AI 사업기획 컨설팅</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">문제 정의, MVP 설계, 수익모델, 실행 로드맵</p>
+</div>
+<!-- Type 3 -->
+<div class="space-y-3">
+<h4 class="text-lg font-bold text-on-surface">③ 정부지원사업 컨설팅 · PM</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">사업계획서 작성, 8개 부처 수행 이력</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Minimal Footer -->
+<footer class="w-full py-8 bg-surface-container-lowest border-t border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-8 text-center">
+<p class="font-body text-xs text-on-surface-variant/60 tracking-wide">ⓒ 2026 배제협 · ㈜글로보더   All rights reserved.</p>
+</div>
+</footer>
+</body></html>

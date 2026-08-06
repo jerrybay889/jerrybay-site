@@ -1,0 +1,117 @@
+
+JERRYBAY Phase 1 — Browser QA (Chrome / CDP)
+==============================================================================
+PASS  overflow /@desktop         가로 overflow 없음 (1440 vs 1440)
+PASS  console /@desktop          console error 없음
+PASS  banner /@desktop           PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /@desktop         body font-size >= 16px (16)
+PASS  h1 /@desktop               H1 48–64px 범위 (64px)
+PASS  cta /@desktop              Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /@desktop            인터랙티브 타겟 44px 이상
+PASS  overflow /capabilities/@desktop 가로 overflow 없음 (1440 vs 1440)
+PASS  console /capabilities/@desktop console error 없음
+PASS  banner /capabilities/@desktop PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /capabilities/@desktop body font-size >= 16px (16)
+PASS  h1 /capabilities/@desktop  H1 48–64px 범위 (64px)
+PASS  cta /capabilities/@desktop Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /capabilities/@desktop 인터랙티브 타겟 44px 이상
+PASS  overflow /work/@desktop    가로 overflow 없음 (1440 vs 1440)
+PASS  console /work/@desktop     console error 없음
+PASS  banner /work/@desktop      PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /work/@desktop    body font-size >= 16px (16)
+PASS  h1 /work/@desktop          H1 48–64px 범위 (64px)
+PASS  cta /work/@desktop         Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /work/@desktop       인터랙티브 타겟 44px 이상
+PASS  overflow /collaborate/@desktop 가로 overflow 없음 (1440 vs 1440)
+PASS  console /collaborate/@desktop console error 없음
+PASS  banner /collaborate/@desktop PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /collaborate/@desktop body font-size >= 16px (16)
+PASS  h1 /collaborate/@desktop   H1 48–64px 범위 (64px)
+PASS  cta /collaborate/@desktop  Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /collaborate/@desktop 인터랙티브 타겟 44px 이상
+PASS  overflow /about/@desktop   가로 overflow 없음 (1440 vs 1440)
+PASS  console /about/@desktop    console error 없음
+PASS  banner /about/@desktop     PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /about/@desktop   body font-size >= 16px (16)
+PASS  h1 /about/@desktop         H1 48–64px 범위 (64px)
+PASS  cta /about/@desktop        Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /about/@desktop      인터랙티브 타겟 44px 이상
+PASS  overflow /contact/@desktop 가로 overflow 없음 (1440 vs 1440)
+PASS  console /contact/@desktop  console error 없음
+PASS  banner /contact/@desktop   PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /contact/@desktop body font-size >= 16px (16)
+PASS  h1 /contact/@desktop       H1 48–64px 범위 (64px)
+PASS  cta /contact/@desktop      Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"mailto:jerrybay889@gmail.com?subject=%5BJERRYBAY%5D%20%EC%A1%B0%EC%A7%81%20AI%20%EC%A0%81%EC%9A%A9%20%EC%83%81%EB%8B%B4%20%EC%9A%94%EC%B2%AD","h":53},{"text":"조직 AI 적용 상담 요청","href":"mailto:jerrybay889@gmail.com?subject=%5BJERRYBAY%5D%20%EC%A1%B0%EC%A7%81%20AI%20%EC%A0%81%EC%9A%A9%20%EC%83%81%EB%8B%B4%20%EC%9A%94%EC%B2%AD","h":53}]]
+PASS  touch /contact/@desktop    인터랙티브 타겟 44px 이상
+PASS  overflow /privacy/@desktop 가로 overflow 없음 (1440 vs 1440)
+PASS  console /privacy/@desktop  console error 없음
+PASS  banner /privacy/@desktop   PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /privacy/@desktop body font-size >= 16px (16)
+PASS  h1 /privacy/@desktop       H1 48–64px 범위 (64px)
+PASS  touch /privacy/@desktop    인터랙티브 타겟 44px 이상
+PASS  overflow /@mobile          가로 overflow 없음 (390 vs 390)
+PASS  console /@mobile           console error 없음
+PASS  banner /@mobile            PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /@mobile          body font-size >= 16px (16)
+PASS  h1 /@mobile                H1 36–44px 범위 (36px)
+PASS  cta /@mobile               Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /@mobile             인터랙티브 타겟 44px 이상
+PASS  toggle /@mobile            모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /@mobile              메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /capabilities/@mobile 가로 overflow 없음 (390 vs 390)
+PASS  console /capabilities/@mobile console error 없음
+PASS  banner /capabilities/@mobile PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /capabilities/@mobile body font-size >= 16px (16)
+PASS  h1 /capabilities/@mobile   H1 36–44px 범위 (36px)
+PASS  cta /capabilities/@mobile  Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /capabilities/@mobile 인터랙티브 타겟 44px 이상
+PASS  toggle /capabilities/@mobile 모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /capabilities/@mobile 메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /work/@mobile     가로 overflow 없음 (390 vs 390)
+PASS  console /work/@mobile      console error 없음
+PASS  banner /work/@mobile       PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /work/@mobile     body font-size >= 16px (16)
+PASS  h1 /work/@mobile           H1 36–44px 범위 (36px)
+PASS  cta /work/@mobile          Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /work/@mobile        인터랙티브 타겟 44px 이상
+PASS  toggle /work/@mobile       모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /work/@mobile         메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /collaborate/@mobile 가로 overflow 없음 (390 vs 390)
+PASS  console /collaborate/@mobile console error 없음
+PASS  banner /collaborate/@mobile PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /collaborate/@mobile body font-size >= 16px (16)
+PASS  h1 /collaborate/@mobile    H1 36–44px 범위 (36px)
+PASS  cta /collaborate/@mobile   Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53},{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /collaborate/@mobile 인터랙티브 타겟 44px 이상
+PASS  toggle /collaborate/@mobile 모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /collaborate/@mobile  메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /about/@mobile    가로 overflow 없음 (390 vs 390)
+PASS  console /about/@mobile     console error 없음
+PASS  banner /about/@mobile      PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /about/@mobile    body font-size >= 16px (16)
+PASS  h1 /about/@mobile          H1 36–44px 범위 (36px)
+PASS  cta /about/@mobile         Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"/contact/","h":53}]]
+PASS  touch /about/@mobile       인터랙티브 타겟 44px 이상
+PASS  toggle /about/@mobile      모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /about/@mobile        메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /contact/@mobile  가로 overflow 없음 (390 vs 390)
+PASS  console /contact/@mobile   console error 없음
+PASS  banner /contact/@mobile    PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /contact/@mobile  body font-size >= 16px (16)
+PASS  h1 /contact/@mobile        H1 36–44px 범위 (36px)
+PASS  cta /contact/@mobile       Primary CTA 문구·링크 정확  [[{"text":"조직 AI 적용 상담 요청","href":"mailto:jerrybay889@gmail.com?subject=%5BJERRYBAY%5D%20%EC%A1%B0%EC%A7%81%20AI%20%EC%A0%81%EC%9A%A9%20%EC%83%81%EB%8B%B4%20%EC%9A%94%EC%B2%AD","h":53},{"text":"조직 AI 적용 상담 요청","href":"mailto:jerrybay889@gmail.com?subject=%5BJERRYBAY%5D%20%EC%A1%B0%EC%A7%81%20AI%20%EC%A0%81%EC%9A%A9%20%EC%83%81%EB%8B%B4%20%EC%9A%94%EC%B2%AD","h":53}]]
+PASS  touch /contact/@mobile     인터랙티브 타겟 44px 이상
+PASS  toggle /contact/@mobile    모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /contact/@mobile      메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  overflow /privacy/@mobile  가로 overflow 없음 (390 vs 390)
+PASS  console /privacy/@mobile   console error 없음
+PASS  banner /privacy/@mobile    PRIVATE PREVIEW 배너 렌더링
+PASS  bodyfont /privacy/@mobile  body font-size >= 16px (16)
+PASS  h1 /privacy/@mobile        H1 36–44px 범위 (36px)
+PASS  touch /privacy/@mobile     인터랙티브 타겟 44px 이상
+PASS  toggle /privacy/@mobile    모바일 메뉴 버튼이 화면 안에 보임
+PASS  menu /privacy/@mobile      메뉴 open → ESC close → focus 복귀  [{"ok":true,"opened":true,"closed":true,"focusReturned":true,"linkCount":6}]
+PASS  skiplink                   skip link 포커스 시 화면에 표시  [{"focused":true,"top":12,"href":"#main"}]
+==============================================================================
+111/111 browser checks passed.
+

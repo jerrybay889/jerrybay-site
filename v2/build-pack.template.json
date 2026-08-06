@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "sourceReviewedAt": "YYYY-MM-DD",
+  "ownerApproval": {
+    "content": false,
+    "claims": false,
+    "contactRoute": false,
+    "publicRelease": false
+  },
+  "site": {
+    "brand": "JERRYBAY",
+    "ownerName": "",
+    "positioning": "",
+    "supportingCopy": "",
+    "primaryCta": {
+      "label": "",
+      "href": ""
+    },
+    "metadata": {
+      "canonicalUrl": "https://www.jerrybay.kr",
+      "defaultTitle": "",
+      "defaultDescription": ""
+    }
+  },
+  "capabilities": [],
+  "stories": [],
+  "ideas": [],
+  "work": [],
+  "collaborationPaths": [],
+  "about": {
+    "narrative": "",
+    "principles": [],
+    "currentFocus": ""
+  },
+  "contact": {
+    "approvedMethod": "",
+    "href": "",
+    "privacyNotice": ""
+  },
+  "claimRegister": []
+}

@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0",
+  "project": "JERRYBAY v2 Capability-Led Website",
+  "canonicalSource": "https://app.notion.com/p/3b4eb5becb8f8110bf43f77e94572f3f",
+  "reviewedAt": "2026-08-06",
+  "refreshBeforeBuild": true,
+  "sources": [
+    {
+      "id": "3b4eb5becb8f8110bf43f77e94572f3f",
+      "title": "JERRYBAY 2.2 - Capability-Led Website Project SSOT v1.0",
+      "role": "canonical",
+      "authority": "highest",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f81cb9ce8f21abf11032a",
+      "title": "JERRYBAY Capability-Led Website - Master PRD v1.0",
+      "role": "implementation-prd",
+      "authority": "high",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f814cbbf6cbbf65580096",
+      "title": "JERRYBAY AI No-Code Harness OS - Capability-Led Commercial Loop v2.2",
+      "role": "operating-harness",
+      "authority": "high",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f81f19c33c6863218cdcd",
+      "title": "Claude Capability and Commercial Review Guide v2.2",
+      "role": "review-protocol",
+      "authority": "advisory",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f81248487ec7e6c39a18a",
+      "title": "Claude Supplemental Audit v2.0",
+      "role": "risk-audit",
+      "authority": "advisory",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f814c920dd354983c2869",
+      "title": "ChatGPT Independent Adjudication v2.1",
+      "role": "risk-decision-history",
+      "authority": "advisory",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f81ae91ceeba407191102",
+      "title": "Claude Strategic Red-Team Audit v1.0",
+      "role": "risk-history",
+      "authority": "advisory",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b4eb5becb8f800baf3ecf92742dafb7",
+      "title": "ChatGPT Sites One-Shot Website Production System v1.0",
+      "role": "build-playbook",
+      "authority": "reference",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "cb16d80fb0b94ced92adda45d064a7c9",
+      "title": "JerryBay Personal Website Build Plan v3.0",
+      "role": "legacy-site-reference",
+      "authority": "superseded",
+      "refreshBeforeBuild": false
+    },
+    {
+      "id": "3b1eb5becb8f8140a8d9d218997c28db",
+      "title": "AI PPT Expert Ebook and Pro Kit",
+      "role": "product-source",
+      "authority": "source-only",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "3b2eb5becb8f81ce93ebc980d69817ba",
+      "title": "SMB AI Team-in-a-Box Ebook and Promotion OS",
+      "role": "product-source",
+      "authority": "source-only",
+      "refreshBeforeBuild": true
+    },
+    {
+      "id": "39eeb5becb8f81a0b749f62e1132d00b",
+      "title": "SEO and GEO Content System and Notion DB Blueprint",
+      "role": "content-governance",
+      "authority": "reference",
+      "refreshBeforeBuild": true
+    }
+  ],
+  "routeContract": [
+    "/",
+    "/capabilities",
+    "/ideas-lab",
+    "/work",
+    "/collaborate",
+    "/about",
+    "/contact",
+    "/privacy"
+  ],
+  "allowedStatuses": [
+    "Proven",
+    "Built",
+    "Designed",
+    "Exploring",
+    "Paused"
+  ],
+  "protectedTopics": [
+    "client-name",
+    "client-logo",
+    "testimonial",
+    "outcome-metric",
+    "price",
+    "payment",
+    "personal-data",
+    "newsletter",
+    "analytics-id"
+  ]
+}

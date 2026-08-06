@@ -35,6 +35,21 @@ complete approved Build Pack.
 - No browser QA, runtime test, production build, deploy, publish, or external
   contact was executed.
 
+## Recovery Snapshot (2026-08-06 KST)
+
+- Repository root: `C:/Users/82103/jerrybay-site`
+- Repository remote: `origin` — `https://github.com/jerrybay889/jerrybay-site.git`
+- Branch: `audit/jerrybay-manyfast-reconciliation-v1`
+- Original reconciliation commit: `b8190dbf7e4b05d8dcda07212772ddbc09b791ad`
+- Parent: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
+- Changed files: exactly the 11 files listed above, all under
+  `docs/jerrybay-manyfast-reconciliation/`.
+- Fresh verification: `git diff --check HEAD^ HEAD`; quoted CSV validation;
+  Markdown-link and SHA-format checks; Mermaid CLI rendering of both diagrams.
+- Working tree before this recovery documentation update: clean.
+- Remote branch: `LOCAL ONLY / NOT PUSHED` (`git ls-remote --heads origin
+  audit/jerrybay-manyfast-reconciliation-v1` returned no matching head).
+
 ## Unresolved Blockers
 
 - Local copies of the seven preserved artifacts are not available for fresh

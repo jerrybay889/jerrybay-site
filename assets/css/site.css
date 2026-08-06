@@ -463,6 +463,21 @@ tbody tr:nth-child(odd) { background: var(--surface-low); }
 
 .ext::after { content: " ↗"; font-size: 0.85em; }
 
+/* --- Spacing utilities -----------------------------------------------------
+   Tailwind-style scale (1 unit = 0.25rem), kept small and only for the
+   handful of one-off top-margins between a section's intro and its grid. */
+
+.mt-4  { margin-top: 1rem; }
+.mt-5  { margin-top: 1.25rem; }
+.mt-7  { margin-top: 1.75rem; }
+.mt-8  { margin-top: 2rem; }
+.mt-9  { margin-top: 2.25rem; }
+.mt-10 { margin-top: 2.5rem; }
+.mt-11 { margin-top: 2.75rem; }
+.mt-14 { margin-top: 3.5rem; }
+
+.table-caption { text-align: left; padding: 0 1rem 0.75rem; }
+
 /* --- Motion --------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {

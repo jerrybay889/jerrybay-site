@@ -1,0 +1,3 @@
+html-validate-11.6.2
+command: npx html-validate index.html capabilities/index.html work/index.html collaborate/index.html about/index.html contact/index.html privacy/index.html
+EXIT=0

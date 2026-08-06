@@ -2,10 +2,12 @@
 
 ## 1. Verdict
 
-**IMPLEMENTATION COMPLETE / REVIEW REQUIRED**
+**WRITER COMPLETE — FRESH REVIEW READY**
 
-All P0 and P1 work finished. This is Writer completion, not final review. The
-build is not approved, not published, and not deployed.
+All P0, P1, and P2 QA closure work finished across two sessions. This is Writer
+self-verification, not an independent Review PASS. The build is not approved,
+not published, and not deployed. See `09_FRESH_CODEX_REVIEW_REQUEST.md` for the
+independent reviewer's task.
 
 ## 2. Base SHA
 
@@ -24,10 +26,12 @@ modified.
 | Commit | SHA | Contents |
 | --- | --- | --- |
 | 1 | `d036d12` | Implementation: 7 routes, assets, QA scripts, docs 00–06 |
-| 2 | branch tip | QA evidence, screenshots, this handoff |
+| 2 | `9a92350` | QA evidence, screenshots, this handoff (v1) |
+| 3 | branch tip | P2 closure: HTML validation, Lighthouse, inline-style fix, async font loading, regenerated screenshots, docs 08–09, this handoff (v2) |
 
 The final fixed SHA is the tip of `build/jerrybay-phase1-commercial-v1` and is
-reported in the session response. Confirm with `git rev-parse HEAD`.
+reported in the session response. **Do not trust any SHA written in prose** —
+confirm with `git rev-parse HEAD` before relying on it.
 
 ## 5. Changed files
 
@@ -109,25 +113,37 @@ Full ledger: `02_CONTENT_AND_CLAIM_LEDGER.csv` (42 rows). Summary:
 | --- | --- |
 | `node scripts/qa/validate-site.mjs` | **81/81 PASS**, exit 0 |
 | `node scripts/qa/browser-qa.mjs` | **111/111 PASS**, exit 0 |
+| `npx html-validate` (7 pages, v11.6.2) | **0 problems**, exit 0 (added in P2) |
+| Lighthouse (9 runs: 7 routes mobile, Home desktop, Home devtools-throttling diagnostic) | Accessibility 100 and Best Practices 100 on **every** route; Home Desktop Performance 99; Home/other-routes Mobile Performance 63–72, classified CONDITIONAL PASS — EXTERNAL DEPENDENCY (added in P2) |
 
-All 15 required checks are covered; mapping in `04_QA_CONTRACT.md`. Four real
-defects were caught by these validators and fixed before commit (13px type,
-an `h1 → h3` heading skip, two claim-scanner hits) — recorded in the QA contract.
+All 15 required checks are covered; mapping in `04_QA_CONTRACT.md`. Real defects
+were caught and fixed across both sessions: 13px type, an `h1 → h3` heading
+skip, two claim-scanner hits (session 1); 35 `no-inline-style` html-validate
+errors and one render-blocking font stylesheet, confirmed fixed by Lighthouse's
+own `render-blocking-insight` audit (session 2, P2). Full detail and the
+Performance diagnosis in `08_P2_QA_EVIDENCE.md`.
 
 ## 10. Browser QA actually run
 
-**Executed.** Chrome 151.0.7922.76 headless over CDP, all 7 routes × 2 viewports
-(1440×900, 390×844). Zero horizontal overflow, zero console errors, H1 at 64px
-desktop / 36px mobile, all touch targets ≥44px, mobile menu open→ESC→focus-return
-verified on every route, skip link visible on focus. Detail in `06_BROWSER_QA.md`.
+**Executed, twice** — once per session, most recently after all P2 changes.
+Chrome 151.0.7922.76 headless over CDP, all 7 routes × 2 viewports (1440×900,
+390×844). Zero horizontal overflow, zero console errors, H1 at 64px desktop /
+36px mobile, all touch targets ≥44px, mobile menu open→ESC→focus-return
+verified on every route, skip link visible on focus. Detail in `06_BROWSER_QA.md`
+and `08_P2_QA_EVIDENCE.md`.
 
-Not tested: Firefox, Safari, real devices, screen readers, Lighthouse.
+Lighthouse **was** run in P2 (see § 9). Still not tested: Firefox, Safari, real
+devices, screen readers.
 
 ## 11. Screenshots produced
 
 15 PNGs in `evidence/screenshots/` — desktop and mobile for all 7 routes, plus
 `home-mobile-menu-open.png` for the mobile-navigation-open state. Captured before
-interaction, so each shows the default state.
+interaction, so each shows the default state. Regenerated in P2 after the
+inline-style and font-loading changes; four were manually re-opened and visually
+compared against the pre-P2 versions (identical — see `08_P2_QA_EVIDENCE.md`
+§ Screenshot & Visual QA), the rest verified via the same automated capture and
+assertion pass.
 
 ## 12. Remaining OWNER_DECISION
 
@@ -156,6 +172,11 @@ interaction, so each shows the default state.
   not run automatically. A well-meaning text edit can silently break the CTA
   contract.
 - **Chrome-only QA.** No second rendering engine has seen this build.
+- **Mobile Performance sits below the 75 threshold on all 7 routes (63–72),**
+  diagnosed as external-dependency (live Google Fonts CDN + CJK font-subset
+  count), not a local code defect — see `08_P2_QA_EVIDENCE.md` for the full
+  diagnostic trail across two throttling methods. Accessibility and Best
+  Practices are 100 on every route; Desktop Performance is 99.
 
 ## 14. Remote status
 
@@ -166,10 +187,12 @@ upstream.
 
 ## 15. Recommended fresh reviewer
 
-A fresh-context Codex reviewer with **no** prior involvement in this build,
-scoped to:
+A fresh-context Codex reviewer with **no** prior involvement in this build.
+Full task list, exact commands, and a PASS/FAIL rubric are in
+`09_FRESH_CODEX_REVIEW_REQUEST.md` — do not substitute a shorter version of it.
+In summary, the reviewer must:
 
-1. Re-run both validators independently and confirm exit 0.
+1. Independently re-run `validate-site.mjs`, `html-validate`, and `browser-qa.mjs`.
 2. Audit `02_CONTENT_AND_CLAIM_LEDGER.csv` against rendered copy — find any
    claim-bearing component that has no ledger row.
 3. Adversarially test the claim scanner: try to introduce a prohibited claim that
@@ -178,6 +201,8 @@ scoped to:
 5. Read the CTA and offer hierarchy as a buyer would and judge whether the
    commercial wedge actually lands.
 6. Confirm the `code.html` deletion is correct and intended.
+7. Independently verify (or challenge) the Mobile Performance
+   external-dependency classification in `08_P2_QA_EVIDENCE.md`.
 
 ## 16. Jerry next approval — exactly one
 

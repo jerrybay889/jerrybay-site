@@ -2,10 +2,41 @@
 
 > **배제협 · JerryBay** — IT전략 · AI교육 · 정부지원 컨설턴트
 
-Personal website for 배제협 (JerryBay), built as a static single-page site.
-
-🌐 **Live:** [www.jerrybay.kr](https://www.jerrybay.kr)  
 📁 **Repo:** [github.com/jerrybay889/jerrybay-site](https://github.com/jerrybay889/jerrybay-site)
+
+---
+
+## ⚠️ This branch is a PRIVATE PREVIEW
+
+`build/jerrybay-phase1-commercial-v1` replaces the single-page site with the
+**Phase 1 Commercial private build**: 7 static routes, `noindex,nofollow` on every
+page, and `robots.txt` disallowing everything. It has not been pushed, deployed,
+or reviewed, and it must not be published as-is.
+
+The live single-page site at [www.jerrybay.kr](https://www.jerrybay.kr) is served
+from `main` and is untouched by this branch.
+
+Start with [docs/jerrybay-phase1-build/00_START_HERE.md](docs/jerrybay-phase1-build/00_START_HERE.md).
+
+### Run locally
+
+```bash
+python -m http.server 4173      # from the repo root — root-absolute paths need this
+# http://127.0.0.1:4173/
+```
+
+### Verify
+
+```bash
+node scripts/qa/validate-site.mjs        # 81 static contract checks
+
+# browser QA needs a headless Chrome with CDP enabled:
+chrome --headless=new --remote-debugging-port=9222 --user-data-dir=<tmp> about:blank
+node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 \
+  docs/jerrybay-phase1-build/evidence/screenshots
+```
+
+Both must exit 0. Last run on this branch: **81/81** static, **111/111** browser.
 
 ---
 

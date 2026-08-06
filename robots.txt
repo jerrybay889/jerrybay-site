@@ -1,0 +1,4 @@
+# JERRYBAY Phase 1 — PRIVATE PREVIEW, NOT FOR PUBLIC RELEASE.
+# This build must never be indexed. Do not relax before an owner release decision.
+User-agent: *
+Disallow: /

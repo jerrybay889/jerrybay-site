@@ -4,7 +4,7 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Active slice
 
-`WO-V4-02 — Project & Evidence Expansion / G2-B-R5 Reference Visibility Remediation`
+`V4-G5 — Owner-authorized Production Publish / LIVE`
 
 ## Outcome hierarchy
 
@@ -12,4 +12,4 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Hard stop
 
-No existing-site production publish, main merge, domain, tracking, payment, database, auth, RLS, secret, or destructive Git change is authorized. The Owner additionally authorized bounded overnight evidence, record, and non-production GitHub branch-publication work on 2026-08-08. G2 completion remains subject to separate visual/story UAT; production remains Owner-gated.
+The Owner authorized the `2026-08-08` production publish after the final runtime evidence cycle. Future production changes, domains, tracking, payment, database, auth, RLS, secrets, and destructive Git work remain Owner-gated.

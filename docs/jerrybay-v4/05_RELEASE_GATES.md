@@ -4,10 +4,10 @@
 | --- | --- | --- |
 | V4-G0 — Evidence & Source Freeze | PASS / CLOSED | Canonical sources and original lineage fixed |
 | V4-G1 — Original Baseline Reconstruction | PASS / CLOSED | Baseline `cab7459e865adfb9c892a636d7a3710179965802` and evidence recorded |
-| V4-G2 — Content & Project Expansion | G2-B-R5 REFERENCE VISIBILITY REMEDIATION PASS / OWNER REVIEW | Reference archive, attribution checks, visibly separated lecture/planning/government categories, external-reference health checks, capability remediation, and IA cleanup pass; final G2 freeze awaits Jerry visual/story UAT |
-| V4-G3 — Responsive / SEO / QA | BLOCKED | G2 content contract complete |
-| V4-G4 — Fresh Fixed-SHA Review | BLOCKED | Candidate SHA frozen |
-| V4-G5 — Production Publish | BLOCKED — OWNER APPROVAL | Jerry visual/story UAT and explicit release approval |
+| V4-G2 — Content & Project Expansion | PASS / CLOSED | Reference archive, attribution checks, visibly separated lecture/planning/government categories, external-reference health checks, capability remediation, and IA cleanup complete |
+| V4-G3 — Responsive / SEO / QA | PASS / RELEASE EVIDENCE | Static, HTML, browser, header, and public-route evidence complete |
+| V4-G4 — Fresh Fixed-SHA Review | OWNER-DIRECT RELEASE AUTHORIZATION | A separate reviewer session was not run; Owner explicitly authorized the final production publish after evidence review |
+| V4-G5 — Production Publish | PASS / LIVE | `www.jerrybay.kr` production deployment READY and public runtime smoke PASS |
 
 Production, domain, tracking, payment, database, auth, RLS, secrets, and destructive Git operations always remain Owner-gated.
 
@@ -65,3 +65,11 @@ Production, domain, tracking, payment, database, auth, RLS, secrets, and destruc
 - Updated isolated protected review deployment: `dpl_7KvveXGbSKHpKW1Pw2t3aH7bMTNF`, state `READY`.
 - Implementation SHA `66ddf94c97ad4c80d2677f528d11daa52ec09837`; static `206/206`, resource guard `29/29`, HTML `0`, and Chrome/CDP `235/235` pass.
 - Four labelled Reference category sections and the emphasized AIKUS link in the home lecture section are rendered and separately asserted. No production or `main` action is authorized.
+
+## Current G5 production checkpoint
+
+`V4-G5 — LIVE`
+
+- Owner-authorized `main` SHA: `11941a29c916b24ed798cb1888998dc8f3d0488b`.
+- Production deployment: `dpl_BofGLHee5vDtDfr1Ug5Fbb1JnEae`, `READY`, with `www.jerrybay.kr` assigned.
+- Static `206/206`, resource guard `29/29`, HTML `0`, and production Chrome/CDP `235/235` pass. The live domain returns the four Reference sections and the visible AIKUS lecture-platform link.

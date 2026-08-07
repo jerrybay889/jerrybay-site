@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B-R5 REFERENCE VISIBILITY REMEDIATION PASS / READY FOR OWNER REVIEW`
+`V4-G5 — OWNER-AUTHORIZED PRODUCTION PUBLISH / LIVE`
 
 ## Active execution
 
@@ -23,6 +23,16 @@
 - Rendered evidence: `29 PNG` files at `docs/jerrybay-v4/evidence/screenshots-g2b-r5-reference-visibility/`; the Reference desktop and home-lecture desktop frames were visually inspected.
 - Isolated protected review deployment: `dpl_7KvveXGbSKHpKW1Pw2t3aH7bMTNF`, state `READY`, URL `https://jerrybay-v4-g2a-review-59k33wfuh-jerrybay889s-projects.vercel.app`.
 - Isolation: the deployment is in `jerrybay-v4-g2a-review` (`prj_yoWFPmidQa0rGubXIpjKeONWXD2P`); existing `jerrybay-site`, `main`, domains, and production remain unchanged.
+
+## G5 production publish
+
+- Owner explicitly authorized final production deployment on 2026-08-08. `main` was fast-forwarded from `d50f9dc85f4b0d0630d06e3df1b40cf404963d78` to `11941a29c916b24ed798cb1888998dc8f3d0488b`.
+- Production deployment: `dpl_BofGLHee5vDtDfr1Ug5Fbb1JnEae`, source `main`, target `production`, state `READY`; aliases include `www.jerrybay.kr`, `jerrybay.kr`, and `jerrybay-site.vercel.app`.
+- Pre-publish candidate evidence: static `206/206`, external-resource policy `29/29`, HTML `0`, browser `235/235`.
+- Production smoke: `/`, `/references/`, and `?type=lecture`, `?type=planning`, `?type=government` each returned HTTP 200. The live DOM includes the AIKUS lecture-platform CTA and all four labelled Reference category sections. Production returned no `X-Robots-Tag: noindex/nofollow` header.
+- Production Chrome/CDP browser QA: `235/235 PASS` at `https://www.jerrybay.kr`, with console/network, overflow, target size, mobile navigation, query filters, and the visible AIKUS CTA verified.
+- Vercel production runtime error scan: no runtime errors in the 1-hour post-deploy window.
+- Detailed record: `docs/jerrybay-v4/evidence/verification-g5-production-publish.md`.
 
 ## Evidence
 

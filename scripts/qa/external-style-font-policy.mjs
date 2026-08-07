@@ -109,9 +109,17 @@ export function findExternalStyleFontViolations(text, { source = "html", fileLab
   let lm;
   while ((lm = linkRe.exec(text))) {
     const attrs = parseAttrs(lm[0]);
-    const rel = (attrs.rel || "").toLowerCase();
-    const relTokens = rel.split(/\s+/);
-    const as = (attrs.as || "").toLowerCase();
+    // F-006.1: canonicalize semantic attribute values (trim + lowercase)
+    // before comparison. `rel` is tokenized so its own whitespace splitting
+    // already tolerated stray leading/trailing space, but `as` is compared
+    // with exact string equality — without trim(), `as="  style  "` never
+    // equals "style" and the whole <link> silently evades classification
+    // even though its href is remote. Both are normalized the same way here
+    // so neither can drift out of sync again.
+    const normalize = (v) => (v || "").trim().toLowerCase();
+    const rel = normalize(attrs.rel);
+    const relTokens = rel.split(/\s+/).filter(Boolean);
+    const as = normalize(attrs.as);
     const href = attrs.href || "";
 
     const isStylesheetLink = relTokens.includes("stylesheet");

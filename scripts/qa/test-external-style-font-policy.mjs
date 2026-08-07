@@ -89,6 +89,44 @@ const MALICIOUS = [
     source: "css",
     text: "@import url('https://cdn.example.test/assets/type.css');",
   },
+  // F-006.1: normalization-boundary fixtures. An independent review found
+  // that `as` was compared with exact string equality (no trim()), so
+  // whitespace padding around the attribute value silently evaded
+  // classification even though rel="preload" and the href was remote.
+  {
+    id: "10a-as-leading-trailing-space-style",
+    source: "html",
+    text: '<link rel="preload" as=" style " href="https://cdn.example.test/assets/site.css">',
+  },
+  {
+    id: "10b-as-leading-trailing-space-font",
+    source: "html",
+    text: '<link rel="preload" as=" font " href="https://cdn.example.test/assets/x.woff2">',
+  },
+  {
+    id: "10c-as-whitespace-and-uppercase",
+    source: "html",
+    text: '<link rel="preload" as=" STYLE " href="https://cdn.example.test/assets/site.css">',
+  },
+  {
+    id: "10d-rel-whitespace-and-uppercase",
+    source: "html",
+    text: '<link rel=" PRELOAD " as="style" href="https://cdn.example.test/assets/site.css">',
+  },
+  {
+    id: "10e-whitespace-case-protocol-relative",
+    source: "html",
+    text: '<link rel=" PreLoad " as=" FoNt " href="//cdn.example.test/assets/x.woff2">',
+  },
+  {
+    id: "10f-reviewer-reported-bypass-exact",
+    source: "html",
+    // Exact fixture from the independent review
+    // (jerrybay-review-evidence/2009841/independent-f006-fixtures.json,
+    // id "H-case-and-whitespace-preload") that produced 0 violations before
+    // this fix.
+    text: "<link REL='  PreLoAd  ' AS='  StYlE  ' HREF='https://alternate-cdn.invalid/styles.css'>",
+  },
 ];
 
 const ALLOWED = [
@@ -126,6 +164,14 @@ const ALLOWED = [
     id: "a7-local-import",
     source: "css",
     text: '@import url("/assets/css/extra.css");',
+  },
+  {
+    // F-006.1: normalization must not over-correct into flagging preconnect
+    // — it loads no resource by itself and stays allowed regardless of
+    // whitespace/case on rel, exactly like a4/a5 above.
+    id: "a8-preconnect-whitespace-and-case-variation",
+    source: "html",
+    text: "<link REL='  PreConnect  ' HREF='https://example.com'>",
   },
 ];
 

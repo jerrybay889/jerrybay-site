@@ -30,4 +30,5 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] External reference inventory is live rechecked.
 - [x] Home capability section makes the three core pillars, complementary execution capabilities, and five public-safe stack groups visible without increasing Hero scale or spacing.
 - [x] Owner-directed IA remediation removes the privacy route/menu and renames the full Content/Projects archive to Reference/Projects at `/references/`.
+- [x] Global navigation is consolidated on `레퍼런스`; `프로젝트` remains only as a Reference-internal content type and filter.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

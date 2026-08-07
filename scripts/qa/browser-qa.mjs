@@ -178,8 +178,8 @@ const MENU_PROBE = `(async () => {
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
   const expectedLinkCount = document.body.classList.contains("home-v4")
-    ? 9
-    : (document.body.classList.contains("content-page") ? 6 : 7);
+    ? 8
+    : (document.body.classList.contains("content-page") ? 5 : 7);
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;

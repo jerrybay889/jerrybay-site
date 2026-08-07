@@ -511,6 +511,16 @@ check("19h", "Historical project pages keep explicit employer-role attribution",
   historicalAttributionGaps.length === 0,
   historicalAttributionGaps.join(", "));
 
+const primaryNav = (page) => page.html.match(/<nav class="nav" id="primary-nav"[\s\S]*?<\/nav>/i)?.[0] || "";
+const homeNav = home ? primaryNav(home) : "";
+const referenceProjectNavDuplicates = pages
+  .filter((p) => p.route.startsWith("/references/"))
+  .filter((p) => /href="\/references\/\?type=project"[^>]*>프로젝트<\/a>/.test(primaryNav(p)))
+  .map((p) => p.route);
+check("19i", "전역 메뉴는 레퍼런스로 통일되고 프로젝트는 레퍼런스 내부 분류로만 유지",
+  !!home && !homeNav.includes('href="#projects"') && referenceProjectNavDuplicates.length === 0,
+  [homeNav.includes('href="#projects"') && "/:#projects", ...referenceProjectNavDuplicates].filter(Boolean).join(", "));
+
 // ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------

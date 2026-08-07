@@ -81,3 +81,9 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Rename the public `콘텐츠` navigation destination and archive to `레퍼런스`; move the hub from `/content/` to `/references/` and all six project detail pages to `/references/projects/...`.
 - Keep the archive query-compatible at `/references/?type=project`, preserve its indexable static-page structure, and update all home, header, footer, breadcrumb, and project links.
 - Treat this as an Owner-directed review-candidate IA change. It does not authorize production publication, does not restore the legacy routes, and does not alter the approved external Tally intake path.
+
+### G2-B-R3 Owner navigation clarification
+
+- Use `레퍼런스` as the single global navigation destination for the archive. Do not place a parallel global `프로젝트` item beside it.
+- Retain `프로젝트` only as a Reference-internal content type: hub filter, project-detail breadcrumb, card type, and project-specific CTA wording.
+- Reference hub and detail-page headers use the same concise navigation: 홈, 레퍼런스, 강의, 기사 · 인터뷰, 문의. Their footer archive link also uses `레퍼런스`.

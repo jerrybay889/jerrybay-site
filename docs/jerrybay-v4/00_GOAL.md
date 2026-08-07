@@ -12,4 +12,4 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Hard stop
 
-No production publish, main merge, domain, tracking, payment, database, auth, RLS, secret, or destructive Git change is authorized. The Owner approved a review-only, non-production Preview for the G2-A checkpoint; G2 completion remains subject to Owner review.
+No existing-site production publish, main merge, domain, tracking, payment, database, auth, RLS, secret, or destructive Git change is authorized. The Owner approved a review-only deployment for the G2-A checkpoint; G2 completion remains subject to Owner review.

@@ -41,7 +41,7 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Expand the three Featured Builds into substantial, Korean-first product-system narratives.
 - Add the Systems & Operating IP section: Globorder ORCA Control OS, JERRY'S QA OS, GRAOS, and AIKUS Books / Kits / Workflows.
 - Preserve the original-first long-form structure and the existing project-experience shell.
-- Publish one review-only non-production Preview after local validation. Pause G2 completion for Owner visual/story feedback.
+- Publish one review-only protected Vercel deployment after local validation. It must not modify the existing `jerrybay-site` project, domains, or `main`; pause G2 completion for Owner visual/story feedback.
 
 ### Product copy contract
 

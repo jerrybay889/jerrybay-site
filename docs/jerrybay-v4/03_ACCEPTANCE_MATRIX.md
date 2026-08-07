@@ -22,7 +22,7 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] Owner-approved `WO-V4-02` exists and scope is limited to product/evidence expansion.
 - [x] G2-A review checkpoint adds substantial AIKUS, OMYQT, INVIT, and Systems/IP public-safe content.
 - [x] G2-A local static, HTML, browser, claim/privacy, and rendered checks pass at one exact SHA.
-- [ ] G2-A review-only non-production Preview is verified and handed to Jerry before G2 completion.
+- [x] G2-A protected Vercel review deployment is READY and isolated from the existing `jerrybay-site` project, domains, and `main` before G2 completion.
 - [ ] Historical commercial/project evidence is complete and role-context safe.
 - [ ] External reference inventory is live rechecked.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

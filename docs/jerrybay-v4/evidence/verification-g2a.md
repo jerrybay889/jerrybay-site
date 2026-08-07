@@ -28,8 +28,16 @@
 - `review-projects-desktop.png` SHA-256: `c27c28b80a63cbb33ea24f61b5911a7325bbdd653713c6e6700028529a348ddd`
 - `review-systems-desktop.png` SHA-256: `d648b7f8fbc64c962424ab04ff2cca080fe1735332690290f15d42f5bf2cd211`
 
-## Pending only
+## Review deployment
 
-- Commit the checkpoint source tree.
-- Deploy and verify one review-only non-production Preview.
-- Send Jerry the Preview URL and wait for review before G2-B.
+- Source commit: `c5c500643266781e866b9c60d0af36eaf9c14c89`
+- URL: `https://jerrybay-v4-g2a-review-6fj7c2qch-jerrybay889s-projects.vercel.app`
+- Vercel deployment ID: `dpl_9LSPntFKAX25hce1asaQcmzNt72w`
+- Ready state: `READY`
+- Isolation: Vercel created a separate protected review project, `jerrybay-v4-g2a-review`. Existing `jerrybay-site`, its domains, and Git `main` were not modified.
+- Platform target fact: Vercel reports `production` for the separate review project. This is not the production deployment of the existing JERRYBAY website and must not be described as one.
+- Access: Vercel Authentication remains enabled. Jerry should open the canonical URL while logged in to the owner Vercel account; a temporary share URL may be generated for a specific handoff without storing it in repository evidence.
+
+## Next action
+
+- Hand the canonical protected review URL to Jerry and wait for feedback before G2-B.

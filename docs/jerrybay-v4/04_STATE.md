@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / IN PROGRESS — G2-A REVIEW CHECKPOINT`
+`V4-G2 — Content & Project Expansion / G2-A READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -33,9 +33,11 @@
 - Public-file scan: internal/sensitive markers `0`, tracking signatures `0`, and in-page collection mechanisms `0`
 - Rendered evidence: `18 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2a/`
 - Full record: `docs/jerrybay-v4/evidence/verification-g2a.md`
+- Review deployment: `jerrybay-v4-g2a-review-6fj7c2qch-jerrybay889s-projects.vercel.app` is `READY` from the committed G2-A source tree.
+- Deployment isolation: Vercel created a separate protected review project, `jerrybay-v4-g2a-review`; existing `jerrybay-site`, its domains, and `main` were not modified. The platform labels the separate review project's deployment target as `production`; this is recorded as an isolation fact, not represented as the existing-site Production release.
 
 Automated accessibility audit reported zero violations and one incomplete color-contrast item for layered transparent/gradient backgrounds. This is recorded for manual quality closure in V4-G3 and does not replace the current keyboard, target-size, heading, overflow, and skip-link PASS evidence.
 
 ## Next Action
 
-Commit the locally validated G2-A review candidate, publish and verify one review-only non-production Preview from that exact source tree, then provide the link. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the checkpoint.
+Provide the protected G2-A review link to Jerry and wait for visual/story feedback. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the checkpoint.

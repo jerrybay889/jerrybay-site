@@ -1,4 +1,4 @@
-/* JERRYBAY Phase 1 Private Preview — progressive enhancement only.
+/* JERRYBAY v4 original-first portfolio — progressive enhancement only.
    The site is fully readable and navigable with JavaScript disabled. */
 (function () {
   "use strict";

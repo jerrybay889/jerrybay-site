@@ -35,7 +35,10 @@ const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, mobile: false },
   { name: "mobile", width: 390, height: 844, mobile: true },
 ];
-const PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const PRIMARY_CTA_BY_ROUTE = new Map([
+  ["/", "프로젝트·컨설팅 문의"],
+]);
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 
 mkdirSync(OUT, { recursive: true });
@@ -135,6 +138,10 @@ const PROBE = `(() => {
     bodyFontPx: parseFloat(getComputedStyle(document.body).fontSize),
     h1Px: (() => { const h = document.querySelector("h1");
                    return h ? Math.round(parseFloat(getComputedStyle(h).fontSize)) : 0; })(),
+    homeSections: ["hero", "expertise", "career", "projects", "lectures", "gov-projects", "press", "contact"]
+      .filter(id => !document.getElementById(id)),
+    profileLoaded: (() => { const img = document.querySelector('img[src="/assets/profile.jpg"]');
+                            return !!img && img.complete && img.naturalWidth > 0; })(),
   };
 })()`;
 
@@ -155,8 +162,9 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  return { ok: opened && closed && focusReturned && linkCount === 6,
-           opened, closed, focusReturned, linkCount };
+  const expectedLinkCount = document.body.classList.contains("home-v4") ? 7 : 6;
+  return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
+           opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;
 
 // F-002: verifies background scroll is actually locked while the mobile menu
@@ -284,12 +292,19 @@ for (const vp of VIEWPORTS) {
 
     if (route !== "/privacy/") {
       const ctas = r.primaries;
+      const expectedCta = PRIMARY_CTA_BY_ROUTE.get(route) || DEFAULT_PRIMARY_CTA;
       record(`cta ${tag}`, `Primary CTA 문구·링크 정확`,
         ctas.length > 0 &&
-        ctas.every((c) => c.text === PRIMARY_CTA) &&
+        ctas.every((c) => c.text === expectedCta) &&
         ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
         ctas.every((c) => c.h >= 44),
         JSON.stringify(ctas));
+    }
+
+    if (route === "/") {
+      record(`v4-sections ${tag}`, "V4-G1 홈 8개 section이 DOM에 존재",
+        r.homeSections.length === 0, r.homeSections.join(", "));
+      record(`profile ${tag}`, "실제 profile image 로드 완료", r.profileLoaded);
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",

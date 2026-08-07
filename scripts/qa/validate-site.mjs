@@ -26,7 +26,10 @@ const ROUTES = [
   { route: "/privacy/", file: "privacy/index.html" },
 ];
 
-const PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const PRIMARY_CTA_BY_ROUTE = new Map([
+  ["/", "프로젝트·컨설팅 문의"],
+]);
 
 const results = [];
 let failed = 0;
@@ -105,8 +108,9 @@ for (const p of pages) {
       labels.join(" | "));
     continue;
   }
-  const allExact = labels.length > 0 && labels.every((l) => l === PRIMARY_CTA);
-  check(`03:${p.route}`, `Primary CTA 문구가 정확히 "${PRIMARY_CTA}"`, allExact,
+  const expectedCta = PRIMARY_CTA_BY_ROUTE.get(p.route) || DEFAULT_PRIMARY_CTA;
+  const allExact = labels.length > 0 && labels.every((l) => l === expectedCta);
+  check(`03:${p.route}`, `Primary CTA 문구가 정확히 "${expectedCta}"`, allExact,
     labels.length ? labels.join(" | ") : "primary CTA 없음");
 }
 
@@ -367,6 +371,57 @@ const cssViolations = findExternalStyleFontViolations(cssText, { source: "css", 
 check("17:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0개",
   cssViolations.length === 0,
   cssViolations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
+
+// ---------------------------------------------------------------------------
+// 18. V4-G1 original-first home contract.
+// ---------------------------------------------------------------------------
+const home = pages.find((p) => p.route === "/");
+const HOME_SECTION_IDS = [
+  "hero", "expertise", "career", "projects", "lectures", "gov-projects", "press", "contact",
+];
+const missingHomeSections = HOME_SECTION_IDS.filter(
+  (id) => !home || !new RegExp(`<section\\b[^>]*\\bid="${id}"`).test(home.html),
+);
+check("18a", "V4-G1 long-form 홈 8개 section 존재",
+  !!home && missingHomeSections.length === 0,
+  missingHomeSections.join(", "));
+
+const HOME_COPY = [
+  "25년 동안 디지털 사업을 기획하고 실행해왔습니다.",
+  "지금은 AI로 새로운 제품과 업무 시스템을 만듭니다.",
+  "AI Product Strategy · AI Consulting & Education · No-Code Product Build · Agentic Operations",
+];
+const missingHomeCopy = HOME_COPY.filter((copy) => !home?.text.includes(copy));
+check("18b", "V4 Hero positioning 문구 정확",
+  !!home && missingHomeCopy.length === 0,
+  missingHomeCopy.join(" | "));
+
+check("18c", "실제 profile.jpg를 eager image로 사용",
+  !!home && /<img\b[^>]*src="\/assets\/profile\.jpg"[^>]*alt="[^"]+"[^>]*loading="eager"/i.test(home.html), "");
+
+const HOME_ANCHORS = ["#projects", "#lectures", "#press"];
+const missingHomeAnchors = HOME_ANCHORS.filter((href) => !home?.html.includes(`href="${href}"`));
+check("18d", "구축·강의·기사 보조 CTA가 홈 anchor로 연결",
+  !!home && missingHomeAnchors.length === 0,
+  missingHomeAnchors.join(", "));
+
+const BUILD_STATUSES = [
+  "IN BUILD / PRODUCTION ITERATION",
+  "IN BUILD / PRIVACY-GATED",
+  "IN BUILD / RELEASE-GATED",
+];
+const missingBuildStatuses = BUILD_STATUSES.filter((status) => !home?.text.includes(status));
+check("18e", "AIKUS·OMYQT·INVIT 상태 label 정확",
+  !!home && missingBuildStatuses.length === 0,
+  missingBuildStatuses.join(", "));
+
+const HOME_FORBIDDEN = [
+  "SSOT", "V4-G", "OWNER", "Evidence Contract", "IDEA DB", "기도제목", "test user",
+];
+const homeForbiddenHits = HOME_FORBIDDEN.filter((term) => home?.text.includes(term));
+check("18f", "공개 홈에 내부 workflow·민감 marker 없음",
+  !!home && homeForbiddenHits.length === 0,
+  homeForbiddenHits.join(", "));
 
 // ---------------------------------------------------------------------------
 // Report

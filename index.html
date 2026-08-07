@@ -3,211 +3,344 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JERRYBAY — AI 교육으로 끝나지 않게 만듭니다</title>
-<meta name="description" content="조직의 업무를 진단하고 맞춤 교육·실습·적용 과제·결과 Review까지 연결하는 조직 AI 교육·업무 적용 프로그램입니다.">
+<title>배제협 · JerryBay — AI 제품과 업무 시스템을 만드는 실행 설계자</title>
+<meta name="description" content="25년 디지털 사업 실행 경험을 바탕으로 AI 제품 전략, 기업 교육, 업무 혁신, 노코드 제품 구축과 정부사업을 연결하는 배제협의 포트폴리오입니다.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/css/site.css">
 </head>
-<body>
+<body class="home-v4">
 <a class="skip-link" href="#main">본문 바로가기</a>
 
 <header class="site-header">
   <div class="wrap site-header__inner">
-    <a class="brand" href="/">JERRY<em>BAY</em></a>
+    <a class="brand" href="/" aria-current="page">JERRY<em>BAY</em></a>
     <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">메뉴</button>
     <nav class="nav" id="primary-nav" aria-label="주 메뉴">
-      <a href="/" aria-current="page">홈</a>
-      <a href="/capabilities/">Capabilities</a>
-      <a href="/work/">Work</a>
-      <a href="/collaborate/">Collaborate</a>
-      <a href="/about/">About</a>
-      <a href="/contact/">Contact</a>
+      <a href="#career">경력</a>
+      <a href="#expertise">하는 일</a>
+      <a href="#projects">프로젝트</a>
+      <a href="#lectures">강의</a>
+      <a href="#gov-projects">정부사업</a>
+      <a href="#press">언론</a>
+      <a href="#contact">문의</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
-
-  <!-- 1. Hero -->
-  <section class="hero">
-    <div class="wrap">
-      <span class="eyebrow">조직 AI 교육 · 업무 적용 프로그램</span>
-      <h1>AI 교육으로 끝나지 않게 만듭니다.</h1>
-      <p class="lead">조직의 업무를 진단하고, 맞춤 교육·실습·적용 과제·결과 Review까지 연결합니다. 기업·대학·기관의 HR/L&amp;D·혁신·사업 책임자를 위한 4–8주 프로그램입니다.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="https://tally.so/r/Y5bypd" target="_blank" rel="noopener noreferrer">조직 AI 적용 상담 요청</a>
-        <a class="btn btn--secondary" href="/about/">대표 수행 방식 보기</a>
+  <section class="hero hero--profile" id="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__grid">
+      <div class="portrait" aria-hidden="true">
+        <div class="portrait__glow"></div>
+        <img src="/assets/profile.jpg" alt="배제협 프로필 사진" width="560" height="560" loading="eager">
       </div>
-    </div>
-  </section>
-
-  <!-- 2. Proof-safe trust strip — no numbers, no client names, no logos -->
-  <section class="section section--low" aria-labelledby="trust-h">
-    <div class="wrap">
-      <h2 class="section__label" id="trust-h">운영 원칙</h2>
-      <div class="trust">
-        <div>
-          <h3>한 사람이 끝까지 설계합니다</h3>
-          <p>진단·교육 설계·실습·적용 과제·결과 Review를 같은 사람이 연결합니다. 강사 배정 후 손을 떼는 구조가 아닙니다.</p>
+      <div class="hero__copy">
+        <p class="eyebrow">Jerry Bay · Founder &amp; Execution Architect</p>
+        <p class="hero__name">배제협 <span>· JerryBay</span></p>
+        <h1 id="hero-title">
+          <span>25년 동안 디지털 사업을 기획하고 실행해왔습니다.</span>
+          <span>지금은 AI로 새로운 제품과 업무 시스템을 만듭니다.</span>
+        </h1>
+        <p class="lead">AI Product Strategy · AI Consulting &amp; Education · No-Code Product Build · Agentic Operations</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="https://tally.so/r/Y5bypd" target="_blank" rel="noopener noreferrer">프로젝트·컨설팅 문의</a>
+          <a class="btn btn--secondary" href="#projects">구축 프로젝트 보기</a>
         </div>
-        <div>
-          <h3>교육이 아니라 업무를 기준으로 봅니다</h3>
-          <p>커리큘럼을 먼저 팔지 않습니다. 실제 업무 흐름과 병목을 먼저 확인한 뒤 교육 범위를 정합니다.</p>
+        <nav class="hero-links" aria-label="주요 콘텐츠 바로가기">
+          <a href="#lectures">강의·교육 문의</a>
+          <a href="#press">기사·레퍼런스 보기</a>
+        </nav>
+        <ul class="hero-tags plain" aria-label="전문 영역">
+          <li>AI 제품 전략</li>
+          <li>기업·기관 AI 교육</li>
+          <li>No-Code / Low-Code</li>
+          <li>AI Agent Architecture</li>
+          <li>정부사업 PM</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--low" id="expertise" aria-labelledby="expertise-title">
+    <div class="wrap">
+      <p class="section__label">What I Do</p>
+      <div class="section-heading">
+        <h2 id="expertise-title">전략을 문서에 두지 않고, 작동하는 결과로 연결합니다.</h2>
+        <p>사업의 방향을 정하고, 제품과 업무 흐름을 설계하고, 교육과 실행까지 이어지는 전 과정을 다룹니다.</p>
+      </div>
+      <div class="expertise-grid">
+        <article class="expertise-item">
+          <span class="expertise-item__index">01</span>
+          <h3>AI Product Strategy &amp; MVP Architecture</h3>
+          <p>문제 정의부터 기능 범위, 데이터 흐름, MVP와 출시 순서까지 하나의 제품 구조로 설계합니다.</p>
+        </article>
+        <article class="expertise-item">
+          <span class="expertise-item__index">02</span>
+          <h3>AI Consulting &amp; Business Transformation</h3>
+          <p>기업의 업무 병목과 신규사업 기회를 찾아 AI 적용 우선순위와 실행 로드맵으로 전환합니다.</p>
+        </article>
+        <article class="expertise-item">
+          <span class="expertise-item__index">03</span>
+          <h3>AI Education &amp; Team Training</h3>
+          <p>기업·기관의 실제 업무를 기준으로 커리큘럼, 실습, 적용 과제를 연결해 설계하고 강의합니다.</p>
+        </article>
+        <article class="expertise-item">
+          <span class="expertise-item__index">04</span>
+          <h3>No-Code / Low-Code Product Build</h3>
+          <p>빠른 검증이 필요한 아이디어를 실제로 탐색하고 사용할 수 있는 프로토타입과 제품으로 만듭니다.</p>
+        </article>
+        <article class="expertise-item">
+          <span class="expertise-item__index">05</span>
+          <h3>Automation &amp; Agent Workflow Architecture</h3>
+          <p>반복 업무, 지식, 의사결정, 검증 과정을 연결하는 자동화와 AI 에이전트 운영 구조를 설계합니다.</p>
+        </article>
+        <article class="expertise-item">
+          <span class="expertise-item__index">06</span>
+          <h3>Government / Consortium Project PM</h3>
+          <p>정부지원사업 기획, 컨소시엄 역할 설계, 일정과 산출물 관리를 실행 단위로 연결합니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="career" aria-labelledby="career-title">
+    <div class="wrap career-layout">
+      <div class="career-intro">
+        <p class="section__label">Career / Founder Story</p>
+        <h2 id="career-title">인터넷 창업기부터 생성형 AI 시대까지</h2>
+        <p class="lead">1999년 온라인 쇼핑몰 창업을 시작으로 모바일, SNS, Web3, 생성형 AI의 변화를 사업 현장에서 직접 경험했습니다.</p>
+        <div class="career-note">
+          <strong>현재</strong>
+          <p>㈜글로보더 Founder &amp; CEO로서 AI 제품, 교육, 업무 시스템과 정부사업을 기획하고 구축합니다.</p>
         </div>
-        <div>
-          <h3>검증되지 않은 성과는 말하지 않습니다</h3>
-          <p>고객사명·인원·성과 수치는 근거와 사용 허가가 확인된 범위에서만 공개합니다. 현재 공개된 정보에는 포함되어 있지 않습니다.</p>
-        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- 3. Three commercial capabilities -->
-  <section class="section" aria-labelledby="cap-h">
-    <div class="wrap">
-      <p class="section__label">Capabilities</p>
-      <h2 id="cap-h">세 가지 축으로 조직의 실행을 설계합니다</h2>
-      <p class="lead">현재는 실제로 상담·계약이 가능한 세 가지 영역을 전면에 둡니다.</p>
-      <div class="grid grid--3 mt-11">
-        <article class="card">
-          <h3>AI Education &amp; Work Transformation</h3>
-          <p>AI 교육을 실제 업무 변화로 연결합니다. 진단 → 맞춤 교육 → 실습 → 적용 과제 → 결과 Review.</p>
-          <dl>
-            <dt>Buyer Problem</dt>
-            <dd>교육은 했는데 업무가 그대로입니다.</dd>
-            <dt>Offer Connection</dt>
-            <dd>Primary Program · Paid Diagnostic</dd>
-          </dl>
-        </article>
-        <article class="card">
-          <h3>Strategy &amp; Business Design</h3>
-          <p>사업 구조·수익 모델·실행 로드맵을 문서가 아니라 결정 가능한 형태로 정리합니다.</p>
-          <dl>
-            <dt>Buyer Problem</dt>
-            <dd>아이디어는 있는데 실행 순서를 못 정합니다.</dd>
-            <dt>Offer Connection</dt>
-            <dd>Paid Diagnostic · Sprint</dd>
-          </dl>
-        </article>
-        <article class="card">
-          <h3>Product &amp; Prototype Design</h3>
-          <p>설명 대신 동작하는 프로토타입으로 합의를 만듭니다. 화면·흐름·범위를 직접 만들어 확인합니다.</p>
-          <dl>
-            <dt>Buyer Problem</dt>
-            <dd>말로는 합의됐는데 만들면 달라집니다.</dd>
-            <dt>Offer Connection</dt>
-            <dd>Sprint</dd>
-          </dl>
-        </article>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn--secondary" href="/capabilities/">Capabilities 전체 보기</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Selected work -->
-  <section class="section section--low" aria-labelledby="work-h">
-    <div class="wrap">
-      <p class="section__label">Selected Work</p>
-      <h2 id="work-h">지금 존재하는 것만 보여줍니다</h2>
-      <p class="lead">아래 항목은 모두 대표가 직접 만든 자산입니다. 고객 성과·도입 실적은 주장하지 않습니다.</p>
-      <div class="grid grid--3 mt-11">
-        <article class="card">
-          <div class="chip-row"><span class="chip">BUILT / PROTOTYPED</span></div>
-          <h3>AIKUS</h3>
-          <p>AI 활용 학습·실습 흐름을 직접 구성한 자체 자산입니다.</p>
-          <dl>
-            <dt>Public Claim Boundary</dt>
-            <dd>고객사 도입·성과·사용자 수를 주장하지 않습니다.</dd>
-          </dl>
-        </article>
-        <article class="card">
-          <div class="chip-row"><span class="chip">BUILT / PROTOTYPED</span></div>
-          <h3>OMYQT</h3>
-          <p>아이디어에서 동작 가능한 형태까지 직접 만들어 확인한 프로토타입입니다.</p>
-          <dl>
-            <dt>Public Claim Boundary</dt>
-            <dd>운영이 종료됐다거나 결과가 입증됐다는 주장을 하지 않습니다.</dd>
-          </dl>
-        </article>
-        <article class="card">
-          <div class="chip-row"><span class="chip">BUILT / DESIGNED</span></div>
-          <h3>AIKUS Books 01</h3>
-          <p>교육 내용을 구조화한 자체 제작 콘텐츠 자산입니다.</p>
-          <dl>
-            <dt>Public Claim Boundary</dt>
-            <dd>판매량·채택 기관·추천사를 주장하지 않습니다.</dd>
-          </dl>
-        </article>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn--secondary" href="/work/">Work 상세 보기</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Offer hierarchy -->
-  <section class="section" aria-labelledby="offer-h">
-    <div class="wrap">
-      <p class="section__label">Offer</p>
-      <h2 id="offer-h">어디서 시작할지 명확하게</h2>
-      <div class="grid grid--3 mt-11">
-        <article class="card offer offer--primary">
-          <span class="offer__rank">Primary Program</span>
-          <h3>조직 AI 교육·업무 적용 프로그램</h3>
-          <p>진단 → 맞춤 교육 → 실습 → 적용 과제 → 결과 Review까지 4–8주.</p>
-          <p class="offer__price">₩5,000,000부터</p>
-          <p class="dim">범위·기간에 따라 조정됩니다.</p>
-        </article>
-        <article class="card offer">
-          <span class="offer__rank">Paid Entry</span>
-          <h3>AI 업무 적용 우선순위 진단</h3>
-          <p>반나절 Workshop으로 핵심 업무·병목·AI 적용 후보를 도출하고 우선순위 Brief를 전달합니다.</p>
-          <p class="offer__price">₩1,500,000</p>
-          <p class="dim">Founding Price</p>
-        </article>
-        <article class="card offer">
-          <span class="offer__rank">Expansion</span>
-          <h3>AI Work Transformation Sprint</h3>
-          <p>교육 또는 진단 이후 업무 흐름·승인 구조·Pilot 범위를 설계합니다.</p>
-          <p class="offer__price">₩5,000,000부터</p>
-          <p class="dim">Founding Offer</p>
-        </article>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn--secondary" href="/collaborate/">협업 방식 자세히 보기</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. Working method -->
-  <section class="section section--low" aria-labelledby="method-h">
-    <div class="wrap">
-      <p class="section__label">Working Method</p>
-      <h2 id="method-h">진행 방식</h2>
-      <ol class="steps plain mt-9">
-        <li><strong>진단</strong>실제 업무 흐름과 병목을 확인하고 AI 적용 후보를 좁힙니다.</li>
-        <li><strong>맞춤 교육</strong>확인된 업무를 기준으로 교육 범위와 사례를 재구성합니다.</li>
-        <li><strong>실습</strong>참여자가 자기 업무 데이터·문서로 직접 다룹니다.</li>
-        <li><strong>적용 과제</strong>교육 종료 후에도 남는 실제 업무 과제를 부여하고 지원합니다.</li>
-        <li><strong>결과 Review</strong>무엇이 바뀌었고 무엇이 남았는지 조직 책임자와 함께 정리합니다.</li>
+      <ol class="timeline" aria-label="경력 타임라인">
+        <li class="timeline-item timeline-item--current">
+          <p class="timeline-item__date">2026.01 — 현재</p>
+          <h3>㈜글로보더 · 대표이사</h3>
+          <p>AI 제품 전략, 기업 교육, 업무 혁신, 정부지원사업을 연결하는 실행 중심 사업을 운영합니다.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-item__date">2024.10 — 2025.12</p>
+          <h3>㈜메타크리에이트 · AI 사업 관리</h3>
+          <p>생성형 AI 서비스 기획·운영과 AI 교육사업의 커리큘럼 및 프로젝트 관리를 담당했습니다.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-item__date">2022.04 — 2024.09</p>
+          <h3>㈜펜타브리드 · Web3 그룹 총괄이사</h3>
+          <p>재직 기간 중 Web3·AI 융합 사업과 기업 대상 생성형 AI 프로젝트의 기획·운영을 수행했습니다.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-item__date">2010 — 2022</p>
+          <h3>디지털 사업·마케팅 기획과 조직 운영</h3>
+          <p>재미와의미, 미디어크리, ㈜그랜드플랜에서 사업 운영, 디지털 마케팅, 콘텐츠 전략을 맡았습니다.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-item__date">1999 — 2009</p>
+          <h3>인터넷 창업과 이커머스 실무</h3>
+          <p>온라인 쇼핑몰을 창업하고 morning365와 지란지교소프트 이커머스 사업에서 초기 디지털 사업 경험을 쌓았습니다.</p>
+        </li>
       </ol>
     </div>
   </section>
 
-  <!-- 7. Final CTA -->
-  <section class="section" aria-labelledby="cta-h">
+  <section class="section section--lowest" id="projects" aria-labelledby="projects-title">
     <div class="wrap">
-      <h2 id="cta-h">지금 조직의 상황부터 확인하겠습니다</h2>
-      <p class="lead">20–30분 Fit Call에서 현재 업무 상황·기대 결과·제약을 확인하고, 진단이 필요한지 아니면 바로 프로그램으로 갈지 판단합니다.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="https://tally.so/r/Y5bypd" target="_blank" rel="noopener noreferrer">조직 AI 적용 상담 요청</a>
-        <a class="btn btn--secondary" href="/about/">대표 수행 방식 보기</a>
+      <p class="section__label">Selected Builds &amp; Project Experience</p>
+      <div class="section-heading section-heading--wide">
+        <h2 id="projects-title">직접 설계하고 구축하는 제품과 프로젝트</h2>
+        <p>현재 만드는 제품은 상태를 정확히 표시하고, 과거 재직 중 수행한 프로젝트는 역할 맥락과 함께 소개합니다.</p>
+      </div>
+
+      <div class="build-grid">
+        <article class="build-card build-card--aikus">
+          <div class="build-card__topline">
+            <span>AI Learning &amp; Work Platform</span>
+            <span class="status-pill">IN BUILD / PRODUCTION ITERATION</span>
+          </div>
+          <h3>AIKUS</h3>
+          <p>AI 학습을 실제 업무 실행으로 연결하기 위해 Learning Lab과 Work Studio의 흐름을 설계·구축하는 제품입니다.</p>
+          <p class="build-card__scope">Learning · Work Execution · Archive · Subscription Architecture</p>
+        </article>
+        <article class="build-card build-card--omyqt">
+          <div class="build-card__topline">
+            <span>Privacy-first AI Reflection</span>
+            <span class="status-pill">IN BUILD / PRIVACY-GATED</span>
+          </div>
+          <h3>OMYQT</h3>
+          <p>개인 QT와 가족·그룹 흐름을 제품 단위로 설계하며, 민감한 개인 데이터를 보호하는 경계를 중심에 둔 플랫폼입니다.</p>
+          <p class="build-card__scope">Personal Flow · Family &amp; Group · AI Generation · Subscription</p>
+        </article>
+        <article class="build-card build-card--invit">
+          <div class="build-card__topline">
+            <span>Mobile FinTech / Behavioral Coaching</span>
+            <span class="status-pill">IN BUILD / RELEASE-GATED</span>
+          </div>
+          <h3>INVIT</h3>
+          <p>투자 정보 추천이 아니라 편향·충동·규율을 기록하고 교정하는 모바일 투자 행동 코칭 시스템입니다.</p>
+          <p class="build-card__scope">Bias Assessment · Journal · Discipline · Principles · AI Coaching</p>
+        </article>
+      </div>
+
+      <div class="project-experience">
+        <h3>Selected Commercial Project Experience</h3>
+        <div class="project-experience__grid">
+          <article>
+            <p class="project-meta">PROJECT EXPERIENCE · 2024</p>
+            <h3>Casper Electric AI Drawing Experience</h3>
+            <p>재직 조직의 프로젝트로 참여한 생성형 AI 이미지 경험 기획·운영 사례입니다.</p>
+            <a class="ext" href="https://ditoday.com/project/%EC%BA%90%EC%8A%A4%ED%8D%BC-%EC%9D%BC%EB%A0%89%ED%8A%B8%EB%A6%AD-ai-%EA%B7%B8%EB%A6%AC%EA%B8%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8/" target="_blank" rel="noopener noreferrer">프로젝트 보기</a>
+          </article>
+          <article>
+            <p class="project-meta">PROJECT EXPERIENCE · 2024</p>
+            <h3>Renault Korea SM6 AI Drawing Experience</h3>
+            <p>재직 조직의 프로젝트로 참여한 생성형 AI 기반 브랜드 경험 사례입니다.</p>
+            <a class="ext" href="https://www.gttkorea.com/news/articleView.html?idxno=6632" target="_blank" rel="noopener noreferrer">관련 기사 보기</a>
+          </article>
+          <article>
+            <p class="project-meta">PROJECT EXPERIENCE</p>
+            <h3>Fashion AI Generator</h3>
+            <p>재직 조직에서 수행한 패션산업 분야 생성형 AI 서비스 기획·운영 경험입니다.</p>
+            <a class="ext" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202308310049" target="_blank" rel="noopener noreferrer">관련 기사 보기</a>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
+  <section class="section" id="lectures" aria-labelledby="lectures-title">
+    <div class="wrap">
+      <p class="section__label">Lectures &amp; Education</p>
+      <div class="section-heading">
+        <h2 id="lectures-title">현장의 업무와 연결하는 AI 교육</h2>
+        <p>기업·기관·대학의 대상과 과업에 맞춰 생성형 AI 활용, 콘텐츠 제작, 업무 혁신 교육을 설계하고 진행했습니다.</p>
+      </div>
+      <div class="table-scroll mt-9">
+        <table>
+          <caption class="table-caption">주요 강의·교육 경험</caption>
+          <thead>
+            <tr><th scope="col">연도</th><th scope="col">기관 및 과정</th><th scope="col">외부 근거</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2023</td><td>CEO 대상 AI 세미나 강연</td><td><a class="ext" href="https://ditoday.com/?p=79353" target="_blank" rel="noopener noreferrer">기사</a></td></tr>
+            <tr><td>2023—2024</td><td>현대차·르노코리아 임직원 AI 활용 전략 강의 경험</td><td>Role context</td></tr>
+            <tr><td>2024</td><td>전문대 홍보관계자 AI 교육</td><td><a class="ext" href="https://news.unn.net/news/articleView.html?idxno=561266" target="_blank" rel="noopener noreferrer">기사</a></td></tr>
+            <tr><td>2024</td><td>대한상공회의소 AI 교육사업 전문 강사</td><td><a class="ext" href="https://www.pentapost.net/sub/view/?idx=2422&amp;sbCd=001001&amp;pageIndex=3&amp;cateCd=&amp;filtering1=&amp;filtering2=" target="_blank" rel="noopener noreferrer">기관 페이지</a></td></tr>
+            <tr><td>2024</td><td>패션산업 분야 AI 활용 전략 강의</td><td><a class="ext" href="https://www.fi.co.kr/main/view.asp?idx=79217" target="_blank" rel="noopener noreferrer">기사</a></td></tr>
+            <tr><td>2024</td><td>고용부 청년일경험지원사업 AI Creator 과정 PM·강사</td><td>Project experience</td></tr>
+            <tr><td>2025</td><td>K-MOOC AI 콘텐츠 크리에이터 양성과정</td><td><a class="ext" href="https://www.kmooc.kr/view/course/detail/17701" target="_blank" rel="noopener noreferrer">과정 페이지</a></td></tr>
+            <tr><td>2025</td><td>명지전문대학교 교직원 AI 직무역량 강화</td><td>Education experience</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--low" id="gov-projects" aria-labelledby="gov-title">
+    <div class="wrap">
+      <p class="section__label">Government / Public Projects</p>
+      <div class="section-heading">
+        <h2 id="gov-title">정부·공공 프로젝트 수행 경험</h2>
+        <p>사업계획, 컨소시엄, 교육, 기술 실증을 서로 분리하지 않고 하나의 실행 흐름으로 연결해왔습니다.</p>
+      </div>
+      <div class="public-grid">
+        <article>
+          <span>정보통신 분야</span>
+          <h3>MyData 실증 사업 PM</h3>
+          <p>마이데이터 실증 프로젝트의 사업·운영 관리 경험.</p>
+          <a class="ext" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202306080281" target="_blank" rel="noopener noreferrer">관련 기사</a>
+        </article>
+        <article>
+          <span>고용 분야</span>
+          <h3>청년일경험 AI Creator</h3>
+          <p>AI 콘텐츠 교육 과정의 프로젝트 관리와 강의 경험.</p>
+        </article>
+        <article>
+          <span>창업·R&amp;D 분야</span>
+          <h3>창업성장 R&amp;D·창업지원</h3>
+          <p>사업 기획, 계획서, 실행관리와 지원사업 연계 경험.</p>
+        </article>
+        <article>
+          <span>해양수산 분야</span>
+          <h3>수산양식 AI 실증·컨설팅</h3>
+          <p>현장 문제 정의와 AI 적용 구조를 연결한 컨설팅 경험.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--lowest" id="press" aria-labelledby="press-title">
+    <div class="wrap press-layout">
+      <div>
+        <p class="section__label">Press / Media / External Proof</p>
+        <h2 id="press-title">외부에서 확인할 수 있는 기록</h2>
+        <p class="lead">인터뷰, 프로젝트, 교육과 사업 경험을 외부 기사와 공식 과정 페이지로 확인할 수 있습니다.</p>
+      </div>
+      <div class="press-list">
+        <a href="https://www.meconomynews.com/news/articleView.html?idxno=80356" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">INTERVIEW</span>
+          <strong>스타트업人 인터뷰</strong>
+          <span>시장경제</span>
+        </a>
+        <a href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202308310049" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">PROJECT</span>
+          <strong>펜타브리드 AI 제너레이터</strong>
+          <span>한국경제TV</span>
+        </a>
+        <a href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202306080281" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">MYDATA</span>
+          <strong>마이데이터 시대 기업 보안</strong>
+          <span>한국경제TV</span>
+        </a>
+        <a href="https://www.fi.co.kr/main/view.asp?idx=79217" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">LECTURE</span>
+          <strong>패션산업 AI 강의</strong>
+          <span>패션인사이트</span>
+        </a>
+        <a href="https://news.unn.net/news/articleView.html?idxno=561266" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">EDUCATION</span>
+          <strong>대학 홍보관계자 AI 교육</strong>
+          <span>한국대학신문</span>
+        </a>
+        <a href="https://ditoday.com/?p=79353" target="_blank" rel="noopener noreferrer">
+          <span class="press-list__type">SEMINAR</span>
+          <strong>CEO 대상 AI 세미나</strong>
+          <span>DIToday</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact-layout">
+      <div>
+        <p class="section__label">Contact / Opportunity</p>
+        <h2 id="contact-title">함께 풀어야 할 문제를 들려주세요.</h2>
+        <p class="lead">AI 제품, 조직 교육, 업무 혁신, 정부사업, 파트너십과 관련된 문의를 검토하고 적합한 다음 단계를 제안합니다.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="https://tally.so/r/Y5bypd" target="_blank" rel="noopener noreferrer">프로젝트·컨설팅 문의</a>
+        </div>
+        <p class="contact-fallback">이메일 문의: <a href="mailto:jerrybay889@gmail.com">jerrybay889@gmail.com</a></p>
+      </div>
+      <div class="contact-types">
+        <article>
+          <span>BUILD</span>
+          <h3>AI 제품·MVP·자동화</h3>
+          <p>아이디어 구조화, 프로토타입, 제품 아키텍처와 실행 로드맵.</p>
+        </article>
+        <article>
+          <span>LEARN</span>
+          <h3>기업·기관 AI 교육</h3>
+          <p>업무 중심 교육과 실습, 적용 과제, 조직 역량강화 프로그램.</p>
+        </article>
+        <article>
+          <span>PLAN</span>
+          <h3>사업기획·정부사업·협업</h3>
+          <p>신규사업, 컨소시엄, 정부지원사업 PM과 전략적 파트너십.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -215,18 +348,18 @@
     <div class="site-footer__grid">
       <div>
         <p><strong>JERRYBAY</strong> · 사업·교육·제품·운영을 연결하는 실행 설계자</p>
-        <p class="dim">JERRYBAY는 개인 역량 브랜드이자 상담·제안의 시작점이며, 계약·청구·납품은 ㈜글로보더를 통해 이루어집니다.</p>
+        <p class="dim">JERRYBAY는 배제협의 개인 포트폴리오이며, 계약과 납품은 ㈜글로보더를 통해 진행합니다.</p>
       </div>
       <nav aria-label="푸터 메뉴">
-        <a href="/capabilities/">Capabilities</a>
-        <a href="/work/">Work</a>
-        <a href="/collaborate/">Collaborate</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
+        <a href="#career">경력</a>
+        <a href="#projects">프로젝트</a>
+        <a href="#lectures">강의</a>
+        <a href="#press">언론</a>
+        <a href="#contact">문의</a>
         <a href="/privacy/">Privacy</a>
       </nav>
     </div>
-    <p class="site-footer__meta">㈜글로보더 서울 사무소 · 서울 구로구 디지털로 26길 61, 에이스하이엔드타워2차</p>
+    <p class="site-footer__meta">ⓒ 2026 배제협 · ㈜글로보더. All rights reserved.</p>
   </div>
 </footer>
 

@@ -1,0 +1,66 @@
+JERRYBAY V4-G1 VERIFICATION
+Date: 2026-08-07 KST
+Branch: build/jerrybay-v4-original-first
+Base: d50f9dc85f4b0d0630d06e3df1b40cf404963d78
+Original source: cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe
+
+FINAL EXECUTED CHECKS
+
+1. node scripts/qa/validate-site.mjs
+   PASS — 112/112 checks, exit 0
+
+2. node scripts/qa/test-external-style-font-policy.mjs
+   PASS — 29/29 fixtures, exit 0
+   21 malicious mechanisms detected; 8 allowed mechanisms remained clean.
+
+3. npx --yes html-validate index.html capabilities/index.html work/index.html collaborate/index.html about/index.html contact/index.html privacy/index.html
+   PASS — 0 problems, exit 0
+
+4. node scripts/qa/browser-qa.mjs http://127.0.0.1:9224 http://127.0.0.1:4173 docs/jerrybay-v4/evidence/screenshots
+   PASS — 123/123 checks, exit 0
+   Chrome/CDP; 7 routes × desktop 1440×900 and mobile 390×844.
+   Covered overflow, console/network failures, heading size, CTA label/target,
+   44×44 targets, profile load, V4 sections, menu/ESC/focus, scroll lock,
+   responsive reset, and skip link.
+
+5. agent-browser visible-runtime check
+   PASS — body text length 4287, meaningful interactive snapshot, no overlay,
+   no console entries, and no page errors.
+   axe-core 4.12.1: 0 violations, 22 passes, 1 incomplete color-contrast item.
+   The incomplete item is caused by layered transparent/gradient backgrounds
+   and remains an explicit manual/quality follow-up for V4-G3; no violation was reported.
+
+6. Public-file categorical scan
+   internal workflow markers: 0
+   tracking signatures: 0
+   in-page form/input/iframe/fetch/XHR collection: 0
+   secret-like signatures: 0
+
+RENDERED EVIDENCE
+
+15 PNG files exist in docs/jerrybay-v4/evidence/screenshots.
+
+home-desktop.png
+SHA256 0bb80430ed69267967c7d510098061f6696ecad1364a432b18e91b6e2a6b9220
+
+home-mobile.png
+SHA256 08352a0861c6d6baf4d0d17802411f237f4a72501c20e036af611dce1330eae1
+
+home-mobile-menu-open.png
+SHA256 4197dc3ad1e46d240acbb37abf11bffa664a47297770c6f89eb8b2c01ab3d655
+
+VISUAL INSPECTION
+
+Desktop and mobile screenshots were opened and inspected. The restored page
+uses the original portrait-led identity, Deep Navy / Indigo / Cyan grammar,
+long-form section rhythm, career timeline, projects, lectures, government
+work, visible press, and contact. Mobile hero density and the open-menu brand
+layer were corrected before the final browser run.
+
+BOUNDARY VERIFICATION
+
+Repository root worktree remained at b51033ac7541dbd8cfb728cb040e68e5cf32e06c.
+Local main remained at cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe.
+Remote main remained at d50f9dc85f4b0d0630d06e3df1b40cf404963d78.
+The V4 branch merge-base with the approved production source is d50f9dc85f4b0d0630d06e3df1b40cf404963d78.
+No push, PR, merge, deploy, domain, tracking, payment, database, auth, or RLS action was performed.

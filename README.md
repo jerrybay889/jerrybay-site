@@ -1,78 +1,45 @@
-# JerryBay Personal Website
+# JERRYBAY Personal Website
 
-> **배제협 · JerryBay** — IT전략 · AI교육 · 정부지원 컨설턴트
+JERRYBAY v4 restores the original long-form personal portfolio on top of the current static production source.
 
-📁 **Repo:** [github.com/jerrybay889/jerrybay-site](https://github.com/jerrybay889/jerrybay-site)
+## Current Gate
 
----
+`V4-G1 — Original Baseline Reconstruction`
 
-## Commercial site
+The canonical product/content source is the Notion page `JERRYBAY — Original-First Personal Revenue Portfolio · Master SSOT v4.0`. Repository state, exact SHAs, executable checks, and rendered output are implementation truth.
 
-`build/jerrybay-phase1-commercial-v1` replaces the single-page site with the
-**JERRYBAY commercial build**: 7 static public routes, indexable by search
-engines, describing the organization AI education and business/product design
-offer.
+Start with [`docs/jerrybay-v4/00_GOAL.md`](docs/jerrybay-v4/00_GOAL.md) and [`docs/jerrybay-v4/04_STATE.md`](docs/jerrybay-v4/04_STATE.md).
 
-Start with [docs/jerrybay-phase1-build/00_START_HERE.md](docs/jerrybay-phase1-build/00_START_HERE.md).
+## Architecture
 
-### Run locally
+- Static HTML, CSS, and progressive JavaScript; no build step
+- `/` is the canonical Korean-first long-form portfolio
+- Six supporting routes plus `/privacy/` are preserved during V4-G1
+- Local system fonts only; no remote stylesheet, font, or icon-font dependency
+- Approved Tally intake remains an outbound link; no in-page collection or tracking
 
-```bash
-python -m http.server 4173      # from the repo root — root-absolute paths need this
-# http://127.0.0.1:4173/
-```
-
-### Verify
+## Run locally
 
 ```bash
-node scripts/qa/validate-site.mjs        # static contract checks
-
-# browser QA needs a headless Chrome with CDP enabled:
-chrome --headless=new --remote-debugging-port=9222 --user-data-dir=<tmp> about:blank
-node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 \
-  docs/jerrybay-phase1-build/evidence/screenshots
+python -m http.server 4173
 ```
 
-Both must exit 0.
+Open `http://127.0.0.1:4173/`.
 
----
+## Verify
 
-## Tech Stack
-
-- **Static HTML** — Single-page, zero build step required
-- **Tailwind CSS** (CDN) — Utility-first styling
-- **Google Fonts** — Space Grotesk, Inter, Noto Sans KR
-- **Material Symbols** — Icon system
-- **Vercel** — Hosting & deployment
-
-## Design System
-
-"The Kinetic Archive" — Deep Space theme. See [DESIGN.md](./DESIGN.md) for full specifications.
-
-Key palette: `#131318` (Surface) · `#C0C1FF` (Primary) · `#4CD7F6` (Secondary) · `#6366F1→#06B6D4` (Gradient)
-
-## Project Structure
-
-```
-jerrybay-site/
-├── index.html       ← Main site (single page)
-├── assets/
-│   └── favicon.svg  ← SVG favicon (JB gradient)
-├── DESIGN.md        ← Design system documentation
-├── README.md        ← This file
-└── .gitignore
+```bash
+node scripts/qa/validate-site.mjs
+node scripts/qa/test-external-style-font-policy.mjs
+npx --yes html-validate index.html capabilities/index.html work/index.html collaborate/index.html about/index.html contact/index.html privacy/index.html
 ```
 
-## Deployment
+Browser QA uses Node 22 or later and an already-running Chromium browser with CDP enabled:
 
-This site auto-deploys to Vercel on every push to `main`.
+```bash
+node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 docs/jerrybay-v4/evidence/screenshots
+```
 
-- **Framework:** Static HTML (no build command)
-- **Root Directory:** `/`
-- **Branch:** `main` → production
+## Release boundary
 
-## Contact
-
-- 📧 [jerrybay889@gmail.com](mailto:jerrybay889@gmail.com)
-- 📱 카카오톡: jerrybay
-- 🌐 [www.jerrybay.kr](https://www.jerrybay.kr)
+V4-G1 is local-only. Push, PR, deploy, production, domain, analytics, payments, database, auth, and RLS changes require separate approval.

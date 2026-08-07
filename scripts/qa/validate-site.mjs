@@ -12,6 +12,7 @@
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, resolve, relative, posix } from "node:path";
 import { fileURLToPath } from "node:url";
+import { findExternalStyleFontViolations } from "./external-style-font-policy.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -311,6 +312,28 @@ for (const p of pages) {
 }
 const cssHits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(cssText)).map((f) => f.label);
 check("16:site.css", "site.css에 외부 font 참조 0개", cssHits.length === 0, cssHits.join(", "));
+
+// ---------------------------------------------------------------------------
+// 17. F-006 remediation: mechanism-class remote stylesheet/font guard.
+// Check 16 above is a host/vendor-name denylist — it proves the *specific*
+// Google Fonts URLs are gone but cannot reject an ordinary remote
+// stylesheet, remote @import, or remote @font-face src from ANY origin.
+// This check detects the mechanism itself (see external-style-font-policy.mjs
+// for the full rationale and the adversarial self-test that proves it can't
+// be bypassed by the four payloads an independent review demonstrated evade
+// check 16: a remote <link rel="stylesheet">, a remote @import, a remote
+// @font-face src url(), and the same inside an inline <style> block).
+// ---------------------------------------------------------------------------
+for (const p of pages) {
+  const violations = findExternalStyleFontViolations(p.html, { source: "html", fileLabel: p.route });
+  check(`17:${p.route}`, "외부 stylesheet/font 로딩 메커니즘 0개 (mechanism-class guard)",
+    violations.length === 0,
+    violations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
+}
+const cssViolations = findExternalStyleFontViolations(cssText, { source: "css", fileLabel: "assets/css/site.css" });
+check("17:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0개",
+  cssViolations.length === 0,
+  cssViolations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
 
 // ---------------------------------------------------------------------------
 // Report

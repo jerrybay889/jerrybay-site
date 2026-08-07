@@ -2,12 +2,22 @@
 
 ## 1. Verdict
 
-**WRITER COMPLETE — FRESH REVIEW READY**
+**WRITER REMEDIATION COMPLETE — FRESH RE-REVIEW READY**
 
-All P0, P1, and P2 QA closure work finished across two sessions. This is Writer
-self-verification, not an independent Review PASS. The build is not approved,
-not published, and not deployed. See `09_FRESH_CODEX_REVIEW_REQUEST.md` for the
-independent reviewer's task.
+History, not erased: an independent Fresh-Context review of commit `e4fe3b8`
+(the prior "WRITER COMPLETE" state) returned **FAIL**, reproducing three real
+defects — F-001 (Critical, 44×44 interactive targets), F-002 (Major, mobile
+menu did not lock background scroll), F-003 (Critical, Home Mobile Lighthouse
+Performance 60-61 under real DevTools throttling, threshold 75) — plus two
+Minor findings. Evidence: `C:\Users\82103\jerrybay-review-evidence\e4fe3b8\`.
+All five are now remediated and independently re-verified beyond simply
+re-running the same scripts that missed them the first time. Full detail:
+`10_REMEDIATION_EVIDENCE.md`.
+
+This is still Writer self-verification, not an independent Review PASS. The
+build is not approved, not published, and not deployed. See
+`11_FRESH_REVIEW_REQUEST_AFTER_REMEDIATION.md` for the next independent
+reviewer's task — it supersedes `09_FRESH_CODEX_REVIEW_REQUEST.md`.
 
 ## 2. Base SHA
 
@@ -27,7 +37,8 @@ modified.
 | --- | --- | --- |
 | 1 | `d036d12` | Implementation: 7 routes, assets, QA scripts, docs 00–06 |
 | 2 | `9a92350` | QA evidence, screenshots, this handoff (v1) |
-| 3 | branch tip | P2 closure: HTML validation, Lighthouse, inline-style fix, async font loading, regenerated screenshots, docs 08–09, this handoff (v2) |
+| 3 | `e4fe3b8` | P2 closure: HTML validation, Lighthouse, inline-style fix, async font loading, regenerated screenshots, docs 08–09, this handoff (v2) — **independently reviewed, FAIL** |
+| 4 | branch tip | Remediation: F-001/F-002/F-003 fixes, strengthened QA (89/119 checks), 3× cold Lighthouse mobile runs, docs 10–11, this handoff (v3) |
 
 The final fixed SHA is the tip of `build/jerrybay-phase1-commercial-v1` and is
 reported in the session response. **Do not trust any SHA written in prose** —
@@ -111,39 +122,49 @@ Full ledger: `02_CONTENT_AND_CLAIM_LEDGER.csv` (42 rows). Summary:
 
 | Validator | Result |
 | --- | --- |
-| `node scripts/qa/validate-site.mjs` | **81/81 PASS**, exit 0 |
-| `node scripts/qa/browser-qa.mjs` | **111/111 PASS**, exit 0 |
-| `npx html-validate` (7 pages, v11.6.2) | **0 problems**, exit 0 (added in P2) |
-| Lighthouse (9 runs: 7 routes mobile, Home desktop, Home devtools-throttling diagnostic) | Accessibility 100 and Best Practices 100 on **every** route; Home Desktop Performance 99; Home/other-routes Mobile Performance 63–72, classified CONDITIONAL PASS — EXTERNAL DEPENDENCY (added in P2) |
+| `node scripts/qa/validate-site.mjs` | **89/89 PASS**, exit 0 (was 81, +8 external-font-zero checks) |
+| `node scripts/qa/browser-qa.mjs` | **119/119 PASS**, exit 0 (was 111, +8 scroll-lock checks; `touch` check strengthened from a 4-selector height-only subset to every visible `a[href]/button` at both width and height) |
+| `npx html-validate` (7 pages, v11.6.2) | **0 problems**, exit 0 |
+| Lighthouse Home Desktop | **100 / 100 / 100** (Performance/Accessibility/Best Practices) |
+| Lighthouse Home Mobile, DevTools throttling, 3 independent cold runs | **91 / 94 / 94** Performance, all ≥75 threshold; 100/100 Accessibility/Best Practices on every run |
+| Lighthouse, all 7 routes, mobile simulated | **100 / 100 / 100** on every route |
 
-All 15 required checks are covered; mapping in `04_QA_CONTRACT.md`. Real defects
-were caught and fixed across both sessions: 13px type, an `h1 → h3` heading
-skip, two claim-scanner hits (session 1); 35 `no-inline-style` html-validate
-errors and one render-blocking font stylesheet, confirmed fixed by Lighthouse's
-own `render-blocking-insight` audit (session 2, P2). Full detail and the
-Performance diagnosis in `08_P2_QA_EVIDENCE.md`.
+All 15 required checks are covered; mapping in `04_QA_CONTRACT.md`. Real
+defects were caught and fixed across three remediation passes: 13px type, an
+`h1 → h3` heading skip, two claim-scanner hits (pass 1); 35 `no-inline-style`
+html-validate errors and one render-blocking font stylesheet (pass 2, P2);
+F-001/F-002/F-003 reproduced by an independent Fresh-Context review and fixed
+in pass 3 — see `10_REMEDIATION_EVIDENCE.md` for full before/after detail,
+including the withdrawal of pass 2's "CONDITIONAL PASS — EXTERNAL DEPENDENCY"
+classification for Mobile Performance, which the independent review correctly
+rejected as a local, fixable font-loading defect.
 
 ## 10. Browser QA actually run
 
-**Executed, twice** — once per session, most recently after all P2 changes.
-Chrome 151.0.7922.76 headless over CDP, all 7 routes × 2 viewports (1440×900,
-390×844). Zero horizontal overflow, zero console errors, H1 at 64px desktop /
-36px mobile, all touch targets ≥44px, mobile menu open→ESC→focus-return
-verified on every route, skip link visible on focus. Detail in `06_BROWSER_QA.md`
-and `08_P2_QA_EVIDENCE.md`.
+**Executed, three times** — once per remediation pass, most recently after
+the F-001/F-002/F-003 fixes. Chrome 151.0.7922.76 headless over CDP, all 7
+routes × 2 viewports (1440×900, 390×844). Zero horizontal overflow, zero
+console errors, H1 at 64px desktop / 36px mobile, every visible
+`a[href]/button` ≥44×44px (width and height, comprehensive selector — see
+`10_REMEDIATION_EVIDENCE.md` § F-001), mobile menu open→ESC→focus-return
+**and** background-scroll-lock verified with real (CDP-trusted-input) wheel
+events on every route (§ F-002), skip link visible on focus. Detail in
+`06_BROWSER_QA.md` and `10_REMEDIATION_EVIDENCE.md`.
 
-Lighthouse **was** run in P2 (see § 9). Still not tested: Firefox, Safari, real
-devices, screen readers.
+Still not tested: Firefox, Safari, real devices, screen readers.
 
 ## 11. Screenshots produced
 
 15 PNGs in `evidence/screenshots/` — desktop and mobile for all 7 routes, plus
-`home-mobile-menu-open.png` for the mobile-navigation-open state. Captured before
-interaction, so each shows the default state. Regenerated in P2 after the
-inline-style and font-loading changes; four were manually re-opened and visually
-compared against the pre-P2 versions (identical — see `08_P2_QA_EVIDENCE.md`
-§ Screenshot & Visual QA), the rest verified via the same automated capture and
-assertion pass.
+`home-mobile-menu-open.png` for the mobile-navigation-open state. Captured
+before interaction, so each shows the default state. Regenerated after the
+F-001/F-002/F-003 fixes (system-font swap, in-content link sizing); six were
+manually re-opened and visually reviewed, including a purpose-built scrolled
+capture of the highest-risk in-content-link area
+(`evidence/remediation/capabilities-inline-links.png`) — see
+`10_REMEDIATION_EVIDENCE.md` § Screenshot Evidence. No CTA-hierarchy
+regression, no broken line-wrapping, no button-blob whitespace from the
+target-size fix.
 
 ## 12. Remaining OWNER_DECISION
 
@@ -172,44 +193,55 @@ assertion pass.
   not run automatically. A well-meaning text edit can silently break the CTA
   contract.
 - **Chrome-only QA.** No second rendering engine has seen this build.
-- **Mobile Performance sits below the 75 threshold on all 7 routes (63–72),**
-  diagnosed as external-dependency (live Google Fonts CDN + CJK font-subset
-  count), not a local code defect — see `08_P2_QA_EVIDENCE.md` for the full
-  diagnostic trail across two throttling methods. Accessibility and Best
-  Practices are 100 on every route; Desktop Performance is 99.
+
+**Resolved in remediation, kept here as history:** Mobile Performance
+previously sat below threshold (63–72, and a prior Writer classification of
+"external dependency" that an independent review correctly rejected). Fixed
+by removing the Google Fonts dependency entirely (system-font stack); now
+91/94/94 across three independent cold Lighthouse runs. 44×44 interactive
+targets and mobile-menu scroll lock were also missing and are now fixed and
+independently re-verified. See `10_REMEDIATION_EVIDENCE.md`.
 
 ## 14. Remote status
 
 **Nothing left the machine.** No push, no PR, no merge, no deploy, no Vercel
 project, no analytics account, no outreach. `main` and the live site are
-untouched. Both commits exist only in the local worktree; the branch has no
-upstream.
+untouched. All commits exist only in the local worktree; the branch has no
+upstream. The independent review that produced the FAIL verdict was also
+entirely local (a detached worktree under `jerrybay-site-worktrees\`, evidence
+under `jerrybay-review-evidence\`) — no data left the machine at any point.
 
 ## 15. Recommended fresh reviewer
 
-A fresh-context Codex reviewer with **no** prior involvement in this build.
-Full task list, exact commands, and a PASS/FAIL rubric are in
-`09_FRESH_CODEX_REVIEW_REQUEST.md` — do not substitute a shorter version of it.
-In summary, the reviewer must:
+A fresh-context reviewer with **no** prior involvement in this build **or**
+in the prior FAIL review at `e4fe3b8`. Full task list, exact commands, and a
+PASS/FAIL rubric are in `11_FRESH_REVIEW_REQUEST_AFTER_REMEDIATION.md` — do
+not substitute a shorter version of it, and do not reuse
+`09_FRESH_CODEX_REVIEW_REQUEST.md` (superseded). In summary, the reviewer
+must:
 
-1. Independently re-run `validate-site.mjs`, `html-validate`, and `browser-qa.mjs`.
-2. Audit `02_CONTENT_AND_CLAIM_LEDGER.csv` against rendered copy — find any
+1. Independently re-run `validate-site.mjs` (89/89), `html-validate` (0
+   problems), and `browser-qa.mjs` (119/119).
+2. Independently reproduce F-001's fix using a standalone measurement (not
+   just trusting `browser-qa.mjs`'s own `touch` check, since that check was
+   written by the same party being reviewed).
+3. Independently reproduce F-002's fix using real CDP-trusted wheel input,
+   not a script-dispatched event.
+4. Independently reproduce F-003's fix with at least two fresh
+   `--throttling-method=devtools` Lighthouse runs against Home Mobile.
+5. Audit `02_CONTENT_AND_CLAIM_LEDGER.csv` against rendered copy — find any
    claim-bearing component that has no ledger row.
-3. Adversarially test the claim scanner: try to introduce a prohibited claim that
-   `09:*` misses.
-4. Verify no quarantined content from the reconciliation pack leaked in.
-5. Read the CTA and offer hierarchy as a buyer would and judge whether the
-   commercial wedge actually lands.
-6. Confirm the `code.html` deletion is correct and intended.
-7. Independently verify (or challenge) the Mobile Performance
-   external-dependency classification in `08_P2_QA_EVIDENCE.md`.
+6. Adversarially test the claim scanner: try to introduce a prohibited claim
+   that check `09:*` misses.
+7. Confirm the Commercial Lock (CTA pair, `4–8주`, price anchors) is
+   unchanged from before this remediation cycle.
 
 ## 16. Jerry next approval — exactly one
 
-> **Do you approve `build/jerrybay-phase1-commercial-v1` for fresh-context
-> reviewer handoff?**
+> **Do you approve `build/jerrybay-phase1-commercial-v1` at the new fixed SHA
+> for a fresh-context re-review?**
 
-Yes → the branch goes to an independent reviewer. Still no push, no deploy.
-No → name the section to revise; the branch stays local.
+Yes → the branch goes to an independent reviewer for re-review. Still no
+push, no deploy. No → name the section to revise; the branch stays local.
 
 Everything in § 12 stays open either way. None of it blocks this one decision.

@@ -34,8 +34,16 @@
   --maxw: 1200px;
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
 
-  --font-head: "Space Grotesk", "Noto Sans KR", system-ui, sans-serif;
-  --font-body: "Inter", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  /* System-font stack only — zero external font requests. F-003 remediation:
+     independent review measured 18-19 Google Fonts requests / ~361-432KB and
+     ~3.3s of Style & Layout work causing Home Mobile DevTools Lighthouse
+     Performance to fail at 60-61 (threshold 75). Editorial hierarchy between
+     heading and body is preserved through weight/letter-spacing/size instead
+     of a distinct display typeface — see h1-h4 rules below. */
+  --font-head: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -199,6 +207,22 @@ ul.ticks li { margin-bottom: 0.45rem; }
   margin-top: 2rem;
 }
 
+/* In-content links (inline within paragraphs/definition lists) get an
+   invisible 44x44 hit box without breaking sentence flow. inline-flex keeps
+   each link as a single atomic unit on the line — it still wraps to a new
+   line as a whole with the surrounding text, it just never appears as a
+   sub-44px sliver. No visible padding/background is added, so short link
+   text (e.g. "AIKUS") only gains a taller, centered hit area, not a visible
+   pill shape. .btn is excluded — its own 48px-tall rule already covers it. */
+main a:not(.btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  vertical-align: middle;
+}
+
 /* --- Header / nav --------------------------------------------------------- */
 
 .site-header {
@@ -236,7 +260,9 @@ ul.ticks li { margin-bottom: 0.45rem; }
 .nav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  min-width: 44px;
   padding: 0 0.85rem;
   font-size: 0.9375rem;
   font-weight: 500;
@@ -280,6 +306,15 @@ ul.ticks li { margin-bottom: 0.45rem; }
   .nav a { min-height: 52px; padding: 0 0.75rem; font-size: 1rem; }
   .site-header__inner { position: relative; }
 }
+
+/* Locks background scroll while the mobile menu is open. Toggled by
+   site.js alongside data-open, so it is added/removed at every existing
+   open/close path (trigger, Escape, nav-link click, desktop breakpoint) for
+   free. Plain overflow:hidden (not position:fixed) so the browser preserves
+   the underlying scroll offset natively — no manual scrollTop bookkeeping
+   needed on close. */
+body.nav-open { overflow: hidden; }
+.nav[data-open="true"] { overscroll-behavior: contain; }
 
 /* --- Hero ----------------------------------------------------------------- */
 
@@ -454,7 +489,9 @@ tbody tr:nth-child(odd) { background: var(--surface-low); }
 .site-footer nav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  min-width: 44px;
   color: var(--text-muted);
   text-decoration: none;
 }

@@ -291,6 +291,28 @@ check("15c", "Contact에 데이터 수집 form 없음",
   !!contact && !/<form\b/i.test(contact.html) && !/<input\b/i.test(contact.html), "");
 
 // ---------------------------------------------------------------------------
+// 16. Zero external font/icon-font network dependency (F-003 remediation).
+// Independent review measured 18-19 Google Fonts requests / ~361-432KB
+// causing Home Mobile DevTools Lighthouse Performance to fail at 60-61
+// (threshold 75). The fix removed every Google Fonts <link> in favor of a
+// system-font stack; this guard keeps it removed on every future edit.
+// ---------------------------------------------------------------------------
+const EXTERNAL_FONT_PATTERNS = [
+  { re: /fonts\.googleapis\.com/i, label: "fonts.googleapis.com" },
+  { re: /fonts\.gstatic\.com/i, label: "fonts.gstatic.com" },
+  { re: /@import\s+url\([^)]*font/i, label: "remote @import font" },
+  { re: /material[\s-]?symbols/i, label: "Material Symbols icon font" },
+  { re: /material[\s-]?icons/i, label: "Material Icons icon font" },
+  { re: /use\.typekit\.net|fast\.fonts\.net|fonts\.adobe\.com/i, label: "other external font CDN" },
+];
+for (const p of pages) {
+  const hits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(p.html)).map((f) => f.label);
+  check(`16:${p.route}`, "외부 font/icon-font 네트워크 요청 0개", hits.length === 0, hits.join(", "));
+}
+const cssHits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(cssText)).map((f) => f.label);
+check("16:site.css", "site.css에 외부 font 참조 0개", cssHits.length === 0, cssHits.join(", "));
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 const pad = (s, n) => String(s).padEnd(n);

@@ -2,6 +2,17 @@
 
 > **Writer verdict for this cycle: WRITER COMPLETE — FRESH REVIEW READY**
 > Writer self-verification only. This is not an independent Review PASS.
+>
+> **SUPERSEDED.** An independent Fresh-Context review of the resulting commit
+> `e4fe3b8` returned **FAIL**, reproducing three real defects this cycle's
+> testing missed: F-001 (44×44 targets — the `touch` check below covered only
+> a 4-selector subset and height, not width), F-002 (mobile menu did not lock
+> background scroll — never tested here), and F-003 (Home Mobile Performance
+> under real DevTools throttling scored 60-61, not the 63-72 this document's
+> § "CONDITIONAL PASS — EXTERNAL DEPENDENCY" section concluded — that
+> conclusion was independently reproduced and rejected. See
+> `10_REMEDIATION_EVIDENCE.md` for the fix and `07_FINAL_HANDOFF.md` for
+> current status. This document is kept for history, not as current guidance.
 
 ## Preflight
 

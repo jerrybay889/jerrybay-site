@@ -8,7 +8,13 @@
  *   - horizontal overflow (documentElement.scrollWidth vs innerWidth) + the
  *     widest offending element, so a failure names its own cause
  *   - primary CTA presence, wording and target
+ *   - every visible a[href]/button/[role=button] is >=44x44px, both
+ *     dimensions, via a genuine viewport-intersection visibility test
+ *     (not a partial selector list — see the F-001 remediation note inline)
  *   - mobile menu open / ESC-close / focus-return behaviour
+ *   - mobile menu background-scroll lock: open blocks real (CDP-level
+ *     trusted) wheel scrolling, close restores position and re-enables it,
+ *     and resizing past the desktop breakpoint releases the lock too
  *   - keyboard focus reachability of the skip link
  *   - a PNG screenshot
  *
@@ -102,11 +108,22 @@ const PROBE = `(() => {
                  h: Math.round(a.getBoundingClientRect().height) }));
   const toggle = document.querySelector("[data-nav-toggle]");
   const toggleBox = toggle ? toggle.getBoundingClientRect() : null;
-  const smallTargets = [...document.querySelectorAll("a.btn, button, .nav a, .site-footer nav a")]
-    .filter(el => { const r = el.getBoundingClientRect();
-                    return r.width > 0 && r.height > 0 && r.height < 44; })
-    .map(el => el.tagName.toLowerCase() + ":" + el.textContent.trim().slice(0, 14) +
-               "(" + Math.round(el.getBoundingClientRect().height) + "px)");
+
+  // F-001: every visible a[href]/button/[role=button], width AND height,
+  // not a partial selector list. "Visible" is a genuine viewport-intersection
+  // test (real box, non-zero size, actually on-screen) rather than a
+  // hardcoded class exclusion — this is what correctly excludes the
+  // skip-link's offscreen idle state (top:-100px) without special-casing it,
+  // while a separate skiplink test below still covers its focused state.
+  const targetEls = [...document.querySelectorAll("a[href], button, [role='button']")];
+  const smallTargets = targetEls
+    .map(el => ({ el, r: el.getBoundingClientRect(), cs: getComputedStyle(el) }))
+    .filter(({ r, cs }) => r.width > 0 && r.height > 0 &&
+      r.right > 0 && r.bottom > 0 && r.left < window.innerWidth && r.top < window.innerHeight &&
+      cs.visibility !== "hidden" && cs.display !== "none")
+    .filter(({ r }) => r.width < 44 || r.height < 44)
+    .map(({ el, r }) => el.tagName.toLowerCase() + ":" + el.textContent.trim().slice(0, 18) +
+               "(" + Math.round(r.width) + "x" + Math.round(r.height) + "px)");
   return {
     overflow, widest, primaries, smallTargets,
     innerWidth: window.innerWidth,
@@ -141,6 +158,75 @@ const MENU_PROBE = `(async () => {
            opened, closed, focusReturned, linkCount };
 })()`;
 
+// F-002: verifies background scroll is actually locked while the mobile menu
+// is open. Uses CDP's Input.dispatchMouseEvent(mouseWheel) rather than a
+// page-script-dispatched WheelEvent, because a script-dispatched event never
+// triggers the browser's native scroll response (only trusted/OS-level input
+// does) — a script-only test here would pass regardless of whether the CSS
+// fix works, which is exactly the kind of check that missed real defects
+// before (see F-001's prior partial-selector audit).
+async function testScrollLock(cdp, vp, tag, record) {
+  const evalNum = async (expr) => {
+    const { result } = await cdp.send("Runtime.evaluate", { expression: expr, returnByValue: true });
+    return result.value;
+  };
+  const evalBool = async (expr) => {
+    const { result } = await cdp.send("Runtime.evaluate", { expression: expr, returnByValue: true });
+    return !!result.value;
+  };
+  const wheel = (deltaY) => cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseWheel", x: Math.round(vp.width / 2), y: Math.round(vp.height / 2),
+    deltaX: 0, deltaY,
+  });
+
+  const maxScroll = await evalNum(
+    "document.documentElement.scrollHeight - window.innerHeight"
+  );
+  const scrollable = maxScroll > 80;
+
+  // behavior:"instant" overrides the site's CSS scroll-behavior:smooth for
+  // this call — without it, scrollTo animates and every read below lands
+  // mid-animation, producing unstable, non-reproducible baseline values.
+  await evalNum('window.scrollTo({ top: 200, left: 0, behavior: "instant" }); window.scrollY');
+  await sleep(80);
+  const beforeOpen = await evalNum("window.scrollY");
+
+  await evalBool('document.querySelector("[data-nav-toggle]").click(); true');
+  await sleep(60);
+  const lockedOnOpen = await evalBool('document.body.classList.contains("nav-open")');
+
+  await wheel(300);
+  await sleep(80);
+  const duringOpenY = await evalNum("window.scrollY");
+  const scrollBlocked = !scrollable || duringOpenY === beforeOpen;
+
+  await evalBool(
+    'document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); true'
+  );
+  await sleep(60);
+  const lockReleased = !(await evalBool('document.body.classList.contains("nav-open")'));
+  const positionPreserved = (await evalNum("window.scrollY")) === beforeOpen;
+  const focusReturned = await evalBool(
+    'document.activeElement === document.querySelector("[data-nav-toggle]")'
+  );
+
+  await wheel(300);
+  await sleep(80);
+  const afterCloseY = await evalNum("window.scrollY");
+  const scrollWorksAfterClose = !scrollable || afterCloseY !== beforeOpen;
+
+  await evalNum('window.scrollTo({ top: 0, left: 0, behavior: "instant" }); 0');
+
+  const detail = JSON.stringify({
+    scrollable, beforeOpen, lockedOnOpen, duringOpenY, scrollBlocked,
+    lockReleased, positionPreserved, focusReturned, afterCloseY, scrollWorksAfterClose,
+  });
+  record(`scrolllock ${tag}`, "메뉴 open 시 배경 scroll 차단 → close 시 위치 보존·재개",
+    lockedOnOpen && scrollBlocked && lockReleased && positionPreserved &&
+      focusReturned && scrollWorksAfterClose,
+    detail);
+}
+
 // --- run -------------------------------------------------------------------
 
 const targets = await (await fetch(`${CDP}/json/list`)).json();
@@ -171,9 +257,7 @@ for (const vp of VIEWPORTS) {
 
     const consoleErrors = cdp.events
       .filter((e) => e.method === "Log.entryAdded" && e.params.entry.level === "error")
-      .map((e) => e.params.entry.text)
-      // Google Fonts is a deliberate external dependency; offline runs are not a page defect.
-      .filter((t) => !/fonts\.(googleapis|gstatic)\.com/.test(t));
+      .map((e) => e.params.entry.text);
     const failedReqs = cdp.events
       .filter((e) => e.method === "Network.loadingFailed")
       .map((e) => e.params.errorText)
@@ -207,7 +291,7 @@ for (const vp of VIEWPORTS) {
         JSON.stringify(ctas));
     }
 
-    record(`touch ${tag}`, "인터랙티브 타겟 44px 이상",
+    record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",
       r.smallTargets.length === 0, r.smallTargets.join(", "));
 
     // Screenshot before any interaction, so the evidence shows the default state.
@@ -225,6 +309,8 @@ for (const vp of VIEWPORTS) {
       record(`menu ${tag}`, "메뉴 open → ESC close → focus 복귀",
         menu.value.ok, JSON.stringify(menu.value));
 
+      await testScrollLock(cdp, vp, tag, record);
+
       // Capture the open mobile navigation as its own required page state.
       if (route === "/") {
         await cdp.send("Runtime.evaluate", {
@@ -238,6 +324,32 @@ for (const vp of VIEWPORTS) {
     }
   }
 }
+
+// F-002: resizing past the desktop breakpoint while the menu is open must
+// release the scroll lock too, not just Escape/link-click/toggle-click.
+await cdp.send("Emulation.setDeviceMetricsOverride", {
+  width: 390, height: 844, deviceScaleFactor: 1, mobile: true,
+});
+await cdp.send("Page.navigate", { url: BASE + "/" });
+await sleep(700);
+await cdp.send("Runtime.evaluate", {
+  expression: 'document.querySelector("[data-nav-toggle]").click()',
+});
+await sleep(60);
+await cdp.send("Emulation.setDeviceMetricsOverride", {
+  width: 1440, height: 900, deviceScaleFactor: 1, mobile: false,
+});
+await sleep(150);
+const { result: resizeReset } = await cdp.send("Runtime.evaluate", {
+  expression: `({
+    lockReleased: !document.body.classList.contains("nav-open"),
+    navOpenAttr: document.getElementById("primary-nav").getAttribute("data-open"),
+  })`,
+  returnByValue: true,
+});
+record("scrolllock resize-to-desktop", "데스크톱 breakpoint 복귀 시 scroll lock 해제",
+  resizeReset.value.lockReleased && resizeReset.value.navOpenAttr !== "true",
+  JSON.stringify(resizeReset.value));
 
 // Skip link must be the first keyboard stop and must become visible on focus.
 await cdp.send("Emulation.setDeviceMetricsOverride", {

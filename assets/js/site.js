@@ -13,12 +13,14 @@
     nav.setAttribute("data-open", "true");
     toggle.setAttribute("aria-expanded", "true");
     toggle.textContent = "닫기";
+    document.body.classList.add("nav-open");
   }
 
   function close(refocus) {
     nav.removeAttribute("data-open");
     toggle.setAttribute("aria-expanded", "false");
     toggle.textContent = "메뉴";
+    document.body.classList.remove("nav-open");
     if (refocus) toggle.focus();
   }
 

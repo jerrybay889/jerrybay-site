@@ -1,5 +1,14 @@
 # Fresh Codex Review Request
 
+> **SUPERSEDED.** This request was acted on: an independent review of the
+> resulting commit `e4fe3b8` returned **FAIL** (F-001, F-002, F-003 —
+> see `10_REMEDIATION_EVIDENCE.md`). Use
+> `11_FRESH_REVIEW_REQUEST_AFTER_REMEDIATION.md` instead. Kept for history.
+> Note: this document's QA commands already used the correct
+> `scripts/qa/validate-site.mjs` / `scripts/qa/browser-qa.mjs` paths — the
+> `tools/` path mismatch noted by the independent review (F-005) was in that
+> review's own supplied instruction template, not in this document.
+
 **You must have no prior involvement in this build.** If you have any memory of writing this
 site, this commercial lock, or these QA scripts, you are not the intended reviewer — hand this
 back and ask for a genuinely independent reviewer instead.

@@ -258,13 +258,20 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 13. Privacy placeholder carries the mandated sentence.
+// 13. Privacy carries the approved G3C canonical disclosures.
 // ---------------------------------------------------------------------------
 const privacy = pages.find((p) => p.route === "/privacy/");
-const REQUIRED_PRIVACY =
-  "운영 주체·외부 Form·수집 항목·보유기간·위탁·국외이전이 확정되기 전에는 본 페이지를 공개용 개인정보처리방침으로 사용할 수 없습니다. OWNER/EXPERT REVIEW REQUIRED.";
-check("13", "Privacy 필수 고지 문구 존재",
-  !!privacy && privacy.text.includes(REQUIRED_PRIVACY), "");
+const REQUIRED_PRIVACY_TERMS = [
+  "㈜글로보더",
+  "이름, 전화번호",
+  "90일",
+  "Tally",
+  "Belgium",
+  "jerrybay889@gmail.com",
+];
+const privacyMissing = REQUIRED_PRIVACY_TERMS.filter((t) => !privacy?.text.includes(t));
+check("13", "Privacy 필수 공개 항목 존재 (개인정보처리자/필수항목/보유기간/외부처리자/국외이전/권리행사연락처)",
+  !!privacy && privacyMissing.length === 0, privacyMissing.join(", "));
 
 // ---------------------------------------------------------------------------
 // 14. robots.txt disallows everything.

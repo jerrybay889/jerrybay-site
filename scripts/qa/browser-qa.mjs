@@ -36,6 +36,7 @@ const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844, mobile: true },
 ];
 const PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 
 mkdirSync(OUT, { recursive: true });
 
@@ -286,7 +287,7 @@ for (const vp of VIEWPORTS) {
       record(`cta ${tag}`, `Primary CTA 문구·링크 정확`,
         ctas.length > 0 &&
         ctas.every((c) => c.text === PRIMARY_CTA) &&
-        ctas.every((c) => c.href === "/contact/" || c.href.startsWith("mailto:")) &&
+        ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
         ctas.every((c) => c.h >= 44),
         JSON.stringify(ctas));
     }

@@ -23,14 +23,13 @@ const ROUTES = [
   { route: "/collaborate/", file: "collaborate/index.html" },
   { route: "/about/", file: "about/index.html" },
   { route: "/contact/", file: "contact/index.html" },
-  { route: "/privacy/", file: "privacy/index.html" },
-  { route: "/content/", file: "content/index.html" },
-  { route: "/content/projects/aikus/", file: "content/projects/aikus/index.html" },
-  { route: "/content/projects/omyqt/", file: "content/projects/omyqt/index.html" },
-  { route: "/content/projects/invit/", file: "content/projects/invit/index.html" },
-  { route: "/content/projects/casper-electric-ai-drawing/", file: "content/projects/casper-electric-ai-drawing/index.html" },
-  { route: "/content/projects/renault-sm6-ai-drawing/", file: "content/projects/renault-sm6-ai-drawing/index.html" },
-  { route: "/content/projects/fashion-ai-generator/", file: "content/projects/fashion-ai-generator/index.html" },
+  { route: "/references/", file: "references/index.html" },
+  { route: "/references/projects/aikus/", file: "references/projects/aikus/index.html" },
+  { route: "/references/projects/omyqt/", file: "references/projects/omyqt/index.html" },
+  { route: "/references/projects/invit/", file: "references/projects/invit/index.html" },
+  { route: "/references/projects/casper-electric-ai-drawing/", file: "references/projects/casper-electric-ai-drawing/index.html" },
+  { route: "/references/projects/renault-sm6-ai-drawing/", file: "references/projects/renault-sm6-ai-drawing/index.html" },
+  { route: "/references/projects/fashion-ai-generator/", file: "references/projects/fashion-ai-generator/index.html" },
 ];
 
 const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
@@ -72,17 +71,17 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 14 route entry HTML files, and no stray public HTML.
+// 1. Exactly 13 route entry HTML files, and no stray public HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "14개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "13개 route 파일이 모두 존재", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
 const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 14개 (stray 없음)",
-  allHtml.length === 14 && stray.length === 0,
+check("01b", "public HTML 파일이 정확히 13개 (stray 없음)",
+  allHtml.length === 13 && stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
 
 // Load every page once.
@@ -110,11 +109,6 @@ for (const p of pages) {
 const CTA_RE = /<a\b[^>]*class="[^"]*\bbtn--primary\b[^"]*"[^>]*>([\s\S]*?)<\/a>/gi;
 for (const p of pages) {
   const labels = [...p.html.matchAll(CTA_RE)].map((m) => m[1].replace(/<[^>]+>/g, "").trim());
-  if (p.route === "/privacy/") {
-    check(`03:${p.route}`, "Privacy는 상업 CTA를 노출하지 않음", labels.length === 0,
-      labels.join(" | "));
-    continue;
-  }
   const expectedCta = PRIMARY_CTA_BY_ROUTE.get(p.route) || DEFAULT_PRIMARY_CTA;
   const allExact = labels.length > 0 && labels.every((l) => l === expectedCta);
   check(`03:${p.route}`, `Primary CTA 문구가 정확히 "${expectedCta}"`, allExact,
@@ -276,23 +270,19 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 13. Privacy carries the approved G3C canonical disclosures.
+// 13. Owner-directed privacy-route removal must be complete.
 // ---------------------------------------------------------------------------
-const privacy = pages.find((p) => p.route === "/privacy/");
-const REQUIRED_PRIVACY_TERMS = [
-  "㈜글로보더",
-  "이름, 전화번호",
-  "90일",
-  "Tally",
-  "Belgium",
-  "jerrybay889@gmail.com",
-];
-const privacyMissing = REQUIRED_PRIVACY_TERMS.filter((t) => !privacy?.text.includes(t));
-check("13", "Privacy 필수 공개 항목 존재 (개인정보처리자/필수항목/보유기간/외부처리자/국외이전/권리행사연락처)",
-  !!privacy && privacyMissing.length === 0, privacyMissing.join(", "));
+const privacyRoutePresent = existsSync(join(ROOT, "privacy", "index.html"));
+const privacyLinks = pages
+  .flatMap((p) => (p.html.match(/href="\/privacy\//g) || []).map(() => p.route));
+check("13", "개인정보 route와 메뉴 링크가 제거됨",
+  !privacyRoutePresent && privacyLinks.length === 0,
+  [privacyRoutePresent && "privacy/index.html", ...privacyLinks].filter(Boolean).join(", "));
 
-check("13b", `Privacy가 승인된 시행일을 정확히 표기 ("${APPROVED_EFFECTIVE_DATE}")`,
-  !!privacy && privacy.text.includes(APPROVED_EFFECTIVE_DATE), "");
+const legacyContentLinks = pages
+  .flatMap((p) => (p.html.match(/href="\/content(?:\/|\?)/g) || []).map(() => p.route));
+check("13b", "레퍼런스 전환 후 /content legacy 링크가 없음",
+  legacyContentLinks.length === 0, legacyContentLinks.join(", "));
 
 // ---------------------------------------------------------------------------
 // 14. robots.txt permits public crawling.
@@ -465,16 +455,16 @@ check("18i", "홈 역량 섹션에 3개 핵심 역량과 실행 역량·현재 �
   `pillars=${capabilityPillarCount}, stackGroups=${stackGroupCount}, missing=${missingCapabilityTerms.join(" | ")}`);
 
 // ---------------------------------------------------------------------------
-// 19. G2-A-R1 content hub and individual project-detail contract.
+// 19. G2-B-R2 reference hub and individual project-detail contract.
 // ---------------------------------------------------------------------------
-const contentHub = pages.find((p) => p.route === "/content/");
+const contentHub = pages.find((p) => p.route === "/references/");
 const contentProjects = [
-  "/content/projects/aikus/",
-  "/content/projects/omyqt/",
-  "/content/projects/invit/",
-  "/content/projects/casper-electric-ai-drawing/",
-  "/content/projects/renault-sm6-ai-drawing/",
-  "/content/projects/fashion-ai-generator/",
+  "/references/projects/aikus/",
+  "/references/projects/omyqt/",
+  "/references/projects/invit/",
+  "/references/projects/casper-electric-ai-drawing/",
+  "/references/projects/renault-sm6-ai-drawing/",
+  "/references/projects/fashion-ai-generator/",
 ];
 const contentDetailPages = pages.filter((p) => contentProjects.includes(p.route));
 const missingContentLinks = contentProjects.filter((route) => !contentHub?.html.includes(`href="${route}"`));
@@ -484,10 +474,10 @@ const missingDetailStructure = contentDetailPages.filter((p) =>
 const productHomepages = ["https://aikus.kr/", "https://www.omyqt.com/", "https://invit.kr/"];
 const missingProductHomepageLinks = productHomepages.filter((url) => !contentHub?.html.includes(`href="${url}"`));
 
-check("19a", "콘텐츠 허브와 6개 프로젝트 상세 route 존재",
+check("19a", "레퍼런스 허브와 6개 프로젝트 상세 route 존재",
   !!contentHub && contentDetailPages.length === 6,
   `hub=${!!contentHub}, details=${contentDetailPages.length}`);
-check("19b", "콘텐츠 허브가 6개 프로젝트 상세 페이지로 연결",
+check("19b", "레퍼런스 허브가 6개 프로젝트 상세 페이지로 연결",
   !!contentHub && missingContentLinks.length === 0,
   missingContentLinks.join(", "));
 check("19c", "모든 프로젝트 상세에 소개·범위·기술 범주 구조 존재",
@@ -496,22 +486,22 @@ check("19c", "모든 프로젝트 상세에 소개·범위·기술 범주 구조
 check("19d", "AIKUS·OMYQT·INVIT 홈페이지 링크 존재",
   !!contentHub && missingProductHomepageLinks.length === 0,
   missingProductHomepageLinks.join(", "));
-check("19e", "홈 프로젝트 섹션에 콘텐츠 허브 진입 링크 존재",
-  !!home && home.html.includes('href="/content/?type=project"'), "");
+check("19e", "홈 프로젝트 섹션에 레퍼런스 허브 진입 링크 존재",
+  !!home && home.html.includes('href="/references/?type=project"'), "");
 check("19f", "언론 섹션 제목이 기사 · 인터뷰로 표기",
   !!home && home.text.includes("기사 · 인터뷰"), "");
 
 const CONTENT_FORBIDDEN = ["SSOT", "V4-G", "OWNER", "IDEA DB", "12,091", "2,721", "App Store 출시 완료"];
-const contentForbiddenHits = pages.filter((p) => p.route.startsWith("/content"))
+const contentForbiddenHits = pages.filter((p) => p.route.startsWith("/references"))
   .flatMap((p) => CONTENT_FORBIDDEN.filter((term) => p.text.includes(term)).map((term) => `${p.route}:${term}`));
-check("19g", "콘텐츠 공개 copy에 내부 용어·민감 규모·출시 과장 없음",
+check("19g", "레퍼런스 공개 copy에 내부 용어·민감 규모·출시 과장 없음",
   contentForbiddenHits.length === 0,
   contentForbiddenHits.join(", "));
 
 const historicalProjectRoutes = [
-  "/content/projects/casper-electric-ai-drawing/",
-  "/content/projects/renault-sm6-ai-drawing/",
-  "/content/projects/fashion-ai-generator/",
+  "/references/projects/casper-electric-ai-drawing/",
+  "/references/projects/renault-sm6-ai-drawing/",
+  "/references/projects/fashion-ai-generator/",
 ];
 const historicalAttributionGaps = pages
   .filter((p) => historicalProjectRoutes.includes(p.route))

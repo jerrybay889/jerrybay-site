@@ -7,7 +7,7 @@
 - [x] `/` is a Korean-first long-form homepage with the eight contracted sections.
 - [x] Original Deep Navy / Indigo / Cyan identity, actual profile photo, information density, and scroll rhythm are recognizably restored.
 - [x] No external stylesheet, font, or icon-font dependency is introduced.
-- [x] Existing six supporting routes and `/privacy/` remain present and functional.
+- [x] Existing six supporting routes remain present and functional; Owner-directed removal of the dedicated privacy route is complete.
 - [x] Home primary CTA text and approved Tally target are exact; supporting CTAs use in-page anchors.
 - [x] Public copy contains no internal workflow terms, raw IDEA content, private data, unsupported outcomes, or misleading client attribution.
 - [x] Static, adversarial resource, HTML, and full browser checks pass.
@@ -29,4 +29,5 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] Historical commercial/project evidence is complete and role-context safe.
 - [x] External reference inventory is live rechecked.
 - [x] Home capability section makes the three core pillars, complementary execution capabilities, and five public-safe stack groups visible without increasing Hero scale or spacing.
+- [x] Owner-directed IA remediation removes the privacy route/menu and renames the full Content/Projects archive to Reference/Projects at `/references/`.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

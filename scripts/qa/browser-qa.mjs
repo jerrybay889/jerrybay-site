@@ -31,10 +31,10 @@ const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = 
   process.argv;
 
 const ROUTES = [
-  "/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/", "/privacy/",
-  "/content/", "/content/projects/aikus/", "/content/projects/omyqt/", "/content/projects/invit/",
-  "/content/projects/casper-electric-ai-drawing/", "/content/projects/renault-sm6-ai-drawing/",
-  "/content/projects/fashion-ai-generator/",
+  "/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/",
+  "/references/", "/references/projects/aikus/", "/references/projects/omyqt/", "/references/projects/invit/",
+  "/references/projects/casper-electric-ai-drawing/", "/references/projects/renault-sm6-ai-drawing/",
+  "/references/projects/fashion-ai-generator/",
 ];
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, mobile: false },
@@ -177,7 +177,9 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  const expectedLinkCount = document.body.classList.contains("home-v4") ? 9 : 7;
+  const expectedLinkCount = document.body.classList.contains("home-v4")
+    ? 9
+    : (document.body.classList.contains("content-page") ? 6 : 7);
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;
@@ -305,16 +307,14 @@ for (const vp of VIEWPORTS) {
     record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위 (${r.h1Px}px)`,
       r.h1Px >= h1Min && r.h1Px <= h1Max);
 
-    if (route !== "/privacy/") {
-      const ctas = r.primaries;
-      const expectedCta = PRIMARY_CTA_BY_ROUTE.get(route) || DEFAULT_PRIMARY_CTA;
-      record(`cta ${tag}`, `Primary CTA 문구·링크 정확`,
-        ctas.length > 0 &&
-        ctas.every((c) => c.text === expectedCta) &&
-        ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
-        ctas.every((c) => c.h >= 44),
-        JSON.stringify(ctas));
-    }
+    const ctas = r.primaries;
+    const expectedCta = PRIMARY_CTA_BY_ROUTE.get(route) || DEFAULT_PRIMARY_CTA;
+    record(`cta ${tag}`, `Primary CTA 문구·링크 정확`,
+      ctas.length > 0 &&
+      ctas.every((c) => c.text === expectedCta) &&
+      ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
+      ctas.every((c) => c.h >= 44),
+      JSON.stringify(ctas));
 
     if (route === "/") {
       record(`v4-sections ${tag}`, "V4-G1 홈 8개 section이 DOM에 존재",
@@ -407,8 +407,8 @@ record("skiplink", "skip link 포커스 시 화면에 표시",
   skip.value.focused && skip.value.top >= 0 && skip.value.href === "#main",
   JSON.stringify(skip.value));
 
-// The home CTA reaches a real, query-compatible project-only content view.
-await cdp.send("Page.navigate", { url: BASE + "/content/?type=project" });
+// The home CTA reaches a real, query-compatible project-only reference view.
+await cdp.send("Page.navigate", { url: BASE + "/references/?type=project" });
 await sleep(700);
 const { result: projectFilter } = await cdp.send("Runtime.evaluate", {
   expression: `(() => {
@@ -424,11 +424,11 @@ const { result: projectFilter } = await cdp.send("Runtime.evaluate", {
   })()`,
   returnByValue: true,
 });
-record("content project-filter", "콘텐츠 프로젝트 필터가 query route에서 동작",
+record("references project-filter", "레퍼런스 프로젝트 필터가 query route에서 동작",
   projectFilter.value.visible === 6 && projectFilter.value.projectsOnly && projectFilter.value.projectTabCurrent,
   JSON.stringify(projectFilter.value));
 const { data: filterShot } = await cdp.send("Page.captureScreenshot", { format: "png" });
-writeFileSync(join(OUT, "content-project-filter-desktop.png"), Buffer.from(filterShot, "base64"));
+writeFileSync(join(OUT, "references-project-filter-desktop.png"), Buffer.from(filterShot, "base64"));
 
 cdp.close();
 

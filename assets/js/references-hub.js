@@ -1,4 +1,4 @@
-/* Progressive enhancement for the static, indexable content archive. */
+/* Progressive enhancement for the static, indexable reference archive. */
 (function () {
   "use strict";
 
@@ -15,7 +15,7 @@
   });
 
   var visibleCount = cards.filter(function (card) { return !card.hidden; }).length;
-  result.textContent = activeType === "project" ? "프로젝트 " + visibleCount + "개" : "전체 콘텐츠 " + visibleCount + "개";
+  result.textContent = activeType === "project" ? "프로젝트 " + visibleCount + "개" : "전체 레퍼런스 " + visibleCount + "개";
 
   Array.prototype.forEach.call(document.querySelectorAll("[data-content-filter]"), function (link) {
     if (link.getAttribute("data-content-filter") === activeType) link.setAttribute("aria-current", "page");

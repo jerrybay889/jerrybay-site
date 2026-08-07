@@ -73,4 +73,11 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Make three core pillars visible: AI business/product strategy, AI consulting/business transformation, and AI education/knowledge transfer.
 - Make the complementary execution capabilities visible: product/prototype build, AI agent/automation, and government/consortium project PM.
 - Group the current public-safe stack into Product & Knowledge, Web & Mobile, Data & Security, AI & Automation, and Delivery & Quality. Use technology categories and named tools only where they are already Owner-approved; do not expose credentials, internal procedures, or unsupported performance claims.
-- Preserve accessible source order, 44px interactive targets, local system-font delivery, and the existing Content/Projects archive. This is a home-information architecture remediation only; it does not approve new daily content publication or a production release.
+- Preserve accessible source order, 44px interactive targets, local system-font delivery, and the existing Reference/Projects archive. This is a home-information architecture remediation only; it does not approve new daily content publication or a production release.
+
+### G2-B-R2 Owner IA clarification
+
+- Remove the dedicated `/privacy/` route and every visible Privacy/개인정보 menu or footer link from the review candidate.
+- Rename the public `콘텐츠` navigation destination and archive to `레퍼런스`; move the hub from `/content/` to `/references/` and all six project detail pages to `/references/projects/...`.
+- Keep the archive query-compatible at `/references/?type=project`, preserve its indexable static-page structure, and update all home, header, footer, breadcrumb, and project links.
+- Treat this as an Owner-directed review-candidate IA change. It does not authorize production publication, does not restore the legacy routes, and does not alter the approved external Tally intake path.

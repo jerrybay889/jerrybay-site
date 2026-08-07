@@ -38,6 +38,17 @@
 
 Automated accessibility audit reported zero violations and one incomplete color-contrast item for layered transparent/gradient backgrounds. This is recorded for manual quality closure in V4-G3 and does not replace the current keyboard, target-size, heading, overflow, and skip-link PASS evidence.
 
+## G2-A-R1 evidence — local updated review candidate
+
+- Verified implementation SHA: `98a03c96d3e0ce23fba68a2a6993384f2a84e9d9`
+- Static contract: `212/212 PASS` across 14 public routes
+- External resource adversarial fixtures: `29/29 PASS`
+- HTML validation: `0 problems` across all 14 public routes
+- Chrome/CDP browser QA: `245/245 PASS` across desktop/mobile, including Featured Build overlap and `/content/?type=project` assertions
+- Public-file scan: internal/sensitive `0`, secret-like `0`, tracking `0`
+- Rendered evidence: `33 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2a-r1/`
+- Full record: `docs/jerrybay-v4/evidence/verification-g2a-r1.md`
+
 ## Next Action
 
 Complete the Owner-requested G2-A-R1 visual remediation and Content/Projects archive, run the expanded route-level QA, publish one updated isolated protected review revision, and stop for Jerry review. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the updated checkpoint.

@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B-R2 REFERENCE IA REMEDIATION PASS / READY FOR OWNER REVIEW`
+`V4-G2 — Content & Project Expansion / G2-B-R3 REFERENCE NAVIGATION CONSOLIDATION PASS / READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -89,6 +89,19 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Isolated protected review deployment: `dpl_AJP2wgdQt9JjnejAbTsTmpHPkXYP`, state `READY`, URL `https://jerrybay-v4-g2a-review-qaf855qex-jerrybay889s-projects.vercel.app`.
 - Isolation remains unchanged: deployment is in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`; existing `jerrybay-site`, its domains, `main`, and existing-site production were not changed.
 - Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r2-references.md`.
+
+## G2-B-R3 reference navigation consolidation
+
+- Verified implementation SHA: `0790583b2a9ef9b05e135431252e3634289a72f5` (`fix: consolidate reference navigation`).
+- The home header no longer presents a parallel `프로젝트` item. Reference hub and six detail-page headers now use the single archive destination `레퍼런스`; their footer archive link follows the same rule.
+- `프로젝트` remains intentionally inside the Reference experience only: the `/references/?type=project` filter, project breadcrumbs, content types, and project-specific CTA wording.
+- Static contract: `202/202 PASS`, including new check `19i` which rejects a home `#projects` global menu item or a Reference header project-filter menu item.
+- External resource adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems` across all 13 routes; `git diff --check`: PASS.
+- Chrome/CDP browser QA: `230/230 PASS` across all 13 routes and both viewports. Mobile menu contracts now assert 8 home links, 5 Reference/detail links, and 7 preserved supporting-route links.
+- Rendered evidence: `28 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2b-r3-reference-nav/`; desktop home and Reference header frames were visually inspected.
+- Isolated protected review deployment: `dpl_BQuGt4nVDkYkSZyk368UiMhf5PDH`, state `READY`, URL `https://jerrybay-v4-g2a-review-a18wq4bux-jerrybay889s-projects.vercel.app`.
+- Isolation remains unchanged: deployment is in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`; existing `jerrybay-site`, its domains, `main`, and existing-site production were not changed.
+- Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r3-reference-nav.md`.
 
 ## Next Action
 

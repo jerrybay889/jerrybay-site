@@ -1,6 +1,6 @@
 /* ==========================================================================
-   JERRYBAY — Phase 1 Commercial Private Preview
-   Deep Space / Kinetic Archive, tuned for conversion hierarchy + WCAG AA.
+   JERRYBAY — Personal Revenue Portfolio v3
+   Editorial Resume x Builder Portfolio, built on the v2 Deep Space tokens.
    No build step. No external CSS dependency.
    ========================================================================== */
 
@@ -525,4 +525,164 @@ tbody tr:nth-child(odd) { background: var(--surface-low); }
     transition-duration: 0.001ms !important;
   }
   .btn--primary:hover { transform: none; }
+}
+
+/* ==========================================================================
+   v3 — Editorial Resume x Builder Portfolio additions
+   ========================================================================== */
+
+/* --- Hero portrait (Home) — the real portrait must be visually dominant --- */
+
+.hero--profile .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.hero--profile .hero__portrait { order: 2; }
+.hero--profile .hero__copy { order: 1; }
+.hero__portrait img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+@media (max-width: 900px) {
+  .hero--profile .wrap { grid-template-columns: minmax(0, 1fr); }
+  .hero--profile .hero__portrait { order: 1; max-width: 15rem; margin-inline: auto; }
+  .hero--profile .hero__copy { order: 2; text-align: left; }
+}
+.hero__cta-text {
+  color: var(--text-muted);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- Proof strip (compact, scannable, no logos) ---------------------------- */
+
+.proof-strip {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 780px) { .proof-strip { grid-template-columns: minmax(0, 1fr); } }
+.proof-strip__item {
+  padding: 1.1rem 1.25rem;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 3px 0 0 var(--secondary);
+}
+.proof-strip__item strong { display: block; color: var(--text); margin-bottom: 0.2rem; }
+.proof-strip__item span { color: var(--text-muted); font-size: 0.9375rem; }
+
+/* --- Status chip variants (truthful state labels, colour never sole cue) --- */
+
+.chip--verified { background: #00424e; color: #acedff; }
+.chip--live { background: #1b3a1f; color: #b7f0be; }
+.chip--build { background: #3a2f00; color: #ffe08a; }
+.chip--pending { background: var(--surface-highest); color: var(--text-muted); }
+
+/* --- Evidence / media link list -------------------------------------------- */
+
+.evidence-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.evidence-list li { border-radius: var(--radius-lg); background: var(--surface-low); }
+.section--low .evidence-list li { background: var(--surface-lowest); }
+.evidence-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--text);
+}
+.evidence-list a:hover { color: var(--secondary); }
+.evidence-list .ev-publisher {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.2rem;
+}
+
+/* --- Resume timeline -------------------------------------------------------- */
+
+.timeline { display: grid; gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+.timeline li {
+  position: relative;
+  padding-left: 1.6rem;
+  border-left: 2px solid var(--ghost);
+  padding-bottom: 0.25rem;
+}
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -0.4375rem;
+  top: 0.4rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--primary);
+}
+.timeline__period {
+  font-family: var(--font-head);
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+.timeline__role { color: var(--text); font-weight: 700; margin: 0.15rem 0 0.35rem; }
+.timeline__desc { color: var(--text-muted); font-size: 0.9375rem; margin: 0; }
+.timeline__tag {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* --- Resume header block ---------------------------------------------------- */
+
+.resume-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.resume-head__contact { display: grid; gap: 0.4rem; color: var(--text-muted); font-size: 0.9375rem; }
+.resume-head__contact a { color: var(--text-muted); }
+.resume-head__contact a:hover { color: var(--secondary); }
+.resume-fit { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.resume-fit li {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--surface-highest);
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+/* --- Print stylesheet (/resume/) -------------------------------------------- */
+
+.print-only { display: none; }
+
+@media print {
+  .site-header, .site-footer, .btn-row, .no-print { display: none !important; }
+  .print-only { display: block; }
+  body { background: #fff; color: #111; }
+  .hero, .section { padding: 0.5rem 0 !important; background: #fff !important; }
+  .wrap { max-width: 100%; padding-inline: 0; }
+  h1, h2, h3, h4, .timeline__role, .section__label { color: #111 !important; }
+  .lead, .dim, .muted, .timeline__desc, .timeline__period, .resume-head__contact,
+  .resume-head__contact a { color: #333 !important; }
+  a { color: #111; text-decoration: underline; }
+  .timeline li { border-left-color: #999; }
+  .timeline li::before { background: #111; }
+  .resume-fit li { background: #eee; color: #111; box-shadow: none; }
+  .card { background: #fff; box-shadow: none; border: 1px solid #ddd; }
+  .eyebrow { color: #444; }
 }

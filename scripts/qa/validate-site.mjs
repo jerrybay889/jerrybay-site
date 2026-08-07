@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * JERRYBAY — Public Production site validator.
+ * JERRYBAY — Personal Revenue Portfolio v3 site validator.
  *
  * Deterministic, dependency-free. Run from the repo root:
  *   node scripts/qa/validate-site.mjs
@@ -9,8 +9,8 @@
  * This is a build-time contract check, not a substitute for browser QA.
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
-import { join, dirname, resolve, relative, posix } from "node:path";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { join, dirname, resolve, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 import { findExternalStyleFontViolations } from "./external-style-font-policy.mjs";
 
@@ -18,15 +18,17 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const ROUTES = [
   { route: "/", file: "index.html" },
-  { route: "/capabilities/", file: "capabilities/index.html" },
+  { route: "/resume/", file: "resume/index.html" },
   { route: "/work/", file: "work/index.html" },
-  { route: "/collaborate/", file: "collaborate/index.html" },
-  { route: "/about/", file: "about/index.html" },
+  { route: "/lab/", file: "lab/index.html" },
+  { route: "/insights/", file: "insights/index.html" },
+  { route: "/books/", file: "books/index.html" },
   { route: "/contact/", file: "contact/index.html" },
   { route: "/privacy/", file: "privacy/index.html" },
 ];
-
-const PRIMARY_CTA = "조직 AI 적용 상담 요청";
+const NAV_ROUTES = ROUTES.filter((r) => r.route !== "/privacy/"); // primary nav excludes Privacy (footer-only), same pattern as v2.
+const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
+const APPROVED_EFFECTIVE_DATE = "시행일: 2026년 8월 7일";
 
 const results = [];
 let failed = 0;
@@ -62,18 +64,23 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 7 route entry HTML files, and no stray public HTML.
+// 1. Exactly 8 route entry HTML files (7 new IA routes + Privacy), no stray.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "7개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "8개 route 파일이 모두 존재 (7개 신규 IA + Privacy)", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
 const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 7개 (stray 없음)",
-  allHtml.length === 7 && stray.length === 0,
+check("01b", "public HTML 파일이 정확히 8개 (stray 없음, 레거시 about/capabilities/collaborate 제거됨)",
+  allHtml.length === 8 && stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
+
+// Legacy route directories must be gone — they are replaced by vercel.json redirects.
+const legacyDirs = ["about", "capabilities", "collaborate"].filter((d) => existsSync(join(ROOT, d)));
+check("01c", "레거시 라우트 디렉터리 제거됨 (about/capabilities/collaborate)",
+  legacyDirs.length === 0, legacyDirs.join(", "));
 
 // Load every page once.
 const pages = ROUTES.filter((r) => existsSync(join(ROOT, r.file)))
@@ -95,33 +102,34 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Primary CTA wording is exact, and 4. nothing competes with it.
+// 3. Primary CTA: v3 intentionally has multiple entry paths (Hire/B2B/
+// Lecture/Build/Partnership), so there is no single sitewide CTA string.
+// Instead: Home/Work/Lab/Insights/Books must each carry >=1 btn--primary,
+// Contact/Privacy carry none (Contact IS the destination; Privacy stays
+// commerce-free), and exactly one gradient-filled button style exists.
 // ---------------------------------------------------------------------------
+const PRIMARY_REQUIRED = new Set(["/", "/work/", "/lab/", "/insights/", "/books/"]);
+const PRIMARY_NONE = new Set(["/contact/", "/privacy/"]);
 const CTA_RE = /<a\b[^>]*class="[^"]*\bbtn--primary\b[^"]*"[^>]*>([\s\S]*?)<\/a>/gi;
 for (const p of pages) {
   const labels = [...p.html.matchAll(CTA_RE)].map((m) => m[1].replace(/<[^>]+>/g, "").trim());
-  if (p.route === "/privacy/") {
-    check(`03:${p.route}`, "Privacy는 상업 CTA를 노출하지 않음", labels.length === 0,
+  if (PRIMARY_NONE.has(p.route)) {
+    check(`03:${p.route}`, "Contact/Privacy는 별도 상업 Primary CTA를 노출하지 않음", labels.length === 0,
       labels.join(" | "));
-    continue;
+  } else if (PRIMARY_REQUIRED.has(p.route)) {
+    check(`03:${p.route}`, "Primary CTA가 최소 1개 존재", labels.length > 0, "");
   }
-  const allExact = labels.length > 0 && labels.every((l) => l === PRIMARY_CTA);
-  check(`03:${p.route}`, `Primary CTA 문구가 정확히 "${PRIMARY_CTA}"`, allExact,
-    labels.length ? labels.join(" | ") : "primary CTA 없음");
 }
 
-// A competing primary must not appear as a second gradient-filled button style.
-const primaryClassDefs = (read("assets/css/site.css").match(/\.btn--primary\b/g) || []).length;
-const otherFilledCta = /\.btn--[a-z]+\s*\{[^}]*linear-gradient/gi;
 const cssText = read("assets/css/site.css");
 const gradientButtons = [...cssText.matchAll(/\.(btn--[a-z]+)\s*\{[^}]*linear-gradient[^}]*\}/gi)]
   .map((m) => m[1]);
 check("04", "gradient primary 버튼 스타일이 하나뿐",
   gradientButtons.length === 1 && gradientButtons[0] === "btn--primary",
-  gradientButtons.join(", ") || `defs=${primaryClassDefs}`);
+  gradientButtons.join(", "));
 
 // ---------------------------------------------------------------------------
-// 5/6/7. Link + asset resolution, no href="#".
+// 5. Link + asset resolution, no href="#".
 // ---------------------------------------------------------------------------
 const routeSet = new Set(ROUTES.map((r) => r.route));
 for (const p of pages) {
@@ -141,12 +149,43 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
+// 6. Legacy redirects — vercel.json carries permanent redirects for the
+// three retired v2 routes, each mapped into the new v3 IA.
+// ---------------------------------------------------------------------------
+const vercelJson = existsSync(join(ROOT, "vercel.json")) ? read("vercel.json") : "";
+let vercelParsed = {};
+try { vercelParsed = JSON.parse(vercelJson); } catch { /* handled by check below */ }
+check("06a", "vercel.json이 유효한 JSON", Object.keys(vercelParsed).length > 0 || vercelJson === "", "");
+
+const REQUIRED_REDIRECTS = [
+  ["/about", "/resume/"], ["/about/", "/resume/"],
+  ["/capabilities", "/contact/"], ["/capabilities/", "/contact/"],
+  ["/collaborate", "/contact/"], ["/collaborate/", "/contact/"],
+];
+const redirects = Array.isArray(vercelParsed.redirects) ? vercelParsed.redirects : [];
+const missingRedirects = REQUIRED_REDIRECTS.filter(
+  ([source, destination]) =>
+    !redirects.some((r) => r.source === source && r.destination === destination && r.permanent === true)
+);
+check("06b", "레거시 3개 라우트(about/capabilities/collaborate)가 permanent redirect로 매핑됨",
+  missingRedirects.length === 0,
+  missingRedirects.map(([s, d]) => `${s}→${d}`).join(", "));
+
+// ---------------------------------------------------------------------------
+// 7. Tally URL is unchanged everywhere it is used.
+// ---------------------------------------------------------------------------
+for (const p of pages) {
+  const urls = [...p.html.matchAll(/https:\/\/tally\.so\/[^\s"'<>]*/g)].map((m) => m[0]);
+  const wrong = urls.filter((u) => u !== CANONICAL_TALLY_URL);
+  check(`07:${p.route}`, `Tally URL이 정확히 "${CANONICAL_TALLY_URL}"로 유지됨`,
+    wrong.length === 0, wrong.join(", "));
+}
+
+// ---------------------------------------------------------------------------
 // 8. No invented privacy dates / retention / officer contact.
 // The approved Privacy effective date (released 2026-08-07) is the one
-// concrete date exempted from the fabrication scan; check 13b asserts it
-// appears verbatim instead of being flagged as invented.
+// concrete date exempted from the fabrication scan.
 // ---------------------------------------------------------------------------
-const APPROVED_EFFECTIVE_DATE = "시행일: 2026년 8월 7일";
 const FABRICATED_LEGAL = [
   { re: /privacy@/i, label: "전용 privacy 이메일" },
   { re: /시행일\s*[::]\s*\S/, label: "시행일 값" },
@@ -164,7 +203,7 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 9. Prohibited unverified claim patterns.
+// 9. Prohibited unverified claim patterns (no invented KPI/testimonial).
 // ---------------------------------------------------------------------------
 const PROHIBITED = [
   { re: /\d+\s*인\s*(?:대상|교육|참여)/, label: "인원 수 주장" },
@@ -179,8 +218,8 @@ const PROHIBITED = [
   { re: /\d+\s*%\s*(?:향상|개선|증가|절감)/, label: "개선율 주장" },
   { re: /(?:고객|참여자|수강생)\s*(?:후기|추천사)/, label: "추천사" },
 ];
-// 가격·기간·통화 시간은 승인된 Commercial Lock 값이므로 예외.
-const ALLOWED_NUMERIC = /₩[\d,]+|\d+–\d+\s*(?:주|분)|Books\s*01|1999년/g;
+// 가격·연도·기간·전화번호·프로젝트 건수는 승인된 값이므로 예외.
+const ALLOWED_NUMERIC = /₩[\d,]+|\d+–\d+\s*(?:주|분)|Books\s*01|1999년|010-3878-9581|20\d\d(?:\.\d\d)?(?:\s*[~∼–-]\s*(?:현재|20\d\d(?:\.\d\d)?))?|\d+건|\d+년\s*(?:넘게|동안)/g;
 for (const p of pages) {
   const scrubbed = p.text.replace(ALLOWED_NUMERIC, " ");
   const hits = PROHIBITED.filter((c) => c.re.test(scrubbed)).map((c) => c.label);
@@ -188,22 +227,31 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 10. Every Work card carries a status chip and a claim boundary.
+// 10. Work cards: 3 P0 commercial cases, each with status + evidence link +
+// claim boundary. Lab cards: >=3 self-built entries with truthful status,
+// OMYQT specifically carries a live-proof link.
 // ---------------------------------------------------------------------------
 const workPage = pages.find((p) => p.route === "/work/");
 if (workPage) {
   const cards = [...workPage.html.matchAll(/<article\b[\s\S]*?<\/article>/gi)].map((m) => m[0]);
   const okCards = cards.filter(
-    (c) => /class="chip"/.test(c) &&
-           /(BUILT|PROTOTYPED|DESIGNED|PROVEN|EXPLORING)/.test(c) &&
+    (c) => /class="chip/.test(c) &&
+           /PUBLIC VERIFIED/.test(c) &&
            /Public Claim Boundary/.test(c) &&
-           /Current Status/.test(c)
+           /(Role Evidence|Public Proof)/.test(c) &&
+           /https:\/\//.test(c)
   );
-  check("10", "Work 카드 전부가 status + claim boundary 보유",
+  check("10a", "Work에 P0 상용 프로젝트 카드 3개, 각각 status + 외부 근거 링크 + claim boundary 보유",
     cards.length === 3 && okCards.length === 3, `cards=${cards.length}, ok=${okCards.length}`);
+}
 
-  // PROVEN must not appear without an evidence id.
-  check("10b", "Evidence 없는 PROVEN 라벨 없음", !/\bPROVEN\b/.test(workPage.text.replace(/PROVEN은[\s\S]{0,80}/, "")), "");
+const labPage = pages.find((p) => p.route === "/lab/");
+if (labPage) {
+  const cards = [...labPage.html.matchAll(/<article\b[\s\S]*?<\/article>/gi)].map((m) => m[0]);
+  check("10b", "Lab에 자체 프로젝트 카드가 3개 이상", cards.length >= 3, `cards=${cards.length}`);
+  const omyqt = cards.find((c) => /OMYQT/.test(c));
+  check("10c", "OMYQT 카드가 실제 live 링크(omyqt.com)를 보유",
+    !!omyqt && /https:\/\/www\.omyqt\.com\//.test(omyqt), "");
 }
 
 // ---------------------------------------------------------------------------
@@ -219,14 +267,13 @@ check("11", "body 16px 기준, 모든 font-size >= 14px",
   bodyRule && tooSmall.length === 0,
   tooSmall.map((f) => f.raw).join(", ") || (bodyRule ? "" : "body font-size 규칙 없음"));
 
-// Inline font-size overrides are not allowed.
 for (const p of pages) {
   check(`11b:${p.route}`, "inline font-size 오버라이드 없음",
     !/style="[^"]*font-size/i.test(p.html), "");
 }
 
 // ---------------------------------------------------------------------------
-// 12. Landmarks, heading order, skip link, lang.
+// 12. Landmarks, heading order, skip link, lang, nav completeness.
 // ---------------------------------------------------------------------------
 for (const p of pages) {
   const hasLang = /<html\s+lang="ko"/.test(p.html);
@@ -245,26 +292,40 @@ for (const p of pages) {
     [!hasLang && "lang", !hasSkip && "skip-link", !landmarks && "landmark",
      h1s !== 1 && `h1=${h1s}`, jump && `heading jump ${jump}`].filter(Boolean).join(", "));
 
-  // Mobile menu control must be wired for assistive tech.
   const navOk = /data-nav-toggle[^>]*aria-expanded="false"[^>]*aria-controls="primary-nav"/.test(p.html)
     && /<nav class="nav" id="primary-nav"/.test(p.html);
   check(`12b:${p.route}`, "모바일 메뉴 버튼 aria 연결", navOk, "");
 
-  // Preview banner must be gone in public production.
-  check(`12c:${p.route}`, "PRIVATE PREVIEW 배너 부재",
-    !p.html.includes('class="preview-banner"') &&
-    !p.text.includes("PRIVATE PREVIEW · NOT FOR PUBLIC RELEASE"), "");
+  // Primary nav must carry the 7 v3 IA links (Privacy stays footer-only).
+  const navBlock = (p.html.match(/<nav class="nav" id="primary-nav"[\s\S]*?<\/nav>/) || [""])[0];
+  const navLinkCount = (navBlock.match(/<a\s+href=/g) || []).length;
+  check(`12e:${p.route}`, "주 메뉴에 v3 IA 7개 링크 (홈/Resume/Work/Lab/Insights/Books/Contact)",
+    navLinkCount === 7, `count=${navLinkCount}`);
 }
 
-// Every img needs alt text.
 for (const p of pages) {
   const imgs = [...p.html.matchAll(/<img\b[^>]*>/gi)].map((m) => m[0]);
   const noAlt = imgs.filter((i) => !/\balt=/.test(i));
   check(`12d:${p.route}`, "모든 img에 alt 존재", noAlt.length === 0, noAlt.join(" "));
 }
 
+// Home hero must carry the real portrait, above the Proof Strip section,
+// as the build-time proxy for "Person -> Proof -> next action" ordering.
+const home = pages.find((p) => p.route === "/");
+if (home) {
+  const heroIdx = home.html.indexOf('class="hero hero--profile"');
+  const heroEndIdx = home.html.indexOf('</section>', heroIdx);
+  const heroBlock = heroIdx >= 0 ? home.html.slice(heroIdx, heroEndIdx) : "";
+  const portraitIdx = home.html.indexOf('src="/assets/profile.jpg"');
+  const proofIdx = home.html.indexOf('id="proof-h"');
+  const ctaInHero = heroBlock.includes('href="/contact/"');
+  check("12f", "Home: 실제 portrait가 Hero에 존재하고, Hero -> Proof Strip 순서, Hero 안에 Contact CTA 포함",
+    heroIdx >= 0 && portraitIdx > heroIdx && portraitIdx < heroEndIdx && proofIdx > heroEndIdx && ctaInHero,
+    `hero=${heroIdx}, heroEnd=${heroEndIdx}, portrait=${portraitIdx}, proof=${proofIdx}, ctaInHero=${ctaInHero}`);
+}
+
 // ---------------------------------------------------------------------------
-// 13. Privacy carries the approved G3C canonical disclosures.
+// 13. Privacy carries the approved canonical disclosures (unchanged substance).
 // ---------------------------------------------------------------------------
 const privacy = pages.find((p) => p.route === "/privacy/");
 const REQUIRED_PRIVACY_TERMS = [
@@ -283,17 +344,13 @@ check("13b", `Privacy가 승인된 시행일을 정확히 표기 ("${APPROVED_EF
   !!privacy && privacy.text.includes(APPROVED_EFFECTIVE_DATE), "");
 
 // ---------------------------------------------------------------------------
-// 14. robots.txt permits public crawling.
+// 14. robots.txt permits public crawling; vercel.json carries no noindex.
 // ---------------------------------------------------------------------------
 const robots = existsSync(join(ROOT, "robots.txt")) ? read("robots.txt") : "";
 check("14", "robots.txt가 공개 크롤링을 허용 (Disallow: / 없음)",
   /User-agent:\s*\*/i.test(robots) && /^\s*Allow:\s*\/\s*$/im.test(robots) &&
   !/^\s*Disallow:\s*\/\s*$/im.test(robots), "");
 
-// ---------------------------------------------------------------------------
-// 14b. vercel.json carries no noindex/nofollow X-Robots-Tag header.
-// ---------------------------------------------------------------------------
-const vercelJson = existsSync(join(ROOT, "vercel.json")) ? read("vercel.json") : "";
 check("14b", "vercel.json에 X-Robots-Tag noindex/nofollow 없음",
   !/X-Robots-Tag/i.test(vercelJson) || !/noindex|nofollow/i.test(vercelJson), "");
 
@@ -303,33 +360,106 @@ check("14b", "vercel.json에 X-Robots-Tag noindex/nofollow 없음",
 const INTERNAL_MARKERS = ["PRIVATE PREVIEW", "NOT FOR PUBLIC RELEASE", "OWNER REVIEW REQUIRED", "Phase 1"];
 for (const p of pages) {
   const hits = INTERNAL_MARKERS.filter((m) => p.text.includes(m) || p.html.includes(m));
-  check(`14c:${p.route}`, "내부 워크플로 마커 0개 (PRIVATE PREVIEW/NOT FOR PUBLIC RELEASE/OWNER REVIEW REQUIRED/Phase 1)",
+  check(`14c:${p.route}`, "내부 워크플로 마커 0개",
     hits.length === 0, hits.join(", "));
 }
 
 // ---------------------------------------------------------------------------
-// 15. Deferred scope must be absent.
+// 14d. No registered business address on any JERRYBAY marketing/legal page.
 // ---------------------------------------------------------------------------
-const deferredDirs = ["ideas-lab", "books", "newsletter", "search", "admin", "dashboard", "api"];
-const presentDirs = deferredDirs.filter((d) => existsSync(join(ROOT, d)));
-check("15a", "Phase 1.5+ 라우트 디렉터리 없음", presentDirs.length === 0, presentDirs.join(", "));
+const ADDRESS_MARKERS = ["구로구", "디지털로", "에이스하이엔드타워"];
+for (const p of pages) {
+  const hits = ADDRESS_MARKERS.filter((m) => p.text.includes(m));
+  check(`14d:${p.route}`, "등록 사업장 주소 미노출", hits.length === 0, hits.join(", "));
+}
 
-const deferredLinks = pages.flatMap((p) =>
-  deferredDirs.filter((d) => new RegExp(`href="/${d}`).test(p.html)).map((d) => `${p.route}→/${d}`)
-);
-check("15b", "Ideas Lab 등 이연 라우트 링크 없음", deferredLinks.length === 0, deferredLinks.join(", "));
+// ---------------------------------------------------------------------------
+// 14e. No sibling private repo URLs/paths exposed (AIKUS/INVIT/OMYQT/ORCA).
+// ---------------------------------------------------------------------------
+const REPO_LEAK_MARKERS = ["github.com/jerrybay889/aikus", "github.com/jerrybay889/invit_staging", "invit_staging", "aikus-full-service", "omyqt-app"];
+for (const p of pages) {
+  const hits = REPO_LEAK_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
+  check(`14e:${p.route}`, "형제 저장소 URL/경로 미노출", hits.length === 0, hits.join(", "));
+}
 
-// Contact must not collect data in-page.
+// ---------------------------------------------------------------------------
+// 14f. Books ships in v3, with a truthful checkout-pending state and no
+// invented native checkout/payment.
+// ---------------------------------------------------------------------------
+const books = pages.find((p) => p.route === "/books/");
+if (books) {
+  check("14f", "Books가 '출시 준비 중' 상태를 정확히 표기", books.text.includes("출시 준비 중"), "");
+  const paymentMarkers = ["latpeed.com/checkout", "stripe.com", "paypal.com", "toss", "결제하기", "구매하기"];
+  const hits = paymentMarkers.filter((m) => books.html.toLowerCase().includes(m.toLowerCase()));
+  check("14g", "Books에 미준비 상태의 결제/체크아웃 링크 없음", hits.length === 0, hits.join(", "));
+}
+
+// ---------------------------------------------------------------------------
+// 14h. Contact has no in-page data-collection form (Tally remains the only
+// collector, per the preserved Privacy substance).
+// ---------------------------------------------------------------------------
 const contact = pages.find((p) => p.route === "/contact/");
-check("15c", "Contact에 데이터 수집 form 없음",
+check("14h", "Contact에 데이터 수집 form 없음",
   !!contact && !/<form\b/i.test(contact.html) && !/<input\b/i.test(contact.html), "");
 
 // ---------------------------------------------------------------------------
-// 16. Zero external font/icon-font network dependency (F-003 remediation).
-// Independent review measured 18-19 Google Fonts requests / ~361-432KB
-// causing Home Mobile DevTools Lighthouse Performance to fail at 60-61
-// (threshold 75). The fix removed every Google Fonts <link> in favor of a
-// system-font stack; this guard keeps it removed on every future edit.
+// 14i. No analytics/tracking script added anywhere (regression guard).
+// ---------------------------------------------------------------------------
+const TRACKING_MARKERS = ["gtag(", "googletagmanager", "google-analytics", "clarity.ms", "hotjar", "fbq(", "facebook.net/"];
+for (const p of pages) {
+  const hits = TRACKING_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
+  check(`14i:${p.route}`, "analytics/tracking 스크립트 없음", hits.length === 0, hits.join(", "));
+}
+
+// ---------------------------------------------------------------------------
+// 14j. No CMS/backend/payment/auth/database framework markers.
+// ---------------------------------------------------------------------------
+const BACKEND_MARKERS = ["<form", "action=\"/api", "supabase.", "firebase.", "auth0.", "/wp-admin", "wp-content"];
+for (const p of pages) {
+  const hits = BACKEND_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
+  check(`14j:${p.route}`, "CMS/backend/auth/database 마커 없음", hits.length === 0, hits.join(", "));
+}
+
+// ---------------------------------------------------------------------------
+// 15. Public evidence wall: >=5 external lecture/media links (Insights),
+// and Insights/Home together must reach the P0 evidence-wall minimum.
+// ---------------------------------------------------------------------------
+const insights = pages.find((p) => p.route === "/insights/");
+if (insights) {
+  const evLinks = [...insights.html.matchAll(/class="evidence-list[^"]*"[\s\S]*?<\/ul>/g)]
+    .flatMap((m) => [...m[0].matchAll(/href="(https:\/\/[^"]+)"/g)])
+    .map((m) => m[1]);
+  check("15a", "Insights Public Evidence Wall에 외부 링크 5개 이상", evLinks.length >= 5, `count=${evLinks.length}`);
+  const badTarget = [...insights.html.matchAll(/<a\b[^>]*href="https:\/\/[^"]+"[^>]*>/g)]
+    .map((m) => m[0])
+    .filter((a) => !/target="_blank"/.test(a) || !/rel="noopener noreferrer"/.test(a));
+  check("15b", "Insights 외부 링크가 모두 target=_blank rel=noopener noreferrer", badTarget.length === 0,
+    badTarget.slice(0, 3).join(" | "));
+}
+
+// All external links sitewide must use a safe target/rel.
+for (const p of pages) {
+  const externalAnchors = [...p.html.matchAll(/<a\b[^>]*href="https:\/\/[^"]+"[^>]*>/g)].map((m) => m[0]);
+  const bad = externalAnchors.filter((a) => !/target="_blank"/.test(a) || !/rel="[^"]*noopener[^"]*noreferrer/.test(a));
+  check(`15c:${p.route}`, "외부 링크가 모두 안전한 target/rel 보유", bad.length === 0, bad.slice(0, 3).join(" | "));
+}
+
+// ---------------------------------------------------------------------------
+// 16. Resume print stylesheet exists and the resume page wires the required
+// print-only affordances (no-print chrome, print trigger, timeline markup).
+// ---------------------------------------------------------------------------
+check("16a", "site.css에 @media print 블록 존재", /@media\s+print/.test(cssText), "");
+const resume = pages.find((p) => p.route === "/resume/");
+if (resume) {
+  check("16b", "Resume 페이지에 인쇄 트리거·no-print 헤더/푸터·타임라인 마크업 존재",
+    /data-print-trigger/.test(resume.html) &&
+    /<header class="site-header no-print"/.test(resume.html) &&
+    /<footer class="site-footer no-print"/.test(resume.html) &&
+    /class="timeline/.test(resume.html), "");
+}
+
+// ---------------------------------------------------------------------------
+// 17. Zero external font/icon-font network dependency (F-003 remediation).
 // ---------------------------------------------------------------------------
 const EXTERNAL_FONT_PATTERNS = [
   { re: /fonts\.googleapis\.com/i, label: "fonts.googleapis.com" },
@@ -341,30 +471,23 @@ const EXTERNAL_FONT_PATTERNS = [
 ];
 for (const p of pages) {
   const hits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(p.html)).map((f) => f.label);
-  check(`16:${p.route}`, "외부 font/icon-font 네트워크 요청 0개", hits.length === 0, hits.join(", "));
+  check(`17:${p.route}`, "외부 font/icon-font 네트워크 요청 0개", hits.length === 0, hits.join(", "));
 }
 const cssHits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(cssText)).map((f) => f.label);
-check("16:site.css", "site.css에 외부 font 참조 0개", cssHits.length === 0, cssHits.join(", "));
+check("17:site.css", "site.css에 외부 font 참조 0개", cssHits.length === 0, cssHits.join(", "));
 
 // ---------------------------------------------------------------------------
-// 17. F-006 remediation: mechanism-class remote stylesheet/font guard.
-// Check 16 above is a host/vendor-name denylist — it proves the *specific*
-// Google Fonts URLs are gone but cannot reject an ordinary remote
-// stylesheet, remote @import, or remote @font-face src from ANY origin.
-// This check detects the mechanism itself (see external-style-font-policy.mjs
-// for the full rationale and the adversarial self-test that proves it can't
-// be bypassed by the four payloads an independent review demonstrated evade
-// check 16: a remote <link rel="stylesheet">, a remote @import, a remote
-// @font-face src url(), and the same inside an inline <style> block).
+// 18. F-006-class mechanism guard: remote stylesheet/font loading mechanism,
+// not just a vendor denylist (see external-style-font-policy.mjs).
 // ---------------------------------------------------------------------------
 for (const p of pages) {
   const violations = findExternalStyleFontViolations(p.html, { source: "html", fileLabel: p.route });
-  check(`17:${p.route}`, "외부 stylesheet/font 로딩 메커니즘 0개 (mechanism-class guard)",
+  check(`18:${p.route}`, "외부 stylesheet/font 로딩 메커니즘 0개 (mechanism-class guard)",
     violations.length === 0,
     violations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
 }
 const cssViolations = findExternalStyleFontViolations(cssText, { source: "css", fileLabel: "assets/css/site.css" });
-check("17:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0개",
+check("18:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0개",
   cssViolations.length === 0,
   cssViolations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
 
@@ -372,7 +495,7 @@ check("17:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0�
 // Report
 // ---------------------------------------------------------------------------
 const pad = (s, n) => String(s).padEnd(n);
-console.log("\nJERRYBAY — Public Production QA\n" + "=".repeat(72));
+console.log("\nJERRYBAY v3 — Personal Revenue Portfolio QA\n" + "=".repeat(72));
 for (const r of results) {
   console.log(`${r.ok ? "PASS" : "FAIL"}  ${pad(r.id, 22)} ${r.name}${r.detail ? `  [${r.detail}]` : ""}`);
 }

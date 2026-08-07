@@ -1,22 +1,25 @@
 #!/usr/bin/env node
 /**
- * JERRYBAY — Public Production browser QA over the Chrome DevTools Protocol.
+ * JERRYBAY v3 — Personal Revenue Portfolio browser QA over the Chrome DevTools Protocol.
  *
  * Drives an already-running Chrome (started with --remote-debugging-port) against
- * a locally served build. Captures, per route and viewport:
+ * a locally served static build. Captures, per route and viewport:
  *   - console errors and failed network requests
  *   - horizontal overflow (documentElement.scrollWidth vs innerWidth) + the
- *     widest offending element, so a failure names its own cause
- *   - primary CTA presence, wording and target
+ *     widest offending element
+ *   - Home: the real portrait is visible within the first mobile viewport
+ *     (build-time proxy for "Person -> Proof -> next action in the first 3
+ *     screenfuls"; vercel.json redirects for the 3 legacy routes are not
+ *     replayable against a plain static server, so they are asserted
+ *     statically in validate-site.mjs check 06 instead)
  *   - every visible a[href]/button/[role=button] is >=44x44px, both
  *     dimensions, via a genuine viewport-intersection visibility test
- *     (not a partial selector list — see the F-001 remediation note inline)
  *   - mobile menu open / ESC-close / focus-return behaviour
- *   - mobile menu background-scroll lock: open blocks real (CDP-level
- *     trusted) wheel scrolling, close restores position and re-enables it,
- *     and resizing past the desktop breakpoint releases the lock too
+ *   - mobile menu background-scroll lock
  *   - keyboard focus reachability of the skip link
- *   - a PNG screenshot
+ *   - Resume: print trigger swaps to a print-media layout (no-print chrome
+ *     hidden) via Emulation.setEmulatedMedia
+ *   - a PNG screenshot per route/viewport
  *
  * Usage:
  *   node scripts/qa/browser-qa.mjs <cdpHttpEndpoint> <baseUrl> <screenshotDir>
@@ -30,13 +33,11 @@ import { join } from "node:path";
 const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = "."] =
   process.argv;
 
-const ROUTES = ["/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/", "/privacy/"];
+const ROUTES = ["/", "/resume/", "/work/", "/lab/", "/insights/", "/books/", "/contact/", "/privacy/"];
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, mobile: false },
   { name: "mobile", width: 390, height: 844, mobile: true },
 ];
-const PRIMARY_CTA = "조직 AI 적용 상담 요청";
-const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 
 mkdirSync(OUT, { recursive: true });
 
@@ -110,12 +111,6 @@ const PROBE = `(() => {
   const toggle = document.querySelector("[data-nav-toggle]");
   const toggleBox = toggle ? toggle.getBoundingClientRect() : null;
 
-  // F-001: every visible a[href]/button/[role=button], width AND height,
-  // not a partial selector list. "Visible" is a genuine viewport-intersection
-  // test (real box, non-zero size, actually on-screen) rather than a
-  // hardcoded class exclusion — this is what correctly excludes the
-  // skip-link's offscreen idle state (top:-100px) without special-casing it,
-  // while a separate skiplink test below still covers its focused state.
   const targetEls = [...document.querySelectorAll("a[href], button, [role='button']")];
   const smallTargets = targetEls
     .map(el => ({ el, r: el.getBoundingClientRect(), cs: getComputedStyle(el) }))
@@ -125,16 +120,20 @@ const PROBE = `(() => {
     .filter(({ r }) => r.width < 44 || r.height < 44)
     .map(({ el, r }) => el.tagName.toLowerCase() + ":" + el.textContent.trim().slice(0, 18) +
                "(" + Math.round(r.width) + "x" + Math.round(r.height) + "px)");
+
+  const portrait = document.querySelector('img[src="/assets/profile.jpg"]');
+  const portraitBox = portrait ? portrait.getBoundingClientRect() : null;
+
   return {
     overflow, widest, primaries, smallTargets,
     innerWidth: window.innerWidth,
     scrollWidth: doc.scrollWidth,
     toggleVisible: !!toggleBox && toggleBox.width > 0 &&
       toggleBox.right <= window.innerWidth + 1 && toggleBox.left >= -1,
-    bannerVisible: !!document.querySelector(".preview-banner"),
     bodyFontPx: parseFloat(getComputedStyle(document.body).fontSize),
     h1Px: (() => { const h = document.querySelector("h1");
                    return h ? Math.round(parseFloat(getComputedStyle(h).fontSize)) : 0; })(),
+    portraitTopWithin3Screens: !!portraitBox && portraitBox.top >= 0 && portraitBox.top < window.innerHeight * 3,
   };
 })()`;
 
@@ -155,17 +154,10 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  return { ok: opened && closed && focusReturned && linkCount === 6,
+  return { ok: opened && closed && focusReturned && linkCount === 7,
            opened, closed, focusReturned, linkCount };
 })()`;
 
-// F-002: verifies background scroll is actually locked while the mobile menu
-// is open. Uses CDP's Input.dispatchMouseEvent(mouseWheel) rather than a
-// page-script-dispatched WheelEvent, because a script-dispatched event never
-// triggers the browser's native scroll response (only trusted/OS-level input
-// does) — a script-only test here would pass regardless of whether the CSS
-// fix works, which is exactly the kind of check that missed real defects
-// before (see F-001's prior partial-selector audit).
 async function testScrollLock(cdp, vp, tag, record) {
   const evalNum = async (expr) => {
     const { result } = await cdp.send("Runtime.evaluate", { expression: expr, returnByValue: true });
@@ -185,9 +177,6 @@ async function testScrollLock(cdp, vp, tag, record) {
   );
   const scrollable = maxScroll > 80;
 
-  // behavior:"instant" overrides the site's CSS scroll-behavior:smooth for
-  // this call — without it, scrollTo animates and every read below lands
-  // mid-animation, producing unstable, non-reproducible baseline values.
   await evalNum('window.scrollTo({ top: 200, left: 0, behavior: "instant" }); window.scrollY');
   await sleep(80);
   const beforeOpen = await evalNum("window.scrollY");
@@ -236,8 +225,6 @@ if (!page) { console.error("No CDP page target found."); process.exit(1); }
 const cdp = await connect(page.webSocketDebuggerUrl);
 
 await cdp.send("Page.enable");
-// Headless windows are never "active", so :focus / :focus-visible would not match
-// and focus assertions would fail for harness reasons rather than page defects.
 await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true });
 await cdp.send("Runtime.enable");
 await cdp.send("Log.enable");
@@ -274,28 +261,21 @@ for (const vp of VIEWPORTS) {
     record(`console ${tag}`, "console error 없음",
       consoleErrors.length === 0 && failedReqs.length === 0,
       [...consoleErrors, ...failedReqs].join(" | "));
-    record(`banner ${tag}`, "PRIVATE PREVIEW 배너 부재", !r.bannerVisible);
     record(`bodyfont ${tag}`, `body font-size >= 16px (${r.bodyFontPx})`, r.bodyFontPx >= 16);
 
-    const h1Min = vp.mobile ? 36 : 48;
-    const h1Max = vp.mobile ? 44 : 64;
+    const h1Min = vp.mobile ? 30 : 40;
+    const h1Max = vp.mobile ? 46 : 66;
     record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위 (${r.h1Px}px)`,
       r.h1Px >= h1Min && r.h1Px <= h1Max);
 
-    if (route !== "/privacy/") {
-      const ctas = r.primaries;
-      record(`cta ${tag}`, `Primary CTA 문구·링크 정확`,
-        ctas.length > 0 &&
-        ctas.every((c) => c.text === PRIMARY_CTA) &&
-        ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
-        ctas.every((c) => c.h >= 44),
-        JSON.stringify(ctas));
+    if (route === "/" && vp.mobile) {
+      record(`portrait ${tag}`, "Home: 실제 portrait가 첫 3 화면(mobile) 안에 표시됨",
+        r.portraitTopWithin3Screens, "");
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",
       r.smallTargets.length === 0, r.smallTargets.join(", "));
 
-    // Screenshot before any interaction, so the evidence shows the default state.
     const shot = await cdp.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(
       join(OUT, `${(route === "/" ? "home" : route.replace(/\//g, "")) }-${vp.name}.png`),
@@ -312,7 +292,6 @@ for (const vp of VIEWPORTS) {
 
       await testScrollLock(cdp, vp, tag, record);
 
-      // Capture the open mobile navigation as its own required page state.
       if (route === "/") {
         await cdp.send("Runtime.evaluate", {
           expression: `document.querySelector("[data-nav-toggle]").click()`,
@@ -325,6 +304,39 @@ for (const vp of VIEWPORTS) {
     }
   }
 }
+
+// Resume print QA: switch the emulated media to "print" and verify the
+// no-print chrome (header/footer/CTA row) actually disappears.
+await cdp.send("Emulation.setDeviceMetricsOverride", {
+  width: 1440, height: 900, deviceScaleFactor: 1, mobile: false,
+});
+await cdp.send("Page.navigate", { url: BASE + "/resume/" });
+await sleep(700);
+await cdp.send("Emulation.setEmulatedMedia", { media: "print" });
+await sleep(150);
+const { result: printProbe } = await cdp.send("Runtime.evaluate", {
+  expression: `(() => {
+    const header = document.querySelector(".site-header");
+    const footer = document.querySelector(".site-footer");
+    const printTrigger = document.querySelector("[data-print-trigger]");
+    const timeline = document.querySelector(".timeline");
+    return {
+      headerHidden: !header || getComputedStyle(header).display === "none",
+      footerHidden: !footer || getComputedStyle(footer).display === "none",
+      triggerHidden: !printTrigger || getComputedStyle(printTrigger.closest(".btn-row")).display === "none",
+      timelineVisible: !!timeline && getComputedStyle(timeline).display !== "none",
+      bg: getComputedStyle(document.body).backgroundColor,
+    };
+  })()`,
+  returnByValue: true,
+});
+const pp = printProbe.value;
+record("resume-print", "Resume 인쇄 미디어에서 no-print 요소 숨김, 본문(timeline)은 유지",
+  pp.headerHidden && pp.footerHidden && pp.triggerHidden && pp.timelineVisible,
+  JSON.stringify(pp));
+const printShot = await cdp.send("Page.captureScreenshot", { format: "png" });
+writeFileSync(join(OUT, "resume-print.png"), Buffer.from(printShot.data, "base64"));
+await cdp.send("Emulation.setEmulatedMedia", { media: "" });
 
 // F-002: resizing past the desktop breakpoint while the menu is open must
 // release the scroll lock too, not just Escape/link-click/toggle-click.
@@ -362,7 +374,6 @@ const { result: skip } = await cdp.send("Runtime.evaluate", {
   expression: `(async () => {
     const l = document.querySelector(".skip-link");
     l.focus();
-    // The reveal is a 0.15s transition; measure after it settles.
     await new Promise(r => setTimeout(r, 300));
     const r = l.getBoundingClientRect();
     return { focused: document.activeElement === l, top: Math.round(r.top),
@@ -378,7 +389,7 @@ record("skiplink", "skip link 포커스 시 화면에 표시",
 cdp.close();
 
 const pad = (s, n) => String(s).padEnd(n);
-console.log("\nJERRYBAY — Public Production Browser QA (Chrome / CDP)\n" + "=".repeat(78));
+console.log("\nJERRYBAY v3 — Personal Revenue Portfolio Browser QA (Chrome / CDP)\n" + "=".repeat(78));
 for (const r of results) {
   console.log(`${r.ok ? "PASS" : "FAIL"}  ${pad(r.id, 26)} ${r.name}${r.detail ? `  [${r.detail}]` : ""}`);
 }

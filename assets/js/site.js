@@ -1,7 +1,16 @@
-/* JERRYBAY Phase 1 Private Preview — progressive enhancement only.
+/* JERRYBAY Personal Revenue Portfolio v3 — progressive enhancement only.
    The site is fully readable and navigable with JavaScript disabled. */
 (function () {
   "use strict";
+
+  // Resume print trigger. The button is a real <a href="/resume/"> so the
+  // page still works with JS disabled; this only upgrades it to call print().
+  document.querySelectorAll("[data-print-trigger]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.print();
+    });
+  });
 
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.getElementById("primary-nav");

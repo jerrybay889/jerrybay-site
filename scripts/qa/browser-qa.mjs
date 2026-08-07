@@ -138,7 +138,7 @@ const PROBE = `(() => {
     bodyFontPx: parseFloat(getComputedStyle(document.body).fontSize),
     h1Px: (() => { const h = document.querySelector("h1");
                    return h ? Math.round(parseFloat(getComputedStyle(h).fontSize)) : 0; })(),
-    homeSections: ["hero", "expertise", "career", "projects", "lectures", "gov-projects", "press", "contact"]
+    homeSections: ["hero", "expertise", "career", "projects", "systems", "lectures", "gov-projects", "press", "contact"]
       .filter(id => !document.getElementById(id)),
     profileLoaded: (() => { const img = document.querySelector('img[src="/assets/profile.jpg"]');
                             return !!img && img.complete && img.naturalWidth > 0; })(),
@@ -162,7 +162,7 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  const expectedLinkCount = document.body.classList.contains("home-v4") ? 7 : 6;
+  const expectedLinkCount = document.body.classList.contains("home-v4") ? 8 : 6;
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;

@@ -423,6 +423,23 @@ check("18f", "공개 홈에 내부 workflow·민감 marker 없음",
   !!home && homeForbiddenHits.length === 0,
   homeForbiddenHits.join(", "));
 
+const G2_FEATURED_TERMS = [
+  "Learning Lab", "Work Studio", "Subscription", "Edge Functions", "RevenueCat",
+  "Globorder ORCA Control OS", "JERRY’S QA OS", "GRAOS", "AIKUS Books / Kits / Workflows",
+];
+const missingG2FeaturedTerms = G2_FEATURED_TERMS.filter((term) => !home?.text.includes(term));
+check("18g", "V4-G2 Featured Builds와 Systems/IP의 공개-safe 세부 구조 존재",
+  !!home && /<section\b[^>]*\bid="systems"/.test(home.html) && missingG2FeaturedTerms.length === 0,
+  missingG2FeaturedTerms.join(" | "));
+
+const G2_FORBIDDEN = [
+  "12,091", "2,721", "App Store 출시 완료", "사용자 기도", "가족 데이터", "투자 일지 내용",
+];
+const g2ForbiddenHits = G2_FORBIDDEN.filter((term) => home?.text.includes(term));
+check("18h", "V4-G2 공개 copy에 내부 규모·민감 데이터·출시 과장 없음",
+  !!home && g2ForbiddenHits.length === 0,
+  g2ForbiddenHits.join(", "));
+
 // ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------

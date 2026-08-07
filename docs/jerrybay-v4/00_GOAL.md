@@ -4,7 +4,7 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Active slice
 
-`WO-V4-01 — Baseline Restore`
+`WO-V4-02 — Project & Evidence Expansion / G2-A Review Checkpoint`
 
 ## Outcome hierarchy
 
@@ -12,4 +12,4 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Hard stop
 
-No push, PR, deploy, production change, or V4-G2 content expansion is authorized in the active slice.
+No production publish, main merge, domain, tracking, payment, database, auth, RLS, secret, or destructive Git change is authorized. The Owner approved a review-only, non-production Preview for the G2-A checkpoint; G2 completion remains subject to Owner review.

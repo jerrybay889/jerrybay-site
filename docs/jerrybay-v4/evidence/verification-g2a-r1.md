@@ -36,3 +36,17 @@ The optional `agent-browser` CLI was not installed in this environment. The repo
 ## Review deployment next
 
 Deploy this exact implementation SHA only to the existing isolated, protected review project. Record the deployment ID, canonical review URL, READY state, and isolation evidence after that action. Do not treat the isolated project's platform target label as a release of the existing JERRYBAY production site.
+
+## Isolated protected review deployment
+
+- Created: 2026-08-07 (Asia/Seoul)
+- Deployment ID: `dpl_J7YzNzZwS1xJtDsM1hZ1skjgwbXF`
+- Deployment URL: `https://jerrybay-v4-g2a-review-j32tifa96-jerrybay889s-projects.vercel.app`
+- Deployment state: `READY`
+- Deployment project: `prj_yoWFPmidQa0rGubXIpjKeONWXD2P` (`jerrybay-v4-g2a-review`)
+- Requested target: `preview`; returned deployment target: `null`.
+- Source metadata SHA: `4e2759a0d82be0fbeeb99664d806c5ab4d9bc7f7`; verified implementation SHA remains `98a03c96d3e0ce23fba68a2a6993384f2a84e9d9`.
+- Isolation verification: existing `jerrybay-site` remains at deployment `dpl_5uHsafs8LFiyKRLLs2Y4bXwBwGgW`; no existing-site domain, production deployment, `main`, push, or PR was changed.
+- Review access: Vercel Authentication remains enabled. No temporary access token or share URL is stored in this evidence file.
+
+The Vercel connector confirmed the new deployment metadata as `READY`. Its protected nested-route fetches redirect to Vercel Authentication in this environment, so the full route and interaction evidence for this candidate remains the recorded local Chrome/CDP `245/245 PASS` run above; owner review is performed in an authenticated Vercel session.

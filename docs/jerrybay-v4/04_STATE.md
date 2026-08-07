@@ -49,6 +49,15 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Rendered evidence: `33 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2a-r1/`
 - Full record: `docs/jerrybay-v4/evidence/verification-g2a-r1.md`
 
+## G2-A-R1 isolated review deployment
+
+- Deployment ID: `dpl_J7YzNzZwS1xJtDsM1hZ1skjgwbXF`
+- Review URL: `https://jerrybay-v4-g2a-review-j32tifa96-jerrybay889s-projects.vercel.app`
+- State: `READY`; the deployment was requested as `preview` in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`.
+- Source metadata SHA: `4e2759a0d82be0fbeeb99664d806c5ab4d9bc7f7`; implementation SHA remains `98a03c96d3e0ce23fba68a2a6993384f2a84e9d9`.
+- Isolation check: existing project `jerrybay-site` remains at `dpl_5uHsafs8LFiyKRLLs2Y4bXwBwGgW`; its domains and `main` were not changed.
+- Review access remains protected by Vercel Authentication. No temporary share URL is recorded in repository evidence.
+
 ## Next Action
 
-Complete the Owner-requested G2-A-R1 visual remediation and Content/Projects archive, run the expanded route-level QA, publish one updated isolated protected review revision, and stop for Jerry review. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the updated checkpoint.
+Jerry reviews the isolated protected checkpoint and provides either revision feedback or a separate G2-B approval. Do not start G2-B, change `main`, push, open a PR, or publish the existing site until that direction is received.

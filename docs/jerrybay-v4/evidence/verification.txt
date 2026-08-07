@@ -3,6 +3,7 @@ Date: 2026-08-07 KST
 Branch: build/jerrybay-v4-original-first
 Base: d50f9dc85f4b0d0630d06e3df1b40cf404963d78
 Original source: cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe
+V4-G1 baseline SHA: cab7459e865adfb9c892a636d7a3710179965802
 
 FINAL EXECUTED CHECKS
 

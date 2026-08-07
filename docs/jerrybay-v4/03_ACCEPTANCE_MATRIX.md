@@ -12,6 +12,7 @@
 - [x] Public copy contains no internal workflow terms, raw IDEA content, private data, unsupported outcomes, or misleading client attribution.
 - [x] Static, adversarial resource, HTML, and full browser checks pass.
 - [x] Desktop/mobile screenshots and mobile-menu evidence exist.
-- [ ] Exact local V4-G1 baseline SHA is recorded; no push, PR, or deployment occurred.
+- [x] Exact local V4-G1 baseline SHA is recorded; no push, PR, or deployment occurred.
 
-V4-G2 remains blocked until every V4-G1 row is checked.
+V4-G1 is closed at baseline SHA `cab7459e865adfb9c892a636d7a3710179965802`.
+V4-G2 requires a new Owner-approved work packet.

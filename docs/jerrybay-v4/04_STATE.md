@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G1 — Original Baseline Reconstruction / READY TO FREEZE`
+`V4-G1 — Original Baseline Reconstruction / PASS / CLOSED`
 
 ## Active execution
 
@@ -11,6 +11,7 @@
 - Base SHA: `d50f9dc85f4b0d0630d06e3df1b40cf404963d78`
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
 - Active work order: `WO-V4-01`
+- V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## Evidence
 
@@ -26,4 +27,4 @@ Automated accessibility audit reported zero violations and one incomplete color-
 
 ## Next Action
 
-Commit the verified baseline locally, record its exact SHA, and close V4-G1. Do not begin V4-G2.
+Prepare exactly one Owner approval packet for `V4-G2 — Content & Project Expansion`. Do not begin V4-G2 without that approval.

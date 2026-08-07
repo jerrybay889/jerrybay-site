@@ -4,7 +4,7 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Active slice
 
-`WO-V4-02 — Project & Evidence Expansion / G2-B-R4 Reference Category Expansion`
+`WO-V4-02 — Project & Evidence Expansion / G2-B-R5 Reference Visibility Remediation`
 
 ## Outcome hierarchy
 

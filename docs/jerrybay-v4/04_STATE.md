@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B-R4 REFERENCE CATEGORY EXPANSION PASS / READY FOR OWNER REVIEW`
+`V4-G2 — Content & Project Expansion / G2-B-R5 REFERENCE VISIBILITY REMEDIATION PASS / READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -12,6 +12,17 @@
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
 - Active work order: `WO-V4-02`
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
+
+## G2-B-R5 reference visibility remediation
+
+- Owner feedback identified that the category records and the AIKUS home link were not sufficiently visible in the review flow. The Reference hub now renders persistent, separately labelled category blocks for `프로젝트 레퍼런스`, `강의 레퍼런스`, `기획 레퍼런스`, and `정부사업 레퍼런스`; its filters show the counts `6 / 8 / 8 / 6`.
+- The home `#lectures` section now carries a visible 50px-high external link labelled `AIKUS 교육 플랫폼 홈페이지 열기 ↗`, targeting `https://aikus.kr/`.
+- Verified implementation SHA: `66ddf94c97ad4c80d2677f528d11daa52ec09837`.
+- Static contract: `206/206 PASS`; external-resource adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
+- Chrome/CDP browser QA: `235/235 PASS`, including the four category headings/count filters and the rendered AIKUS lecture-platform link (`319×50px`).
+- Rendered evidence: `29 PNG` files at `docs/jerrybay-v4/evidence/screenshots-g2b-r5-reference-visibility/`; the Reference desktop and home-lecture desktop frames were visually inspected.
+- Isolated protected review deployment: `dpl_7KvveXGbSKHpKW1Pw2t3aH7bMTNF`, state `READY`, URL `https://jerrybay-v4-g2a-review-59k33wfuh-jerrybay889s-projects.vercel.app`.
+- Isolation: the deployment is in `jerrybay-v4-g2a-review` (`prj_yoWFPmidQa0rGubXIpjKeONWXD2P`); existing `jerrybay-site`, `main`, domains, and production remain unchanged.
 
 ## Evidence
 

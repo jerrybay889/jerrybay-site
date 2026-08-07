@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | V4-G0 — Evidence & Source Freeze | PASS / CLOSED | Canonical sources and original lineage fixed |
 | V4-G1 — Original Baseline Reconstruction | PASS / CLOSED | Baseline `cab7459e865adfb9c892a636d7a3710179965802` and evidence recorded |
-| V4-G2 — Content & Project Expansion | G2-B-R4 REFERENCE CATEGORY EXPANSION PASS / OWNER REVIEW | Reference archive, attribution checks, lecture/planning/government categories, external-reference health checks, capability remediation, and IA cleanup pass; final G2 freeze awaits Jerry visual/story UAT |
+| V4-G2 — Content & Project Expansion | G2-B-R5 REFERENCE VISIBILITY REMEDIATION PASS / OWNER REVIEW | Reference archive, attribution checks, visibly separated lecture/planning/government categories, external-reference health checks, capability remediation, and IA cleanup pass; final G2 freeze awaits Jerry visual/story UAT |
 | V4-G3 — Responsive / SEO / QA | BLOCKED | G2 content contract complete |
 | V4-G4 — Fresh Fixed-SHA Review | BLOCKED | Candidate SHA frozen |
 | V4-G5 — Production Publish | BLOCKED — OWNER APPROVAL | Jerry visual/story UAT and explicit release approval |
@@ -57,3 +57,11 @@ Production, domain, tracking, payment, database, auth, RLS, secrets, and destruc
 - Updated isolated protected review deployment: `dpl_86uDZzutXuAJ1RmW2dCq52vPwUWW`, state `READY`.
 - Implementation SHA `39b9b89d98e4f55d7f16b1bc70e31ce2b75838ba`; static `206/206`, resource guard `29/29`, HTML `0`, and Chrome/CDP `233/233` pass.
 - Reference hub exposes project, lecture, planning, and government categories. Planning keeps source and attribution boundaries; no production or `main` action is authorized.
+
+## Current G2-B-R5 checkpoint
+
+`V4-G2 / G2-B-R5 — READY FOR OWNER REVIEW`
+
+- Updated isolated protected review deployment: `dpl_7KvveXGbSKHpKW1Pw2t3aH7bMTNF`, state `READY`.
+- Implementation SHA `66ddf94c97ad4c80d2677f528d11daa52ec09837`; static `206/206`, resource guard `29/29`, HTML `0`, and Chrome/CDP `235/235` pass.
+- Four labelled Reference category sections and the emphasized AIKUS link in the home lecture section are rendered and separately asserted. No production or `main` action is authorized.

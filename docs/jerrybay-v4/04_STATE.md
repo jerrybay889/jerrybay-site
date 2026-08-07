@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B-R1 CAPABILITY REMEDIATION PASS / READY FOR OWNER REVIEW`
+`V4-G2 — Content & Project Expansion / G2-B-R2 REFERENCE IA REMEDIATION PASS / READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -77,6 +77,18 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Isolated protected review deployment: `dpl_4f9VWdUE3g3sDTNzzbVwA4VJXifr`, state `READY`, URL `https://jerrybay-v4-g2a-review-gwagmjmqt-jerrybay889s-projects.vercel.app`.
 - Isolation check: this deployment belongs to the separate protected project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P` (`jerrybay-v4-g2a-review`). Existing `jerrybay-site`, its domains, `main`, and its production deployment were not changed. Vercel Authentication remains enabled; no temporary share URL is stored.
 - Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r1-capabilities.md`.
+
+## G2-B-R2 reference IA and privacy-route removal
+
+- Verified implementation SHAs: `9be2f922c2d62aa9987e7dd7e11990e628d8b1f1` (route/file move) and `57b0ae9b0cf4f83aec0079567dbd1ace57eb2b73` (links, copy, validator, browser contract, and evidence).
+- Owner-directed change: the dedicated `/privacy/` route and every visible Privacy/개인정보 link are absent. The former `/content/` hub and all six former `/content/projects/...` pages now live under `/references/` and `/references/projects/...`.
+- Static contract: `201/201 PASS` across 13 public routes; checks `13` and `13b` assert privacy removal and zero legacy `/content/` links.
+- External resource adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
+- Chrome/CDP browser QA: `230/230 PASS` across desktop/mobile and all 13 routes, including the query-compatible `/references/?type=project` filter and mobile-menu link-count contracts.
+- Rendered evidence: `28 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2b-r2-references/`.
+- Isolated protected review deployment: `dpl_AJP2wgdQt9JjnejAbTsTmpHPkXYP`, state `READY`, URL `https://jerrybay-v4-g2a-review-qaf855qex-jerrybay889s-projects.vercel.app`.
+- Isolation remains unchanged: deployment is in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`; existing `jerrybay-site`, its domains, `main`, and existing-site production were not changed.
+- Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r2-references.md`.
 
 ## Next Action
 

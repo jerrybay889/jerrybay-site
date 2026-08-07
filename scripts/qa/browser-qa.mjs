@@ -407,6 +407,39 @@ record("skiplink", "skip link 포커스 시 화면에 표시",
   skip.value.focused && skip.value.top >= 0 && skip.value.href === "#main",
   JSON.stringify(skip.value));
 
+await cdp.send("Page.navigate", { url: BASE + "/" });
+await sleep(700);
+const { result: lecturePlatform } = await cdp.send("Runtime.evaluate", {
+  expression: `(() => {
+    const link = document.querySelector('.lecture-platform-link a');
+    link?.scrollIntoView({ block: 'center', behavior: 'instant' });
+    const r = link?.getBoundingClientRect();
+    return { text: link?.textContent.trim(), href: link?.href, visible: !!r && r.top >= 0 && r.bottom <= innerHeight, width: Math.round(r?.width || 0), height: Math.round(r?.height || 0) };
+  })()`,
+  returnByValue: true,
+});
+record("home lecture-platform", "강의 섹션의 AIKUS 홈페이지 링크가 화면에 명확히 표시",
+  lecturePlatform.value.text === "AIKUS 교육 플랫폼 홈페이지 열기 ↗" &&
+    lecturePlatform.value.href === "https://aikus.kr/" && lecturePlatform.value.visible &&
+    lecturePlatform.value.width >= 44 && lecturePlatform.value.height >= 44,
+  JSON.stringify(lecturePlatform.value));
+const { data: lectureShot } = await cdp.send("Page.captureScreenshot", { format: "png" });
+writeFileSync(join(OUT, "home-lectures-desktop.png"), Buffer.from(lectureShot, "base64"));
+
+await cdp.send("Page.navigate", { url: BASE + "/references/" });
+await sleep(700);
+const { result: referenceGroups } = await cdp.send("Runtime.evaluate", {
+  expression: `(() => ({
+    visibleGroups: [...document.querySelectorAll('[data-content-group]')].filter((group) => !group.hidden).map((group) => group.querySelector('h3')?.textContent.trim()),
+    filters: [...document.querySelectorAll('[data-content-filter]')].map((filter) => filter.textContent.trim()),
+  }))()`,
+  returnByValue: true,
+});
+record("references category-headings", "레퍼런스 첫 화면 흐름에 4개 분야 헤딩과 카운트 필터가 존재",
+  JSON.stringify(referenceGroups.value.visibleGroups) === JSON.stringify(["프로젝트 레퍼런스", "강의 레퍼런스", "기획 레퍼런스", "정부사업 레퍼런스"]) &&
+    JSON.stringify(referenceGroups.value.filters) === JSON.stringify(["전체 28", "프로젝트 6", "강의 8", "기획 8", "정부사업 6"]),
+  JSON.stringify(referenceGroups.value));
+
 // The home CTA reaches a real, query-compatible project-only reference view.
 await cdp.send("Page.navigate", { url: BASE + "/references/?type=project" });
 await sleep(700);

@@ -15,6 +15,10 @@
     card.hidden = activeType !== "all" && card.getAttribute("data-content-type") !== activeType;
   });
 
+  Array.prototype.forEach.call(list.querySelectorAll("[data-content-group]"), function (group) {
+    group.hidden = activeType !== "all" && group.getAttribute("data-content-group") !== activeType;
+  });
+
   var visibleCount = cards.filter(function (card) { return !card.hidden; }).length;
   var labels = {
     project: "프로젝트",

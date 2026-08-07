@@ -530,14 +530,25 @@ const referenceTypeCounts = Object.fromEntries(
 const missingReferenceFilters = ["project", "lecture", "planning", "government"].filter(
   (type) => !contentHub?.html.includes(`data-content-filter="${type}"`)
 );
+const referenceGroupCounts = Object.fromEntries(
+  ["project", "lecture", "planning", "government"].map((type) => [
+    type,
+    (contentHub?.html.match(new RegExp(`data-content-group="${type}"`, "g")) || []).length,
+  ])
+);
+const missingReferenceHeadings = ["프로젝트 레퍼런스", "강의 레퍼런스", "기획 레퍼런스", "정부사업 레퍼런스"].filter(
+  (heading) => !contentHub?.html.includes(heading)
+);
 check("19j", "레퍼런스가 프로젝트·강의·기획·정부사업 4개 분류와 공개-safe 기록을 제공",
   !!contentHub &&
     referenceTypeCounts.project === 6 &&
     referenceTypeCounts.lecture === 8 &&
     referenceTypeCounts.planning === 8 &&
     referenceTypeCounts.government === 6 &&
-    missingReferenceFilters.length === 0,
-  `counts=${JSON.stringify(referenceTypeCounts)}, missing=${missingReferenceFilters.join(", ")}`);
+    missingReferenceFilters.length === 0 &&
+    Object.values(referenceGroupCounts).every((count) => count === 1) &&
+    missingReferenceHeadings.length === 0,
+  `counts=${JSON.stringify(referenceTypeCounts)}, groups=${JSON.stringify(referenceGroupCounts)}, missing=${[...missingReferenceFilters, ...missingReferenceHeadings].join(", ")}`);
 
 const lectureProofLinks = [
   "https://ditoday.com/?p=79353",
@@ -558,8 +569,8 @@ check("19l", "기획 레퍼런스는 개인 브랜드명·원문 수집 기록 �
   !!contentHub && planningForbiddenHits.length === 0,
   planningForbiddenHits.join(", "));
 
-check("19m", "홈 강의 섹션에 AIKUS 외부 홈페이지 링크가 존재",
-  !!home && /id="lectures"[\s\S]*?href="https:\/\/aikus\.kr\/"/.test(home.html), "");
+check("19m", "홈 강의 섹션에 눈에 띄는 AIKUS 외부 홈페이지 링크가 존재",
+  !!home && /id="lectures"[\s\S]*?class="lecture-platform-link"[\s\S]*?href="https:\/\/aikus\.kr\/"[\s\S]*?AIKUS 교육 플랫폼 홈페이지 열기/.test(home.html), "");
 
 // ---------------------------------------------------------------------------
 // Report

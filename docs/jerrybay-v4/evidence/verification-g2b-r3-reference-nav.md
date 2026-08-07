@@ -28,3 +28,8 @@ The Owner identified a duplicate global concept: `프로젝트` and `레퍼런�
 ## Release boundary
 
 This deployment belongs to the separate protected review project `jerrybay-v4-g2a-review` (`prj_yoWFPmidQa0rGubXIpjKeONWXD2P`). It does not change the existing `jerrybay-site` project, `main`, domains, or production deployment. Vercel Authentication remains enabled and no temporary authentication-bypass URL is stored.
+
+## Records
+
+- GitHub branch record: `build/jerrybay-v4-original-first` at `b5df59780c15e44b92a27a636c8e8f9877f28d97`.
+- The canonical Notion SSOT status callout was updated and read back after the write to record this G2-B-R3 checkpoint, SHA, evidence totals, and protected review URL.

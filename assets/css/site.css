@@ -56,10 +56,12 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   font-size: 1rem;              /* 16px floor */
-  line-height: 1.7;
+  line-height: 1.75;
   letter-spacing: -0.005em;
   overflow-x: hidden;
   word-break: keep-all;
+  overflow-wrap: break-word;
+  line-break: strict;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -116,35 +118,40 @@ img { max-width: 100%; height: auto; display: block; }
 
 .section__label {
   font-family: var(--font-head);
-  font-size: 0.875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
   color: var(--primary);
   margin: 0 0 1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* --- Typography ----------------------------------------------------------- */
+/* --- Typography -----------------------------------------------------------
+   Korean typography contract: H1 32–52px, H2 24–34px, H3 18–22px. Korean
+   headings stay above -0.015em letter-spacing (v2's -0.025em read as a
+   foreign SaaS display face on Korean text) and use text-wrap: balance so
+   phrases don't break mid-word at odd widths. ------------------------------ */
 
 h1, h2, h3, h4 {
   font-family: var(--font-head);
   font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+  letter-spacing: -0.01em;
+  line-height: 1.22;
   margin: 0 0 1rem;
   color: var(--text);
+  text-wrap: balance;
+  word-break: keep-all;
 }
 
-h1 { font-size: clamp(2.25rem, 5.4vw, 4rem); }   /* 36px mobile → 64px desktop */
-h2 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); line-height: 1.2; }
-h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.3; }
+h1 { font-size: clamp(2rem, 4.2vw, 3.25rem); }   /* 32px mobile → 52px desktop */
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.125rem); line-height: 1.3; }
+h3 { font-size: clamp(1.125rem, 1.7vw, 1.375rem); line-height: 1.35; }
 h4 { font-size: 1.0625rem; line-height: 1.4; }
 
 p { margin: 0 0 1.1rem; }
 p:last-child { margin-bottom: 0; }
 
 .lead {
-  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);   /* 17–19px */
   color: var(--text-muted);
   max-width: 46ch;
 }
@@ -320,7 +327,7 @@ body.nav-open { overflow: hidden; }
 
 .hero {
   position: relative;
-  padding-block: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 7vw, 6rem);
+  padding-block: clamp(3.5rem, 5vw, 4.5rem) clamp(3rem, 4vw, 4rem);
   overflow: hidden;
 }
 .hero::after {
@@ -332,17 +339,17 @@ body.nav-open { overflow: hidden; }
   z-index: 0;
 }
 .hero > * { position: relative; z-index: 1; }
-.hero h1 { max-width: 16ch; }
-.hero .lead { max-width: 52ch; font-size: clamp(1.0625rem, 1.7vw, 1.3125rem); }
+.hero h1 { max-width: 18ch; }
+.hero .lead { max-width: 52ch; font-size: clamp(1.0625rem, 1.3vw, 1.1875rem); }
 
 .eyebrow {
   display: inline-block;
   font-family: var(--font-head);
-  font-size: 0.875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  letter-spacing: 0.03em;
+  font-weight: 600;
   color: var(--secondary);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 /* --- Grid + cards --------------------------------------------------------- */
@@ -531,27 +538,33 @@ tbody tr:nth-child(odd) { background: var(--surface-low); }
    v3 — Editorial Resume x Builder Portfolio additions
    ========================================================================== */
 
-/* --- Hero portrait (Home) — the real portrait must be visually dominant --- */
+/* --- Hero portrait (Home) — restrained personal-homepage scale, not an
+   editorial poster: capped column width, grayscale by default. ----------- */
 
 .hero--profile .wrap {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
-  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 2.75rem);
   align-items: center;
 }
-.hero--profile .hero__portrait { order: 2; }
-.hero--profile .hero__copy { order: 1; }
+.hero--profile .hero__portrait { order: 1; }
+.hero--profile .hero__copy { order: 2; }
 .hero__portrait img {
   width: 100%;
+  max-width: 260px;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: var(--radius-lg);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  filter: grayscale(1);
+  transition: filter 0.3s ease;
 }
+.hero__portrait img:hover { filter: grayscale(0); }
 @media (max-width: 900px) {
   .hero--profile .wrap { grid-template-columns: minmax(0, 1fr); }
-  .hero--profile .hero__portrait { order: 1; max-width: 15rem; margin-inline: auto; }
+  .hero--profile .hero__portrait { order: 1; max-width: 11.25rem; margin-inline: auto; }
   .hero--profile .hero__copy { order: 2; text-align: left; }
+  .hero__portrait img { max-width: 11.25rem; }
 }
 .hero__cta-text {
   color: var(--text-muted);
@@ -686,3 +699,43 @@ tbody tr:nth-child(odd) { background: var(--surface-low); }
   .card { background: #fff; box-shadow: none; border: 1px solid #ddd; }
   .eyebrow { color: #444; }
 }
+
+/* --- Content board (/insights/) -------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.content-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.content-filter__btn {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--ghost);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.content-filter__btn:hover { color: var(--text); background: rgba(192, 193, 255, 0.07); }
+.content-filter__btn.is-active {
+  background: var(--primary);
+  color: var(--on-accent);
+  box-shadow: none;
+}
+
+.content-card[hidden] { display: none; }

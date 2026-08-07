@@ -12,6 +12,25 @@
     });
   });
 
+  // Content board category filter (/insights/). Without JS every card stays
+  // visible, so the board is still fully readable with JS disabled.
+  var filterGroup = document.querySelector(".content-filter");
+  if (filterGroup) {
+    var cards = document.querySelectorAll(".content-card");
+    filterGroup.addEventListener("click", function (e) {
+      var btn = e.target.closest(".content-filter__btn");
+      if (!btn) return;
+      filterGroup.querySelectorAll(".content-filter__btn").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      var filter = btn.getAttribute("data-filter");
+      cards.forEach(function (card) {
+        var show = filter === "전체" || card.getAttribute("data-category") === filter;
+        card.hidden = !show;
+      });
+    });
+  }
+
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.getElementById("primary-nav");
   if (!toggle || !nav) return;

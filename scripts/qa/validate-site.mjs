@@ -26,9 +26,19 @@ const ROUTES = [
   { route: "/contact/", file: "contact/index.html" },
   { route: "/privacy/", file: "privacy/index.html" },
 ];
-const NAV_ROUTES = ROUTES.filter((r) => r.route !== "/privacy/"); // primary nav excludes Privacy (footer-only), same pattern as v2.
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 const APPROVED_EFFECTIVE_DATE = "시행일: 2026년 8월 7일";
+
+// Public-language lock (01_EDITORIAL_VISUAL_REMEDIATION_CONTRACT.md §2/§10):
+// zero visitor-facing occurrences anywhere on the site, including the
+// generated /insights/ content board.
+const BANNED_TERM = "채용";
+const BANNED_LABELS = [
+  "PUBLIC VERIFIED", "SELF-BUILT", "LIVE PUBLIC", "Evidence", "Proof",
+  "Public Evidence Wall", "How Companies Can Use Me", "Featured Commercial Work",
+  "Career Arc", "Now Building", "Build Notes", "Public Claim Boundary", "Role Evidence",
+];
+const BANNED_NAV_LABELS = ["Resume", "Work", "Lab", "Insights", "Books", "Contact"];
 
 const results = [];
 let failed = 0;
@@ -64,17 +74,20 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 8 route entry HTML files (7 new IA routes + Privacy), no stray.
+// 1. Exactly 8 route entry HTML files (7 new IA routes + Privacy), plus any
+// number of generated /insights/<slug>/ content-board detail pages — no
+// other stray HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
 check("01a", "8개 route 파일이 모두 존재 (7개 신규 IA + Privacy)", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
-const expected = ROUTES.map((r) => r.file).sort();
-const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 8개 (stray 없음, 레거시 about/capabilities/collaborate 제거됨)",
-  allHtml.length === 8 && stray.length === 0,
+const expected = new Set(ROUTES.map((r) => r.file));
+const isGeneratedContentDetail = (f) => /^insights\/[^/]+\/index\.html$/.test(f);
+const stray = allHtml.filter((f) => !expected.has(f) && !isGeneratedContentDetail(f));
+check("01b", "public HTML 파일이 8개 route + 생성된 콘텐츠 상세 페이지뿐 (그 외 stray 없음)",
+  stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
 
 // Legacy route directories must be gone — they are replaced by vercel.json redirects.
@@ -82,15 +95,28 @@ const legacyDirs = ["about", "capabilities", "collaborate"].filter((d) => exists
 check("01c", "레거시 라우트 디렉터리 제거됨 (about/capabilities/collaborate)",
   legacyDirs.length === 0, legacyDirs.join(", "));
 
-// Load every page once.
+// Load every core route page once, plus every generated content-board page —
+// "pages" (8 routes) drives route-specific checks; "allPages" (8 routes +
+// every generated insights/<slug>/ detail page) drives sitewide checks
+// (banned terms, head contract, landmarks, link/alt/target safety).
 const pages = ROUTES.filter((r) => existsSync(join(ROOT, r.file)))
   .map((r) => ({ ...r, html: read(r.file) }))
   .map((p) => ({ ...p, text: visibleText(p.html) }));
 
+const contentDetailFiles = allHtml.filter(isGeneratedContentDetail);
+const allPages = [
+  ...pages,
+  ...contentDetailFiles.map((file) => {
+    const html = read(file);
+    return { route: `/${file.replace(/index\.html$/, "")}`, file, html, text: visibleText(html) };
+  }),
+];
+
 // ---------------------------------------------------------------------------
 // 2. Head contract: title, description, viewport, no noindex/nofollow.
+// Covers every route plus every generated content-board detail page.
 // ---------------------------------------------------------------------------
-for (const p of pages) {
+for (const p of allPages) {
   const hasTitle = /<title>\s*\S[\s\S]*?<\/title>/i.test(p.html);
   const hasDesc = /<meta\s+name="description"\s+content="[^"]{20,}"/i.test(p.html);
   const hasViewport = /<meta\s+name="viewport"\s+content="[^"]*width=device-width/i.test(p.html);
@@ -102,13 +128,15 @@ for (const p of pages) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Primary CTA: v3 intentionally has multiple entry paths (Hire/B2B/
-// Lecture/Build/Partnership), so there is no single sitewide CTA string.
-// Instead: Home/Work/Lab/Insights/Books must each carry >=1 btn--primary,
-// Contact/Privacy carry none (Contact IS the destination; Privacy stays
-// commerce-free), and exactly one gradient-filled button style exists.
+// 3. Primary CTA: v3 intentionally has multiple entry paths (합류/B2B/
+// 강의/제품구축/파트너십), so there is no single sitewide CTA string.
+// Home/Work/Lab/Books must each carry >=1 btn--primary. Contact/Privacy
+// carry none (Contact IS the destination; Privacy stays commerce-free).
+// /insights/ is a content board — "useful content first, self-promotion
+// second" (remediation contract §7) — so it is neither required nor
+// forbidden to carry one. Exactly one gradient-filled button style exists.
 // ---------------------------------------------------------------------------
-const PRIMARY_REQUIRED = new Set(["/", "/work/", "/lab/", "/insights/", "/books/"]);
+const PRIMARY_REQUIRED = new Set(["/", "/work/", "/lab/", "/books/"]);
 const PRIMARY_NONE = new Set(["/contact/", "/privacy/"]);
 const CTA_RE = /<a\b[^>]*class="[^"]*\bbtn--primary\b[^"]*"[^>]*>([\s\S]*?)<\/a>/gi;
 for (const p of pages) {
@@ -236,12 +264,10 @@ if (workPage) {
   const cards = [...workPage.html.matchAll(/<article\b[\s\S]*?<\/article>/gi)].map((m) => m[0]);
   const okCards = cards.filter(
     (c) => /class="chip/.test(c) &&
-           /PUBLIC VERIFIED/.test(c) &&
-           /Public Claim Boundary/.test(c) &&
-           /(Role Evidence|Public Proof)/.test(c) &&
+           /기업 프로젝트/.test(c) &&
            /https:\/\//.test(c)
   );
-  check("10a", "Work에 P0 상용 프로젝트 카드 3개, 각각 status + 외부 근거 링크 + claim boundary 보유",
+  check("10a", "Work에 대표 프로젝트 카드 3개, 각각 상태 chip + 외부 근거 링크 보유 (PM 용어 없이)",
     cards.length === 3 && okCards.length === 3, `cards=${cards.length}, ok=${okCards.length}`);
 }
 
@@ -267,7 +293,7 @@ check("11", "body 16px 기준, 모든 font-size >= 14px",
   bodyRule && tooSmall.length === 0,
   tooSmall.map((f) => f.raw).join(", ") || (bodyRule ? "" : "body font-size 규칙 없음"));
 
-for (const p of pages) {
+for (const p of allPages) {
   check(`11b:${p.route}`, "inline font-size 오버라이드 없음",
     !/style="[^"]*font-size/i.test(p.html), "");
 }
@@ -275,7 +301,7 @@ for (const p of pages) {
 // ---------------------------------------------------------------------------
 // 12. Landmarks, heading order, skip link, lang, nav completeness.
 // ---------------------------------------------------------------------------
-for (const p of pages) {
+for (const p of allPages) {
   const hasLang = /<html\s+lang="ko"/.test(p.html);
   const hasSkip = /class="skip-link"\s+href="#main"/.test(p.html);
   const landmarks = ["<header", "<nav", '<main id="main"', "<footer"].every((t) => p.html.includes(t));
@@ -296,32 +322,37 @@ for (const p of pages) {
     && /<nav class="nav" id="primary-nav"/.test(p.html);
   check(`12b:${p.route}`, "모바일 메뉴 버튼 aria 연결", navOk, "");
 
-  // Primary nav must carry the 7 v3 IA links (Privacy stays footer-only).
+  // Primary nav must carry exactly the 6 Korean-first v3 IA links (no
+  // separate 홈 entry — brand/logo returns Home; Privacy stays footer-only).
   const navBlock = (p.html.match(/<nav class="nav" id="primary-nav"[\s\S]*?<\/nav>/) || [""])[0];
   const navLinkCount = (navBlock.match(/<a\s+href=/g) || []).length;
-  check(`12e:${p.route}`, "주 메뉴에 v3 IA 7개 링크 (홈/Resume/Work/Lab/Insights/Books/Contact)",
-    navLinkCount === 7, `count=${navLinkCount}`);
+  check(`12e:${p.route}`, "주 메뉴에 Korean-first 6개 링크 (소개·이력/프로젝트/직접 만든 것/콘텐츠/전자책/문의)",
+    navLinkCount === 6, `count=${navLinkCount}`);
+
+  const bannedNavHits = BANNED_NAV_LABELS.filter((label) => new RegExp(`>${label}<`).test(navBlock));
+  check(`12g:${p.route}`, "주 메뉴가 영어 라벨(Resume/Work/Lab/Insights/Books/Contact)을 노출하지 않음",
+    bannedNavHits.length === 0, bannedNavHits.join(", "));
 }
 
-for (const p of pages) {
+for (const p of allPages) {
   const imgs = [...p.html.matchAll(/<img\b[^>]*>/gi)].map((m) => m[0]);
   const noAlt = imgs.filter((i) => !/\balt=/.test(i));
   check(`12d:${p.route}`, "모든 img에 alt 존재", noAlt.length === 0, noAlt.join(" "));
 }
 
-// Home hero must carry the real portrait, above the Proof Strip section,
-// as the build-time proxy for "Person -> Proof -> next action" ordering.
+// Home hero must carry the real portrait, above the representative-projects
+// section, as the build-time proxy for "Person -> Proof -> next action".
 const home = pages.find((p) => p.route === "/");
 if (home) {
   const heroIdx = home.html.indexOf('class="hero hero--profile"');
   const heroEndIdx = home.html.indexOf('</section>', heroIdx);
   const heroBlock = heroIdx >= 0 ? home.html.slice(heroIdx, heroEndIdx) : "";
   const portraitIdx = home.html.indexOf('src="/assets/profile.jpg"');
-  const proofIdx = home.html.indexOf('id="proof-h"');
+  const projectsIdx = home.html.indexOf('id="fw-h"');
   const ctaInHero = heroBlock.includes('href="/contact/"');
-  check("12f", "Home: 실제 portrait가 Hero에 존재하고, Hero -> Proof Strip 순서, Hero 안에 Contact CTA 포함",
-    heroIdx >= 0 && portraitIdx > heroIdx && portraitIdx < heroEndIdx && proofIdx > heroEndIdx && ctaInHero,
-    `hero=${heroIdx}, heroEnd=${heroEndIdx}, portrait=${portraitIdx}, proof=${proofIdx}, ctaInHero=${ctaInHero}`);
+  check("12f", "Home: 실제 portrait가 Hero에 존재하고, Hero -> 대표 프로젝트 순서, Hero 안에 문의 CTA 포함",
+    heroIdx >= 0 && portraitIdx > heroIdx && portraitIdx < heroEndIdx && projectsIdx > heroEndIdx && ctaInHero,
+    `hero=${heroIdx}, heroEnd=${heroEndIdx}, portrait=${portraitIdx}, projects=${projectsIdx}, ctaInHero=${ctaInHero}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -358,7 +389,7 @@ check("14b", "vercel.json에 X-Robots-Tag noindex/nofollow 없음",
 // 14c. Zero internal workflow markers in visible public copy.
 // ---------------------------------------------------------------------------
 const INTERNAL_MARKERS = ["PRIVATE PREVIEW", "NOT FOR PUBLIC RELEASE", "OWNER REVIEW REQUIRED", "Phase 1"];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = INTERNAL_MARKERS.filter((m) => p.text.includes(m) || p.html.includes(m));
   check(`14c:${p.route}`, "내부 워크플로 마커 0개",
     hits.length === 0, hits.join(", "));
@@ -368,7 +399,7 @@ for (const p of pages) {
 // 14d. No registered business address on any JERRYBAY marketing/legal page.
 // ---------------------------------------------------------------------------
 const ADDRESS_MARKERS = ["구로구", "디지털로", "에이스하이엔드타워"];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = ADDRESS_MARKERS.filter((m) => p.text.includes(m));
   check(`14d:${p.route}`, "등록 사업장 주소 미노출", hits.length === 0, hits.join(", "));
 }
@@ -377,9 +408,22 @@ for (const p of pages) {
 // 14e. No sibling private repo URLs/paths exposed (AIKUS/INVIT/OMYQT/ORCA).
 // ---------------------------------------------------------------------------
 const REPO_LEAK_MARKERS = ["github.com/jerrybay889/aikus", "github.com/jerrybay889/invit_staging", "invit_staging", "aikus-full-service", "omyqt-app"];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = REPO_LEAK_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
   check(`14e:${p.route}`, "형제 저장소 URL/경로 미노출", hits.length === 0, hits.join(", "));
+}
+
+// ---------------------------------------------------------------------------
+// 14k. Public-language lock (remediation contract §2/§10): zero visitor-
+// facing 채용, and zero PM/audit-jargon labels, anywhere on the site.
+// ---------------------------------------------------------------------------
+for (const p of allPages) {
+  const hasBannedTerm = p.text.includes(BANNED_TERM) || p.html.includes(BANNED_TERM);
+  check(`14k:${p.route}`, `공개 페이지에 "${BANNED_TERM}" 노출 0건`, !hasBannedTerm, "");
+
+  const labelHits = BANNED_LABELS.filter((l) => p.text.includes(l) || p.html.includes(l));
+  check(`14l:${p.route}`, "PM/audit 용어(PUBLIC VERIFIED/SELF-BUILT/Evidence 등) 노출 0건",
+    labelHits.length === 0, labelHits.join(", "));
 }
 
 // ---------------------------------------------------------------------------
@@ -406,7 +450,7 @@ check("14h", "Contact에 데이터 수집 form 없음",
 // 14i. No analytics/tracking script added anywhere (regression guard).
 // ---------------------------------------------------------------------------
 const TRACKING_MARKERS = ["gtag(", "googletagmanager", "google-analytics", "clarity.ms", "hotjar", "fbq(", "facebook.net/"];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = TRACKING_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
   check(`14i:${p.route}`, "analytics/tracking 스크립트 없음", hits.length === 0, hits.join(", "));
 }
@@ -415,7 +459,7 @@ for (const p of pages) {
 // 14j. No CMS/backend/payment/auth/database framework markers.
 // ---------------------------------------------------------------------------
 const BACKEND_MARKERS = ["<form", "action=\"/api", "supabase.", "firebase.", "auth0.", "/wp-admin", "wp-content"];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = BACKEND_MARKERS.filter((m) => p.html.toLowerCase().includes(m.toLowerCase()));
   check(`14j:${p.route}`, "CMS/backend/auth/database 마커 없음", hits.length === 0, hits.join(", "));
 }
@@ -424,21 +468,17 @@ for (const p of pages) {
 // 15. Public evidence wall: >=5 external lecture/media links (Insights),
 // and Insights/Home together must reach the P0 evidence-wall minimum.
 // ---------------------------------------------------------------------------
-const insights = pages.find((p) => p.route === "/insights/");
-if (insights) {
-  const evLinks = [...insights.html.matchAll(/class="evidence-list[^"]*"[\s\S]*?<\/ul>/g)]
+const home2 = pages.find((p) => p.route === "/");
+if (home2) {
+  const evLinks = [...home2.html.matchAll(/class="evidence-list[^"]*"[\s\S]*?<\/ul>/g)]
     .flatMap((m) => [...m[0].matchAll(/href="(https:\/\/[^"]+)"/g)])
     .map((m) => m[1]);
-  check("15a", "Insights Public Evidence Wall에 외부 링크 5개 이상", evLinks.length >= 5, `count=${evLinks.length}`);
-  const badTarget = [...insights.html.matchAll(/<a\b[^>]*href="https:\/\/[^"]+"[^>]*>/g)]
-    .map((m) => m[0])
-    .filter((a) => !/target="_blank"/.test(a) || !/rel="noopener noreferrer"/.test(a));
-  check("15b", "Insights 외부 링크가 모두 target=_blank rel=noopener noreferrer", badTarget.length === 0,
-    badTarget.slice(0, 3).join(" | "));
+  check("15a", "Home 강의와 외부 활동 섹션에 외부 링크 5개 이상", evLinks.length >= 5, `count=${evLinks.length}`);
 }
 
-// All external links sitewide must use a safe target/rel.
-for (const p of pages) {
+// All external links sitewide (including generated content-board pages)
+// must use a safe target/rel.
+for (const p of allPages) {
   const externalAnchors = [...p.html.matchAll(/<a\b[^>]*href="https:\/\/[^"]+"[^>]*>/g)].map((m) => m[0]);
   const bad = externalAnchors.filter((a) => !/target="_blank"/.test(a) || !/rel="[^"]*noopener[^"]*noreferrer/.test(a));
   check(`15c:${p.route}`, "외부 링크가 모두 안전한 target/rel 보유", bad.length === 0, bad.slice(0, 3).join(" | "));
@@ -469,7 +509,7 @@ const EXTERNAL_FONT_PATTERNS = [
   { re: /material[\s-]?icons/i, label: "Material Icons icon font" },
   { re: /use\.typekit\.net|fast\.fonts\.net|fonts\.adobe\.com/i, label: "other external font CDN" },
 ];
-for (const p of pages) {
+for (const p of allPages) {
   const hits = EXTERNAL_FONT_PATTERNS.filter((f) => f.re.test(p.html)).map((f) => f.label);
   check(`17:${p.route}`, "외부 font/icon-font 네트워크 요청 0개", hits.length === 0, hits.join(", "));
 }
@@ -480,7 +520,7 @@ check("17:site.css", "site.css에 외부 font 참조 0개", cssHits.length === 0
 // 18. F-006-class mechanism guard: remote stylesheet/font loading mechanism,
 // not just a vendor denylist (see external-style-font-policy.mjs).
 // ---------------------------------------------------------------------------
-for (const p of pages) {
+for (const p of allPages) {
   const violations = findExternalStyleFontViolations(p.html, { source: "html", fileLabel: p.route });
   check(`18:${p.route}`, "외부 stylesheet/font 로딩 메커니즘 0개 (mechanism-class guard)",
     violations.length === 0,
@@ -490,6 +530,109 @@ const cssViolations = findExternalStyleFontViolations(cssText, { source: "css", 
 check("18:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0개",
   cssViolations.length === 0,
   cssViolations.map((v) => `${v.mechanism}:${v.url}`).join(", "));
+
+// ---------------------------------------------------------------------------
+// 19. Korean typography contract (remediation contract §6/§10): H1 CSS max
+// <=52px, H2 CSS max <=34px. Reads the clamp() upper bound directly from
+// site.css rather than a live browser — browser QA still measures the
+// rendered px separately.
+// ---------------------------------------------------------------------------
+function clampMaxPx(rule, selector) {
+  const m = rule.match(new RegExp(`${selector}\\s*\\{[^}]*font-size:\\s*clamp\\(([^,]+),([^,]+),([^)]+)\\)`));
+  if (!m) return null;
+  const upper = m[3].trim();
+  const remMatch = upper.match(/([\d.]+)rem/);
+  const pxMatch = upper.match(/([\d.]+)px/);
+  if (remMatch) return parseFloat(remMatch[1]) * 16;
+  if (pxMatch) return parseFloat(pxMatch[1]);
+  return null;
+}
+const h1Max = clampMaxPx(cssText, "h1");
+const h2Max = clampMaxPx(cssText, "h2");
+check("19a", "H1 CSS clamp 최대값이 52px 이하", h1Max !== null && h1Max <= 52, `h1Max=${h1Max}px`);
+check("19b", "H2 CSS clamp 최대값이 34px 이하", h2Max !== null && h2Max <= 34, `h2Max=${h2Max}px`);
+
+const leadRule = (cssText.match(/\.lead\s*\{[^}]*\}/) || [""])[0];
+const leadMax = (() => {
+  const m = leadRule.match(/font-size:\s*clamp\(([^,]+),([^,]+),([^)]+)\)/);
+  if (!m) return null;
+  const upper = m[3].trim();
+  const remMatch = upper.match(/([\d.]+)rem/);
+  return remMatch ? parseFloat(remMatch[1]) * 16 : null;
+})();
+check("19c", "Lead 본문 폰트가 19px를 넘지 않음", leadMax !== null && leadMax <= 19, `leadMax=${leadMax}px`);
+
+check("19d", "body에 word-break: keep-all 유지", /body\s*\{[^}]*word-break:\s*keep-all/.test(cssText), "");
+check("19e", "h1-h4에 text-wrap: balance 적용", /h1,\s*h2,\s*h3,\s*h4\s*\{[^}]*text-wrap:\s*balance/.test(cssText), "");
+const headingLetterSpacing = (cssText.match(/h1,\s*h2,\s*h3,\s*h4\s*\{[^}]*letter-spacing:\s*(-?[\d.]+)em/) || [])[1];
+check("19f", "Korean heading letter-spacing가 -0.015em보다 타이트하지 않음",
+  headingLetterSpacing !== undefined && parseFloat(headingLetterSpacing) >= -0.015,
+  `letter-spacing=${headingLetterSpacing}em`);
+
+// ---------------------------------------------------------------------------
+// 20. Hero portrait: restrained personal-homepage scale, grayscale default
+// (remediation contract §5/§10).
+// ---------------------------------------------------------------------------
+const portraitDesktopMax = (() => {
+  const m = cssText.match(/\.hero__portrait img\s*\{[^}]*max-width:\s*([\d.]+)px/);
+  return m ? parseFloat(m[1]) : null;
+})();
+check("20a", "Hero portrait desktop 최대 너비가 320px 이하", portraitDesktopMax !== null && portraitDesktopMax <= 320,
+  `desktopMax=${portraitDesktopMax}px`);
+
+const portraitMobileMax = (() => {
+  // The mobile override is a standalone rule inside the 900px media query:
+  // `.hero__portrait img { max-width: 11.25rem; }` — matched directly by
+  // selector rather than by scoping to the (ambiguous, non-brace-aware)
+  // surrounding @media block.
+  const m = cssText.match(/\.hero__portrait img\s*\{\s*max-width:\s*([\d.]+)rem/);
+  return m ? parseFloat(m[1]) * 16 : null;
+})();
+check("20b", "Hero portrait mobile 최대 너비가 190px 이하", portraitMobileMax !== null && portraitMobileMax <= 190,
+  `mobileMax=${portraitMobileMax}px`);
+
+check("20c", "Hero portrait 기본값이 grayscale(1)", /\.hero__portrait img\s*\{[^}]*filter:\s*grayscale\(1\)/.test(cssText), "");
+check("20d", "Hero portrait 과도한 그림자 제거 (블러 <=32px)", (() => {
+  const m = cssText.match(/\.hero__portrait img\s*\{[^}]*box-shadow:[^;]*?(\d+)px\s+rgba/);
+  return !!m && parseInt(m[1], 10) <= 32;
+})(), "");
+check("20e", "Hero 상하 padding이 축소됨 (128px 프리셋 미사용)", !/padding-block:\s*clamp\(3\.5rem, 9vw, 8rem\)/.test(cssText), "");
+
+// ---------------------------------------------------------------------------
+// 21. /insights/ functions as a category-based content board with >=3
+// truthful seed entries and a working (progressive-enhancement) filter.
+// ---------------------------------------------------------------------------
+const postsDir = join(ROOT, "content", "posts");
+const postFiles = existsSync(postsDir) ? readdirSync(postsDir).filter((f) => f.endsWith(".md")) : [];
+check("21a", "content/posts/*.md 시드 글이 3개 이상", postFiles.length >= 3, `count=${postFiles.length}`);
+
+const insightsIndex = pages.find((p) => p.route === "/insights/");
+if (insightsIndex) {
+  check("21b", "/insights/가 GENERATED 마커를 포함 (build-content.mjs 산출물)",
+    insightsIndex.html.includes("GENERATED by scripts/content/build-content.mjs"), "");
+  check("21c", "/insights/에 카테고리 필터 UI 존재 (role=group + data-filter 버튼)",
+    /class="content-filter"[^>]*role="group"/.test(insightsIndex.html) &&
+    /data-filter="전체"/.test(insightsIndex.html), "");
+  const cardCount = (insightsIndex.html.match(/class="card content-card"/g) || []).length;
+  check("21d", "/insights/ 보드에 콘텐츠 카드가 3개 이상 렌더링됨", cardCount >= 3, `cards=${cardCount}`);
+}
+check("21e", "site.js에 카테고리 필터 동작(.content-filter 클릭 핸들러)이 존재",
+  /content-filter/.test(read("assets/js/site.js")) && /data-filter/.test(read("assets/js/site.js")), "");
+
+// ---------------------------------------------------------------------------
+// 22. jerrybay-content-publish skill exists and never auto-publishes.
+// ---------------------------------------------------------------------------
+const skillPath = ".claude/skills/jerrybay-content-publish/SKILL.md";
+const skillExists = existsSync(join(ROOT, skillPath));
+check("22a", "jerrybay-content-publish 스킬 파일 존재", skillExists, skillPath);
+if (skillExists) {
+  const skillText = read(skillPath);
+  check("22b", "스킬이 자동 publish/merge/deploy 금지를 명시",
+    /never publish automatically/i.test(skillText) || /never.*(commit|push|merge|deploy)/i.test(skillText), "");
+  const autoPublishHits = ["git push", "git commit -m", "gh pr create", "vercel deploy", "vercel --prod"]
+    .filter((cmd) => skillText.toLowerCase().includes(cmd));
+  check("22c", "스킬 절차에 자동 실행되는 publish 커맨드가 없음", autoPublishHits.length === 0, autoPublishHits.join(", "));
+}
 
 // ---------------------------------------------------------------------------
 // Report

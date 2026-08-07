@@ -27,13 +27,23 @@
  * Exit code 0 = every assertion passed.
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
+import { writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
+import { join, dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = "."] =
   process.argv;
 
-const ROUTES = ["/", "/resume/", "/work/", "/lab/", "/insights/", "/books/", "/contact/", "/privacy/"];
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const CORE_ROUTES = ["/", "/resume/", "/work/", "/lab/", "/insights/", "/books/", "/contact/", "/privacy/"];
+// Generated content-board detail pages are discovered at run time — one per
+// slug directory under insights/ (excluding insights/index.html itself).
+const contentDetailRoutes = existsSync(join(ROOT, "insights"))
+  ? readdirSync(join(ROOT, "insights"), { withFileTypes: true })
+      .filter((e) => e.isDirectory() && existsSync(join(ROOT, "insights", e.name, "index.html")))
+      .map((e) => `/insights/${e.name}/`)
+  : [];
+const ROUTES = [...CORE_ROUTES, ...contentDetailRoutes];
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, mobile: false },
   { name: "mobile", width: 390, height: 844, mobile: true },
@@ -123,6 +133,17 @@ const PROBE = `(() => {
 
   const portrait = document.querySelector('img[src="/assets/profile.jpg"]');
   const portraitBox = portrait ? portrait.getBoundingClientRect() : null;
+  const portraitFilter = portrait ? getComputedStyle(portrait).filter : "";
+
+  const heroSection = document.querySelector(".hero");
+  const heroHeight = heroSection ? Math.round(heroSection.getBoundingClientRect().height) : null;
+
+  // Remediation contract §5 mobile target: name/H1/primary CTA visible
+  // within the first ~2 screenfuls.
+  const primaryCta = document.querySelector("a.btn--primary");
+  const ctaWithinTwoScreens = primaryCta
+    ? primaryCta.getBoundingClientRect().bottom <= window.innerHeight * 2
+    : null;
 
   return {
     overflow, widest, primaries, smallTargets,
@@ -131,6 +152,13 @@ const PROBE = `(() => {
     toggleVisible: !!toggleBox && toggleBox.width > 0 &&
       toggleBox.right <= window.innerWidth + 1 && toggleBox.left >= -1,
     bodyFontPx: parseFloat(getComputedStyle(document.body).fontSize),
+    portraitWidthPx: portraitBox ? Math.round(portraitBox.width) : null,
+    // A regex literal here would need \\\\( to survive PROBE's own outer
+    // template literal (which strips single backslashes before non-special
+    // characters), so plain string matching avoids that footgun entirely.
+    portraitIsGrayscale: portraitFilter.indexOf("grayscale(1)") !== -1,
+    heroHeight,
+    ctaWithinTwoScreens,
     h1Px: (() => { const h = document.querySelector("h1");
                    return h ? Math.round(parseFloat(getComputedStyle(h).fontSize)) : 0; })(),
     portraitTopWithin3Screens: !!portraitBox && portraitBox.top >= 0 && portraitBox.top < window.innerHeight * 3,
@@ -154,7 +182,7 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  return { ok: opened && closed && focusReturned && linkCount === 7,
+  return { ok: opened && closed && focusReturned && linkCount === 6,
            opened, closed, focusReturned, linkCount };
 })()`;
 
@@ -242,6 +270,13 @@ for (const vp of VIEWPORTS) {
 
     await cdp.send("Page.navigate", { url: BASE + route });
     await sleep(900);
+    // A prior testScrollLock() run dispatches a synthetic mouseWheel at the
+    // viewport center; Chrome does not clear the resulting hover state on
+    // navigation if an element lands under the same coordinate on the new
+    // page. Reset the pointer to a neutral corner before every measurement
+    // so :hover-only styles (e.g. the portrait's grayscale reveal) never
+    // leak between routes/viewports.
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 2, y: 2 });
 
     const consoleErrors = cdp.events
       .filter((e) => e.method === "Log.entryAdded" && e.params.entry.level === "error")
@@ -263,14 +298,33 @@ for (const vp of VIEWPORTS) {
       [...consoleErrors, ...failedReqs].join(" | "));
     record(`bodyfont ${tag}`, `body font-size >= 16px (${r.bodyFontPx})`, r.bodyFontPx >= 16);
 
-    const h1Min = vp.mobile ? 30 : 40;
-    const h1Max = vp.mobile ? 46 : 66;
-    record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위 (${r.h1Px}px)`,
-      r.h1Px >= h1Min && r.h1Px <= h1Max);
+    // Korean typography contract: H1 CSS max <=52px (clamp(2rem,4.2vw,3.25rem)).
+    // Small tolerance for sub-pixel rounding at each viewport.
+    const h1Min = vp.mobile ? 28 : 44;
+    const h1Max = vp.mobile ? 40 : 56;
+    record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위, 52px 상한 준수 (${r.h1Px}px)`,
+      r.h1Px >= h1Min && r.h1Px <= h1Max && r.h1Px <= 53);
 
-    if (route === "/" && vp.mobile) {
-      record(`portrait ${tag}`, "Home: 실제 portrait가 첫 3 화면(mobile) 안에 표시됨",
-        r.portraitTopWithin3Screens, "");
+    if (route === "/") {
+      const portraitMax = vp.mobile ? 190 : 320;
+      record(`portrait-size ${tag}`, `Home portrait 렌더 너비가 ${portraitMax}px 이하 (${r.portraitWidthPx}px)`,
+        r.portraitWidthPx !== null && r.portraitWidthPx <= portraitMax, "");
+      record(`portrait-grayscale ${tag}`, "Home portrait 기본 상태가 grayscale",
+        r.portraitIsGrayscale, "");
+      // Regression ceiling, not a design target: the locked H1/lead copy
+      // wraps to several lines at keep-all width, so an exact px target
+      // isn't meaningful. This still catches a reversion to the old
+      // 128px-padding / 64px-H1 hero (which measured well above these
+      // numbers) while accepting the current copy's real wrapped height.
+      record(`hero-height ${tag}`, `Hero 섹션 높이가 old 128px-padding 프리셋보다 축소됨 (${r.heroHeight}px)`,
+        r.heroHeight !== null && r.heroHeight <= (vp.mobile ? 1000 : 800), "");
+
+      if (vp.mobile) {
+        record(`portrait ${tag}`, "Home: 실제 portrait가 첫 3 화면(mobile) 안에 표시됨",
+          r.portraitTopWithin3Screens, "");
+        record(`cta-2screens ${tag}`, "Home: primary CTA가 첫 2 화면(mobile) 안에 표시됨",
+          r.ctaWithinTwoScreens === true, "");
+      }
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",

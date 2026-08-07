@@ -430,6 +430,31 @@ record("references project-filter", "레퍼런스 프로젝트 필터가 query r
 const { data: filterShot } = await cdp.send("Page.captureScreenshot", { format: "png" });
 writeFileSync(join(OUT, "references-project-filter-desktop.png"), Buffer.from(filterShot, "base64"));
 
+for (const referenceType of [
+  { type: "lecture", expected: 8, label: "강의" },
+  { type: "planning", expected: 8, label: "기획" },
+  { type: "government", expected: 6, label: "정부사업" },
+]) {
+  await cdp.send("Page.navigate", { url: `${BASE}/references/?type=${referenceType.type}` });
+  await sleep(700);
+  const { result: referenceFilter } = await cdp.send("Runtime.evaluate", {
+    expression: `(() => {
+      const visible = [...document.querySelectorAll("[data-content-type]")]
+        .filter((card) => !card.hidden);
+      const tab = document.querySelector('[data-content-filter="${referenceType.type}"]');
+      return {
+        visible: visible.length,
+        typeOnly: visible.every((card) => card.getAttribute("data-content-type") === "${referenceType.type}"),
+        tabCurrent: tab?.getAttribute("aria-current") === "page",
+      };
+    })()`,
+    returnByValue: true,
+  });
+  record(`references ${referenceType.type}-filter`, `${referenceType.label} 레퍼런스 필터가 query route에서 동작`,
+    referenceFilter.value.visible === referenceType.expected && referenceFilter.value.typeOnly && referenceFilter.value.tabCurrent,
+    JSON.stringify(referenceFilter.value));
+}
+
 cdp.close();
 
 const pad = (s, n) => String(s).padEnd(n);

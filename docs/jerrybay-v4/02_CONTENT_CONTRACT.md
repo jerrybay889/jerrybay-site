@@ -87,3 +87,11 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Use `레퍼런스` as the single global navigation destination for the archive. Do not place a parallel global `프로젝트` item beside it.
 - Retain `프로젝트` only as a Reference-internal content type: hub filter, project-detail breadcrumb, card type, and project-specific CTA wording.
 - Reference hub and detail-page headers use the same concise navigation: 홈, 레퍼런스, 강의, 기사 · 인터뷰, 문의. Their footer archive link also uses `레퍼런스`.
+
+### G2-B-R4 Owner reference expansion
+
+- Expand the Reference hub into four query-compatible categories: `프로젝트`, `강의`, `기획`, `정부사업`.
+- The lecture category contains the restored lecture history and only the public article/course/institution links already verified for public display. The home lecture section provides the AIKUS homepage as an external link.
+- The planning category represents Notion collection work as public-safe planning domains, not raw titles, source records, private notes, scores, or client work. It does not imply an external client relationship.
+- Restore the historical government-project record set with clear role wording: MyData demonstration PM, Youth Experience AI Creator PM/instruction, startup/R&amp;D planning, aquaculture AI demonstration consulting, AI Voucher planning support, and startup-support planning consulting.
+- Remove the public-facing `JERRY’S QA OS` title; use `Quality Engineering OS` without changing its role or adding performance claims.

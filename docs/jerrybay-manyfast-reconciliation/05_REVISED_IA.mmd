@@ -1,0 +1,29 @@
+flowchart TD
+  subgraph PUBLIC[Visitor Public IA]
+    H[Home]
+    C[Capabilities]
+    W[Selected Work]
+    CO[Collaborate]
+    A[About]
+    CT[Contact]
+    P[Privacy conditional]
+    H --> C
+    H --> W
+    H --> CO
+    H --> A
+    H --> CT
+    CT --> P
+  end
+
+  subgraph OWNER[Owner Operation Acceptance Flow]
+    EDIT[Edit approved copy and assets]
+    PREVIEW[Preview and responsive QA]
+    REVIEW[Claim, permission, legal review]
+    PUBLISH[Publish through repository and Vercel]
+    RECOVER[Recover prior tagged version]
+    EDIT --> PREVIEW --> REVIEW --> PUBLISH
+    PUBLISH --> RECOVER
+    RECOVER --> PREVIEW
+  end
+
+  PUBLISH -.-> PUBLIC

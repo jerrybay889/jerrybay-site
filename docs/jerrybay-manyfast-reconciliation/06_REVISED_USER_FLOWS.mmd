@@ -1,0 +1,44 @@
+flowchart LR
+  subgraph F1[Organization Buyer -> Primary Offer Inquiry]
+    F1E[Entry: Home or Collaborate] --> F1D{Problem and buyer fit clear?}
+    F1D -- yes --> F1H[Happy: choose Primary CTA]
+    F1D -- no --> F1A[Alternative: read capability and method]
+    F1H --> F1X[External handoff: approved inquiry route]
+    F1X --> F1C[Completion: external receipt]
+    F1E --> F1R[Error: unavailable link or invalid handoff]
+    F1R --> F1T[Retry or email alternative]
+    F1C --> F1M[Analytics event: primary_cta_handoff]
+  end
+
+  subgraph F2[Qualified Visitor -> Paid Diagnostic]
+    F2E[Entry: Offer hierarchy] --> F2D{Needs priority diagnosis?}
+    F2D -- yes --> F2H[Happy: request diagnostic fit]
+    F2D -- no --> F2A[Alternative: education or expansion path]
+    F2H --> F2X[External handoff: owner-approved contact]
+    F2X --> F2C[Completion: handoff complete]
+    F2E --> F2R[Error: terms not approved]
+    F2R --> F2T[Show scope placeholder; no payment]
+    F2C --> F2M[Analytics event: paid_entry_interest]
+  end
+
+  subgraph F3[Partner -> Collaboration Inquiry]
+    F3E[Entry: Collaborate partner path] --> F3D{Partner role and intent clear?}
+    F3D -- yes --> F3H[Happy: choose partnership inquiry]
+    F3D -- no --> F3A[Alternative: read About and capabilities]
+    F3H --> F3X[External handoff: approved inquiry route]
+    F3X --> F3C[Completion: external receipt]
+    F3E --> F3R[Error: missing route]
+    F3R --> F3T[Retry or email alternative]
+    F3C --> F3M[Analytics event: partner_cta_handoff]
+  end
+
+  subgraph F4[Owner -> Edit Preview Publish Recover Acceptance Test]
+    F4E[Entry: repository branch] --> F4D{Copy and claim register complete?}
+    F4D -- no --> F4R[Error: block publish and log gap]
+    F4D -- yes --> F4H[Happy: edit approved source]
+    F4H --> F4X[External handoff: Vercel preview]
+    F4X --> F4Q[QA: mobile, keyboard, links, metadata]
+    F4Q --> F4C[Completion: owner approval recorded]
+    F4C --> F4M[Analytics event: release_candidate_ready]
+    F4R --> F4T[Recover prior tag or revise Build Pack]
+  end

@@ -1,0 +1,43 @@
+Content ID,Page,Claim,Status,Evidence,Permission,Public Copy,Risk,Owner Decision,Build State
+C-001,/,"AI 교육으로 끝나지 않게 만듭니다.",POSITIONING,"Commercial Lock v1.0 Hero Direction",OWNER APPROVED,"AI 교육으로 끝나지 않게 만듭니다.",LOW,APPROVED,SHIPPED
+C-002,/,"진단 → 맞춤 교육 → 실습 → 적용 과제 → 결과 Review","METHOD DESCRIPTION","Commercial Lock v1.0 Process",OWNER APPROVED,"Working Method 5단계",LOW,APPROVED,SHIPPED
+C-003,/,"4–8주",DURATION,"Commercial Lock v1.0 Duration",OWNER APPROVED,"4–8주 프로그램",LOW,APPROVED,SHIPPED
+C-004,/,"₩5,000,000부터",PRICE ANCHOR,"Commercial Lock v1.0 Price Anchor",OWNER APPROVED,"₩5,000,000부터 · 범위·기간에 따라 조정",MEDIUM,APPROVED,SHIPPED
+C-005,/,"₩1,500,000 Founding Price",PRICE,"Commercial Lock v1.0 Paid Entry",OWNER APPROVED,"₩1,500,000 · Founding Price",MEDIUM,APPROVED,SHIPPED
+C-006,/,"한 사람이 끝까지 설계합니다",OPERATING PRINCIPLE,"Owner-stated working model; no numeric claim",N/A,"진단·교육 설계·실습·적용 과제·결과 Review를 같은 사람이 연결합니다",LOW,APPROVED,SHIPPED
+C-007,/,"교육이 아니라 업무를 기준으로 봅니다",OPERATING PRINCIPLE,"Method statement; no outcome claim",N/A,"실제 업무 흐름과 병목을 먼저 확인한 뒤 교육 범위를 정합니다",LOW,APPROVED,SHIPPED
+C-008,/,"검증되지 않은 성과는 말하지 않습니다",DISCLOSURE,"Reconciliation Contract claim rules",N/A,"근거와 사용 허가가 확인된 범위에서만 공개합니다",LOW,APPROVED,SHIPPED
+C-009,/,"기업·대학·기관의 HR/L&D·혁신·사업 책임자",BUYER DEFINITION,"Commercial Lock v1.0 Buyer",OWNER APPROVED,"버전 그대로",LOW,APPROVED,SHIPPED
+C-010,/capabilities/,"AI Education & Work Transformation",CAPABILITY,"Commercial Lock v1.0 Capability 1",OWNER APPROVED,"Buyer Problem / Approach / Deliverables / Offer Connection",LOW,APPROVED,SHIPPED
+C-011,/capabilities/,"Strategy & Business Design",CAPABILITY,"Commercial Lock v1.0 Capability 2",OWNER APPROVED,"Buyer Problem / Approach / Deliverables / Offer Connection",LOW,APPROVED,SHIPPED
+C-012,/capabilities/,"Product & Prototype Design",CAPABILITY,"Commercial Lock v1.0 Capability 3",OWNER APPROVED,"Buyer Problem / Approach / Deliverables / Offer Connection",LOW,APPROVED,SHIPPED
+C-013,/capabilities/,"Content & IP — secondary",CAPABILITY,"Demoted per Phase 1 scope",N/A,"대표 자체 자산 중심 서술",LOW,APPROVED,SHIPPED
+C-014,/capabilities/,"Partnership — secondary",CAPABILITY,"Scope and liability structure undecided",UNKNOWN,"범위와 책임 구조는 개별 확인 필요 + OWNER REVIEW REQUIRED chip",MEDIUM,PENDING,SHIPPED WITH FLAG
+C-015,/work/,"AIKUS — BUILT / PROTOTYPED",ASSET STATUS,"Owner-owned asset; exists in working form",OWNER-OWNED,"Current Status / What Exists / What It Demonstrates / Public Claim Boundary",LOW,APPROVED,SHIPPED
+C-016,/work/,"OMYQT — BUILT / PROTOTYPED",ASSET STATUS,"Owner-owned prototype",OWNER-OWNED,"Current Status / What Exists / What It Demonstrates / Public Claim Boundary",LOW,APPROVED,SHIPPED
+C-017,/work/,"AIKUS Books 01 — BUILT / DESIGNED",ASSET STATUS,"Owner-owned content asset",OWNER-OWNED,"Current Status / What Exists / What It Demonstrates / Public Claim Boundary",LOW,APPROVED,SHIPPED
+C-018,/work/,"AIKUS 고객사 도입·사용자 수·학습 성과",OUTCOME CLAIM,"No evidence found",UNKNOWN,"NOT PUBLISHED — 명시적으로 주장하지 않음을 표기",CRITICAL,BLOCKED,QUARANTINED
+C-019,/work/,"OMYQT 파일럿 운영·결과 입증·조직 도입 규모",OUTCOME CLAIM,"No evidence found",UNKNOWN,"NOT PUBLISHED — 명시적으로 주장하지 않음을 표기",CRITICAL,BLOCKED,QUARANTINED
+C-020,/work/,"AIKUS Books 01 판매량·채택 기관·추천사",OUTCOME CLAIM,"No evidence found",UNKNOWN,"NOT PUBLISHED — 명시적으로 주장하지 않음을 표기",CRITICAL,BLOCKED,QUARANTINED
+C-021,/work/,"기업·대학·기관 대상 수행 이력 존재",EXPERIENCE CLAIM,"Owner assertion; organisation names withheld",PENDING,"조직명·인원·기간·성과는 근거 확인과 사용 허가 후 공개 + OWNER REVIEW REQUIRED chip",MEDIUM,PENDING,SHIPPED WITH FLAG
+C-022,/work/,"PROVEN 라벨",STATUS LABEL,"No Evidence ID supplied for any asset",N/A,"NOT USED — 프리뷰에 PROVEN 항목 없음을 명시",LOW,APPROVED,QUARANTINED
+C-023,/collaborate/,"Free Fit Call 20–30분",PROCESS,"Commercial Lock CTA / fit-call boundary",OWNER APPROVED,"다룹니다 / 다루지 않습니다 명시",LOW,APPROVED,SHIPPED
+C-024,/collaborate/,"Not Included — 성과 수치 보장 없음",BOUNDARY,"Reconciliation Contract: no guaranteed result",N/A,"성과 수치 보장 또는 결과 확약 제외 명시",LOW,APPROVED,SHIPPED
+C-025,/collaborate/,"파트너 및 콘텐츠 협업",SCOPE,"Responsibility and rights structure undecided",UNKNOWN,"OWNER REVIEW REQUIRED chip",MEDIUM,PENDING,SHIPPED WITH FLAG
+C-026,/about/,"사업·교육·제품·운영을 연결하는 실행 설계자",IDENTITY,"Commercial Lock identity statement",OWNER APPROVED,"H1 그대로",LOW,APPROVED,SHIPPED
+C-027,/about/,"1999년부터 IT 현장에서 일해 왔습니다",CAREER,"Existing site statement; year only, no attribution",OWNER-STATED,"개별 재직 이력·조직 성과는 개인 성과로 옮겨 적지 않음",MEDIUM,PENDING,SHIPPED WITH FLAG
+C-028,/about/,"공개 연혁 범위",CAREER DETAIL,"Prior site listed named employers and clients",UNKNOWN,"NOT PUBLISHED — 상담 시 별도 전달 + OWNER REVIEW REQUIRED chip",HIGH,PENDING,QUARANTINED
+C-029,/about/,"Globorder 및 JERRYBAY 조직 관계",ENTITY,"Operating and contracting entity undecided",UNKNOWN,"NOT PUBLISHED — 계약 주체·세금계산서 발행 주체 미확정 표기",HIGH,PENDING,QUARANTINED
+C-030,/about/,"Truthful Ambition 원칙",DISCLOSURE,"Reconciliation Contract",N/A,"하고 싶은 일과 검증된 일을 구분해서 말합니다",LOW,APPROVED,SHIPPED
+C-031,/contact/,"jerrybay889@gmail.com",CONTACT,"Existing repository README and live site",OWNER-OWNED,"mailto 링크 (사이트 내 저장 없음)",LOW,APPROVED,SHIPPED
+C-032,/contact/,"응답 소요 시간",SERVICE PROMISE,"Not decided",UNKNOWN,"NOT PUBLISHED — 확정되지 않아 표기하지 않음을 명시",MEDIUM,PENDING,QUARANTINED
+C-033,/contact/,"외부 문의 접수 도구",TOOLING,"Not selected",UNKNOWN,"OWNER DECISION chip; 폼 없음, 개인정보 수집 없음",HIGH,PENDING,SHIPPED WITH FLAG
+C-034,/contact/,"전화번호·카카오톡 ID",CONTACT,"Present on live site; not re-verified for this build",UNKNOWN,"NOT PUBLISHED",MEDIUM,PENDING,QUARANTINED
+C-035,/privacy/,"개인정보처리방침 본문",LEGAL,"No data inventory; no controller decided",UNKNOWN,"법률 Placeholder만; 필수 고지 문구 게재",CRITICAL,BLOCKED,PLACEHOLDER
+C-036,/privacy/,"시행일·개정일·보유기간",LEGAL DATE,"Not decided",UNKNOWN,"NOT PUBLISHED — 임의 생성 금지 명시",CRITICAL,BLOCKED,QUARANTINED
+C-037,/privacy/,"개인정보 보호책임자·전용 이메일",LEGAL CONTACT,"Not appointed",UNKNOWN,"NOT PUBLISHED — privacy@ 주소 생성하지 않음",CRITICAL,BLOCKED,QUARANTINED
+C-038,/privacy/,"개인정보처리자(운영 주체)",LEGAL ENTITY,"Not decided",UNKNOWN,"Data Inventory Checklist에 OWNER DECISION으로 표기",CRITICAL,BLOCKED,QUARANTINED
+C-039,ALL,"PRIVATE PREVIEW · NOT FOR PUBLIC RELEASE",SAFETY NOTICE,"Work order section 5",N/A,"모든 페이지 상단 배너 + 푸터 + noindex + robots Disallow",LOW,APPROVED,SHIPPED
+C-040,ALL,"운영 주체 표기",ENTITY,"Not decided",UNKNOWN,"푸터에 OWNER DECISION 대기 표기",HIGH,PENDING,SHIPPED WITH FLAG
+C-041,ALL,"현대차·르노코리아·대한상공회의소·명지전문대",CUSTOMER NAME,"Present on live public site; no permission record in this repo",UNKNOWN,"NOT PUBLISHED — 이 빌드로 이관하지 않음",CRITICAL,BLOCKED,NOT MIGRATED
+C-042,ALL,"정부지원사업 PM 수행 실적",EXPERIENCE CLAIM,"Present on live public site; no evidence register entry",UNKNOWN,"NOT PUBLISHED — 이 빌드로 이관하지 않음",HIGH,PENDING,NOT MIGRATED

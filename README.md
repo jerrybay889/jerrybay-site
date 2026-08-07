@@ -2,10 +2,38 @@
 
 > **배제협 · JerryBay** — IT전략 · AI교육 · 정부지원 컨설턴트
 
-Personal website for 배제협 (JerryBay), built as a static single-page site.
-
-🌐 **Live:** [www.jerrybay.kr](https://www.jerrybay.kr)  
 📁 **Repo:** [github.com/jerrybay889/jerrybay-site](https://github.com/jerrybay889/jerrybay-site)
+
+---
+
+## Commercial site
+
+`build/jerrybay-phase1-commercial-v1` replaces the single-page site with the
+**JERRYBAY commercial build**: 7 static public routes, indexable by search
+engines, describing the organization AI education and business/product design
+offer.
+
+Start with [docs/jerrybay-phase1-build/00_START_HERE.md](docs/jerrybay-phase1-build/00_START_HERE.md).
+
+### Run locally
+
+```bash
+python -m http.server 4173      # from the repo root — root-absolute paths need this
+# http://127.0.0.1:4173/
+```
+
+### Verify
+
+```bash
+node scripts/qa/validate-site.mjs        # static contract checks
+
+# browser QA needs a headless Chrome with CDP enabled:
+chrome --headless=new --remote-debugging-port=9222 --user-data-dir=<tmp> about:blank
+node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 \
+  docs/jerrybay-phase1-build/evidence/screenshots
+```
+
+Both must exit 0.
 
 ---
 

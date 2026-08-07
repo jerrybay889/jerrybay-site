@@ -23,6 +23,9 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] G2-A review checkpoint adds substantial AIKUS, OMYQT, INVIT, and Systems/IP public-safe content.
 - [x] G2-A local static, HTML, browser, claim/privacy, and rendered checks pass at one exact SHA.
 - [x] G2-A protected Vercel review deployment is READY and isolated from the existing `jerrybay-site` project, domains, and `main` before G2 completion.
+- [x] G2-A-R1 Hero/type/spacing remediation and project-card overlap correction pass desktop and mobile rendered QA.
+- [x] G2-A-R1 Content hub and all six project detail pages pass static, HTML, browser, role-attribution, and public-copy checks.
+- [x] Future SEO/GEO publishing shape is documented with source and approval gates; no unreviewed daily content is published.
 - [ ] Historical commercial/project evidence is complete and role-context safe.
 - [ ] External reference inventory is live rechecked.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

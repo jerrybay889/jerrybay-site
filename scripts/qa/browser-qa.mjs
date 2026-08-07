@@ -30,7 +30,12 @@ import { join } from "node:path";
 const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = "."] =
   process.argv;
 
-const ROUTES = ["/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/", "/privacy/"];
+const ROUTES = [
+  "/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/", "/privacy/",
+  "/content/", "/content/projects/aikus/", "/content/projects/omyqt/", "/content/projects/invit/",
+  "/content/projects/casper-electric-ai-drawing/", "/content/projects/renault-sm6-ai-drawing/",
+  "/content/projects/fashion-ai-generator/",
+];
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, mobile: false },
   { name: "mobile", width: 390, height: 844, mobile: true },
@@ -110,6 +115,16 @@ const PROBE = `(() => {
   const primaries = [...document.querySelectorAll("a.btn--primary")]
     .map(a => ({ text: a.textContent.trim(), href: a.getAttribute("href"),
                  h: Math.round(a.getBoundingClientRect().height) }));
+  const buildCardOverlaps = [...document.querySelectorAll(".build-card")]
+    .filter((card) => {
+      const topline = card.querySelector(".build-card__topline");
+      const title = card.querySelector("h3");
+      if (!topline || !title) return false;
+      const top = topline.getBoundingClientRect();
+      const heading = title.getBoundingClientRect();
+      return !(heading.bottom <= top.top || heading.top >= top.bottom);
+    })
+    .map((card) => card.querySelector("h3")?.textContent.trim() || "unnamed build card");
   const toggle = document.querySelector("[data-nav-toggle]");
   const toggleBox = toggle ? toggle.getBoundingClientRect() : null;
 
@@ -129,7 +144,7 @@ const PROBE = `(() => {
     .map(({ el, r }) => el.tagName.toLowerCase() + ":" + el.textContent.trim().slice(0, 18) +
                "(" + Math.round(r.width) + "x" + Math.round(r.height) + "px)");
   return {
-    overflow, widest, primaries, smallTargets,
+    overflow, widest, primaries, smallTargets, buildCardOverlaps,
     innerWidth: window.innerWidth,
     scrollWidth: doc.scrollWidth,
     toggleVisible: !!toggleBox && toggleBox.width > 0 &&
@@ -162,7 +177,7 @@ const MENU_PROBE = `(async () => {
                  t.getAttribute("aria-expanded") === "false" &&
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
-  const expectedLinkCount = document.body.classList.contains("home-v4") ? 8 : 6;
+  const expectedLinkCount = document.body.classList.contains("home-v4") ? 9 : 7;
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;
@@ -285,8 +300,8 @@ for (const vp of VIEWPORTS) {
     record(`banner ${tag}`, "PRIVATE PREVIEW 배너 부재", !r.bannerVisible);
     record(`bodyfont ${tag}`, `body font-size >= 16px (${r.bodyFontPx})`, r.bodyFontPx >= 16);
 
-    const h1Min = vp.mobile ? 36 : 48;
-    const h1Max = vp.mobile ? 44 : 64;
+    const h1Min = vp.mobile ? 34 : 46;
+    const h1Max = vp.mobile ? 42 : 52;
     record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위 (${r.h1Px}px)`,
       r.h1Px >= h1Min && r.h1Px <= h1Max);
 
@@ -305,6 +320,8 @@ for (const vp of VIEWPORTS) {
       record(`v4-sections ${tag}`, "V4-G1 홈 8개 section이 DOM에 존재",
         r.homeSections.length === 0, r.homeSections.join(", "));
       record(`profile ${tag}`, "실제 profile image 로드 완료", r.profileLoaded);
+      record(`build-card-layout ${tag}`, "Featured Build label/status와 제목이 겹치지 않음",
+        r.buildCardOverlaps.length === 0, r.buildCardOverlaps.join(", "));
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",
@@ -389,6 +406,29 @@ const { result: skip } = await cdp.send("Runtime.evaluate", {
 record("skiplink", "skip link 포커스 시 화면에 표시",
   skip.value.focused && skip.value.top >= 0 && skip.value.href === "#main",
   JSON.stringify(skip.value));
+
+// The home CTA reaches a real, query-compatible project-only content view.
+await cdp.send("Page.navigate", { url: BASE + "/content/?type=project" });
+await sleep(700);
+const { result: projectFilter } = await cdp.send("Runtime.evaluate", {
+  expression: `(() => {
+    const visible = [...document.querySelectorAll("[data-content-type]")]
+      .filter((card) => !card.hidden);
+    const projectTab = document.querySelector('[data-content-filter="project"]');
+    return {
+      visible: visible.length,
+      projectsOnly: visible.every((card) => card.getAttribute("data-content-type") === "project"),
+      projectTabCurrent: projectTab?.getAttribute("aria-current") === "page",
+      resultText: document.querySelector("[data-content-result]")?.textContent.trim(),
+    };
+  })()`,
+  returnByValue: true,
+});
+record("content project-filter", "콘텐츠 프로젝트 필터가 query route에서 동작",
+  projectFilter.value.visible === 6 && projectFilter.value.projectsOnly && projectFilter.value.projectTabCurrent,
+  JSON.stringify(projectFilter.value));
+const { data: filterShot } = await cdp.send("Page.captureScreenshot", { format: "png" });
+writeFileSync(join(OUT, "content-project-filter-desktop.png"), Buffer.from(filterShot, "base64"));
 
 cdp.close();
 

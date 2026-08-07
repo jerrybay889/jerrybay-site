@@ -43,6 +43,17 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Preserve the original-first long-form structure and the existing project-experience shell.
 - Publish one review-only protected Vercel deployment after local validation. It must not modify the existing `jerrybay-site` project, domains, or `main`; pause G2 completion for Owner visual/story feedback.
 
+### G2-A-R1 Owner feedback remediation
+
+- Reduce home Hero height, top whitespace, and oversized headline scale while preserving the original-first portrait-led hierarchy.
+- Eliminate Featured Build text overlap by keeping each product label, status, title, summary, links, and scope details in normal document flow.
+- Rename the home Press heading to `기사 · 인터뷰`.
+- Add a visible `더 많은 프로젝트 보기` path from the home Project section to `/content/?type=project`.
+- Add `/content/` as an indexable Content hub and create individual pages for AIKUS, OMYQT, INVIT, Casper Electric AI Drawing Experience, Renault Korea SM6 AI Drawing Experience, and Fashion AI Generator.
+- Each project page must include a Korean-first introduction, scope/role context, and verified technology or role category. Employer-period work must remain explicitly attributed as project experience, not a direct Jerry client relationship.
+- Link the three product pages to their owner-designated home domains without making an unverified launch or operating claim.
+- Establish the static publishing shape for future SEO/GEO content, but do not automatically generate or publish daily content without a source, claim review, and Owner-approved publishing input.
+
 ### Product copy contract
 
 - **AIKUS:** Learning + Work Execution System. Show Learning Lab, Work Studio, Archive, My Page, Subscription architecture and the verified stack category: Next.js / TypeScript, Supabase/Postgres/Auth/RLS, Vercel, payment integration. Status remains `IN BUILD / PRODUCTION ITERATION`.

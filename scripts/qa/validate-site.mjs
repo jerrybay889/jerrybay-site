@@ -24,6 +24,13 @@ const ROUTES = [
   { route: "/about/", file: "about/index.html" },
   { route: "/contact/", file: "contact/index.html" },
   { route: "/privacy/", file: "privacy/index.html" },
+  { route: "/content/", file: "content/index.html" },
+  { route: "/content/projects/aikus/", file: "content/projects/aikus/index.html" },
+  { route: "/content/projects/omyqt/", file: "content/projects/omyqt/index.html" },
+  { route: "/content/projects/invit/", file: "content/projects/invit/index.html" },
+  { route: "/content/projects/casper-electric-ai-drawing/", file: "content/projects/casper-electric-ai-drawing/index.html" },
+  { route: "/content/projects/renault-sm6-ai-drawing/", file: "content/projects/renault-sm6-ai-drawing/index.html" },
+  { route: "/content/projects/fashion-ai-generator/", file: "content/projects/fashion-ai-generator/index.html" },
 ];
 
 const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
@@ -65,17 +72,17 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 7 route entry HTML files, and no stray public HTML.
+// 1. Exactly 14 route entry HTML files, and no stray public HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "7개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "14개 route 파일이 모두 존재", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
 const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 7개 (stray 없음)",
-  allHtml.length === 7 && stray.length === 0,
+check("01b", "public HTML 파일이 정확히 14개 (stray 없음)",
+  allHtml.length === 14 && stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
 
 // Load every page once.
@@ -134,7 +141,8 @@ for (const p of pages) {
   for (const h of hrefs) {
     if (h === "#") { bad.push('href="#"'); continue; }
     if (/^(https?:|mailto:|tel:|data:)/i.test(h)) continue;
-    const [pathOnly] = h.split("#");
+    const [withoutHash] = h.split("#");
+    const [pathOnly] = withoutHash.split("?");
     if (!pathOnly) continue;
     if (!pathOnly.startsWith("/")) { bad.push(`relative: ${h}`); continue; }
     if (routeSet.has(pathOnly)) continue;
@@ -439,6 +447,50 @@ const g2ForbiddenHits = G2_FORBIDDEN.filter((term) => home?.text.includes(term))
 check("18h", "V4-G2 공개 copy에 내부 규모·민감 데이터·출시 과장 없음",
   !!home && g2ForbiddenHits.length === 0,
   g2ForbiddenHits.join(", "));
+
+// ---------------------------------------------------------------------------
+// 19. G2-A-R1 content hub and individual project-detail contract.
+// ---------------------------------------------------------------------------
+const contentHub = pages.find((p) => p.route === "/content/");
+const contentProjects = [
+  "/content/projects/aikus/",
+  "/content/projects/omyqt/",
+  "/content/projects/invit/",
+  "/content/projects/casper-electric-ai-drawing/",
+  "/content/projects/renault-sm6-ai-drawing/",
+  "/content/projects/fashion-ai-generator/",
+];
+const contentDetailPages = pages.filter((p) => contentProjects.includes(p.route));
+const missingContentLinks = contentProjects.filter((route) => !contentHub?.html.includes(`href="${route}"`));
+const missingDetailStructure = contentDetailPages.filter((p) =>
+  !/class="project-facts"/.test(p.html) || !/class="detail-panels"/.test(p.html)
+).map((p) => p.route);
+const productHomepages = ["https://aikus.kr/", "https://www.omyqt.com/", "https://invit.kr/"];
+const missingProductHomepageLinks = productHomepages.filter((url) => !contentHub?.html.includes(`href="${url}"`));
+
+check("19a", "콘텐츠 허브와 6개 프로젝트 상세 route 존재",
+  !!contentHub && contentDetailPages.length === 6,
+  `hub=${!!contentHub}, details=${contentDetailPages.length}`);
+check("19b", "콘텐츠 허브가 6개 프로젝트 상세 페이지로 연결",
+  !!contentHub && missingContentLinks.length === 0,
+  missingContentLinks.join(", "));
+check("19c", "모든 프로젝트 상세에 소개·범위·기술 범주 구조 존재",
+  missingDetailStructure.length === 0,
+  missingDetailStructure.join(", "));
+check("19d", "AIKUS·OMYQT·INVIT 홈페이지 링크 존재",
+  !!contentHub && missingProductHomepageLinks.length === 0,
+  missingProductHomepageLinks.join(", "));
+check("19e", "홈 프로젝트 섹션에 콘텐츠 허브 진입 링크 존재",
+  !!home && home.html.includes('href="/content/?type=project"'), "");
+check("19f", "언론 섹션 제목이 기사 · 인터뷰로 표기",
+  !!home && home.text.includes("기사 · 인터뷰"), "");
+
+const CONTENT_FORBIDDEN = ["SSOT", "V4-G", "OWNER", "IDEA DB", "12,091", "2,721", "App Store 출시 완료"];
+const contentForbiddenHits = pages.filter((p) => p.route.startsWith("/content"))
+  .flatMap((p) => CONTENT_FORBIDDEN.filter((term) => p.text.includes(term)).map((term) => `${p.route}:${term}`));
+check("19g", "콘텐츠 공개 copy에 내부 용어·민감 규모·출시 과장 없음",
+  contentForbiddenHits.length === 0,
+  contentForbiddenHits.join(", "));
 
 // ---------------------------------------------------------------------------
 // Report

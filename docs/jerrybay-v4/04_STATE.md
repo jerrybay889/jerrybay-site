@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-A READY FOR OWNER REVIEW`
+`V4-G2 — Content & Project Expansion / G2-A-R1 LOCAL QA PASS / UPDATED REVIEW DEPLOYMENT PENDING`
 
 ## Active execution
 
@@ -40,4 +40,4 @@ Automated accessibility audit reported zero violations and one incomplete color-
 
 ## Next Action
 
-Provide the protected G2-A review link to Jerry and wait for visual/story feedback. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the checkpoint.
+Complete the Owner-requested G2-A-R1 visual remediation and Content/Projects archive, run the expanded route-level QA, publish one updated isolated protected review revision, and stop for Jerry review. Do not complete G2-B or freeze a G2 completion SHA until Jerry reviews the updated checkpoint.

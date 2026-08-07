@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B-R3 REFERENCE NAVIGATION CONSOLIDATION PASS / READY FOR OWNER REVIEW`
+`V4-G2 — Content & Project Expansion / G2-B-R4 REFERENCE CATEGORY EXPANSION PASS / READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -102,6 +102,21 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Isolated protected review deployment: `dpl_BQuGt4nVDkYkSZyk368UiMhf5PDH`, state `READY`, URL `https://jerrybay-v4-g2a-review-a18wq4bux-jerrybay889s-projects.vercel.app`.
 - Isolation remains unchanged: deployment is in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`; existing `jerrybay-site`, its domains, `main`, and existing-site production were not changed.
 - Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r3-reference-nav.md`.
+
+## G2-B-R4 reference category expansion
+
+- Verified implementation SHA: `39b9b89d98e4f55d7f16b1bc70e31ce2b75838ba` (`feat: expand reference categories`).
+- Reference hub now filters four public categories: 6 projects, 8 lectures, 8 planning records, and 6 government-project records.
+- Lecture references restore the prior-home lecture history and link the existing public article, institution, and course evidence. The home lecture section now visibly links to `https://aikus.kr/`.
+- Planning records use only public-safe category-level framing from the Notion collection: no raw notes, source URLs, scores, private records, or invented external-client attribution. The public `JERRY’S QA OS` title is now `Quality Engineering OS`.
+- Government-project references restore the prior-home MyData, Youth Experience AI Creator, startup/R&amp;D, aquaculture AI, AI Voucher, and startup-support planning record set with role-context wording.
+- Static contract: `206/206 PASS`, including category counts, lecture proof links, planning-source boundary, and home AIKUS-link checks. External-resource adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
+- Chrome/CDP browser QA: `233/233 PASS` across 13 routes and both viewports, including the Project, Lecture, Planning, and Government query-filter routes.
+- Rendered evidence: `28 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2b-r4-reference-expansion/`; Reference desktop was visually inspected.
+- External link health: six public article/course/institution URLs returned HTTP `200` with redirects followed; the AIKUS domain timed out in this command but remains the Owner-designated external link and was not relabeled as a runtime-state claim.
+- Isolated protected review deployment: `dpl_86uDZzutXuAJ1RmW2dCq52vPwUWW`, state `READY`, URL `https://jerrybay-v4-g2a-review-4aqtzbha4-jerrybay889s-projects.vercel.app`.
+- Isolation remains unchanged: deployment is in the separate protected review project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P`; existing `jerrybay-site`, its domains, `main`, and existing-site production were not changed.
+- Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r4-reference-expansion.md`.
 
 ## Next Action
 

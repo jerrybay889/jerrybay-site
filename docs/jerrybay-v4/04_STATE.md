@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-A-R1 LOCAL QA PASS / UPDATED REVIEW DEPLOYMENT PENDING`
+`V4-G2 — Content & Project Expansion / G2-B EVIDENCE COMPLETE / OWNER VISUAL UAT PENDING`
 
 ## Active execution
 
@@ -58,6 +58,14 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Isolation check: existing project `jerrybay-site` remains at `dpl_5uHsafs8LFiyKRLLs2Y4bXwBwGgW`; its domains and `main` were not changed.
 - Review access remains protected by Vercel Authentication. No temporary share URL is recorded in repository evidence.
 
+## G2-B overnight evidence update
+
+- Owner authorized bounded G2-B evidence and record work on 2026-08-08; this does not substitute for visual/story UAT or production approval.
+- All three historical project-detail routes carry both `재직 조직 프로젝트 참여` and `개인 직계 고객 프로젝트가 아닌` attribution language. Validator check `19h` enforces that boundary.
+- Ten external references returned HTTP `200` with redirect-following GET checks. Tool-specific crawler access limits are recorded separately and are not treated as dead links.
+- Current static contract rerun: `213/213 PASS`; external-style/font adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
+- Full inventory and command result: `docs/jerrybay-v4/evidence/external-reference-recheck-2026-08-08.md`.
+
 ## Next Action
 
-Jerry reviews the isolated protected checkpoint and provides either revision feedback or a separate G2-B approval. Do not start G2-B, change `main`, push, open a PR, or publish the existing site until that direction is received.
+Jerry reviews the isolated protected checkpoint and provides either visual/story UAT feedback or a separate final-G2 freeze approval. Do not change `main` or publish the existing site without that direction.

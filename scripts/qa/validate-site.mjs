@@ -492,6 +492,19 @@ check("19g", "콘텐츠 공개 copy에 내부 용어·민감 규모·출시 과�
   contentForbiddenHits.length === 0,
   contentForbiddenHits.join(", "));
 
+const historicalProjectRoutes = [
+  "/content/projects/casper-electric-ai-drawing/",
+  "/content/projects/renault-sm6-ai-drawing/",
+  "/content/projects/fashion-ai-generator/",
+];
+const historicalAttributionGaps = pages
+  .filter((p) => historicalProjectRoutes.includes(p.route))
+  .filter((p) => !p.text.includes("재직 조직 프로젝트 참여") || !p.text.includes("개인 직계 고객 프로젝트가 아닌"))
+  .map((p) => p.route);
+check("19h", "Historical project pages keep explicit employer-role attribution",
+  historicalAttributionGaps.length === 0,
+  historicalAttributionGaps.join(", "));
+
 // ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------

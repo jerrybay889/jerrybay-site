@@ -4,7 +4,7 @@ JERRYBAY v4 restores the original long-form personal portfolio on top of the cur
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-A-R1 Review Remediation`
+`V4-G2 — Content & Project Expansion / G2-B Evidence Complete / Owner Visual UAT Pending`
 
 The canonical product/content source is the Notion page `JERRYBAY — Original-First Personal Revenue Portfolio · Master SSOT v4.0`. Repository state, exact SHAs, executable checks, and rendered output are implementation truth.
 
@@ -42,4 +42,4 @@ node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 docs/
 
 ## Release boundary
 
-V4-G1 is local-only. Push, PR, deploy, production, domain, analytics, payments, database, auth, and RLS changes require separate approval.
+Production, domain, analytics, payments, database, auth, and RLS changes require separate approval. The Owner authorized this branch's non-production GitHub publication and record work on 2026-08-08; no `main` merge or production release is implied.

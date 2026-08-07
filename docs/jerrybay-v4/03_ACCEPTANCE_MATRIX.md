@@ -26,6 +26,6 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] G2-A-R1 Hero/type/spacing remediation and project-card overlap correction pass desktop and mobile rendered QA.
 - [x] G2-A-R1 Content hub and all six project detail pages pass static, HTML, browser, role-attribution, and public-copy checks.
 - [x] Future SEO/GEO publishing shape is documented with source and approval gates; no unreviewed daily content is published.
-- [ ] Historical commercial/project evidence is complete and role-context safe.
-- [ ] External reference inventory is live rechecked.
+- [x] Historical commercial/project evidence is complete and role-context safe.
+- [x] External reference inventory is live rechecked.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

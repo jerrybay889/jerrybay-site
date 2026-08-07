@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B EVIDENCE COMPLETE / OWNER VISUAL UAT PENDING`
+`V4-G2 — Content & Project Expansion / G2-B-R1 CAPABILITY REMEDIATION PASS / READY FOR OWNER REVIEW`
 
 ## Active execution
 
@@ -66,6 +66,18 @@ Automated accessibility audit reported zero violations and one incomplete color-
 - Current static contract rerun: `213/213 PASS`; external-style/font adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
 - Full inventory and command result: `docs/jerrybay-v4/evidence/external-reference-recheck-2026-08-08.md`.
 
+## G2-B-R1 capability & stack remediation
+
+- Verified implementation SHA: `610b69d9a360db97fbc942f166f83758938297b7` (`feat: expand homepage capability system`).
+- Home capability section now follows Hero and exposes three core pillars, three complementary execution capabilities, and five public-safe stack groups. Main navigation is `역량`; Hero has a direct `역량·스택 보기` anchor path.
+- Static contract: `214/214 PASS` across 14 public routes; includes structural check `18i` for the capability and stack system.
+- External resource adversarial fixtures: `29/29 PASS`; HTML validation: `0 problems`; `git diff --check`: PASS.
+- Chrome/CDP browser QA: `245/245 PASS` across desktop/mobile and all 14 routes, including overflow, console, keyboard/menu/focus, target-size, CTA, project-filter, hero/profile, and build-card-overlap checks.
+- Rendered evidence: `33 PNG` files in `docs/jerrybay-v4/evidence/screenshots-g2b-r1-capabilities/`; visually inspected capability desktop/mobile frames: `expertise-desktop.png` SHA-256 `CD9D2D336EA09B661DFFCCCCC1A3F554A39D13152C47BE3BC9209DF851A2E232`, `expertise-mobile.png` SHA-256 `2CF5C1A7F312FC611F527ABD31BF554730FB47FE8759191D9B9A6ABB5103763A`.
+- Isolated protected review deployment: `dpl_4f9VWdUE3g3sDTNzzbVwA4VJXifr`, state `READY`, URL `https://jerrybay-v4-g2a-review-gwagmjmqt-jerrybay889s-projects.vercel.app`.
+- Isolation check: this deployment belongs to the separate protected project `prj_yoWFPmidQa0rGubXIpjKeONWXD2P` (`jerrybay-v4-g2a-review`). Existing `jerrybay-site`, its domains, `main`, and its production deployment were not changed. Vercel Authentication remains enabled; no temporary share URL is stored.
+- Full command/result record: `docs/jerrybay-v4/evidence/verification-g2b-r1-capabilities.md`.
+
 ## Next Action
 
-Jerry reviews the isolated protected checkpoint and provides either visual/story UAT feedback or a separate final-G2 freeze approval. Do not change `main` or publish the existing site without that direction.
+Jerry reviews the updated isolated protected checkpoint and provides either visual/story UAT feedback or a separate final-G2 freeze approval. Do not change `main` or publish the existing site without that direction.

@@ -4,7 +4,7 @@ Ship a review-ready JERRYBAY v4 candidate by restoring the original long-form pe
 
 ## Active slice
 
-`WO-V4-02 — Project & Evidence Expansion / G2-B-R1 Capability & Stack Home Remediation`
+`WO-V4-02 — Project & Evidence Expansion / G2-B-R1 Capability & Stack Home Remediation / Ready for Owner Review`
 
 ## Outcome hierarchy
 

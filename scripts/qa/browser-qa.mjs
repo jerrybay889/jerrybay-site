@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * JERRYBAY Phase 1 — browser QA over the Chrome DevTools Protocol.
+ * JERRYBAY — Public Production browser QA over the Chrome DevTools Protocol.
  *
  * Drives an already-running Chrome (started with --remote-debugging-port) against
  * a locally served build. Captures, per route and viewport:
@@ -274,7 +274,7 @@ for (const vp of VIEWPORTS) {
     record(`console ${tag}`, "console error 없음",
       consoleErrors.length === 0 && failedReqs.length === 0,
       [...consoleErrors, ...failedReqs].join(" | "));
-    record(`banner ${tag}`, "PRIVATE PREVIEW 배너 렌더링", r.bannerVisible);
+    record(`banner ${tag}`, "PRIVATE PREVIEW 배너 부재", !r.bannerVisible);
     record(`bodyfont ${tag}`, `body font-size >= 16px (${r.bodyFontPx})`, r.bodyFontPx >= 16);
 
     const h1Min = vp.mobile ? 36 : 48;
@@ -378,7 +378,7 @@ record("skiplink", "skip link 포커스 시 화면에 표시",
 cdp.close();
 
 const pad = (s, n) => String(s).padEnd(n);
-console.log("\nJERRYBAY Phase 1 — Browser QA (Chrome / CDP)\n" + "=".repeat(78));
+console.log("\nJERRYBAY — Public Production Browser QA (Chrome / CDP)\n" + "=".repeat(78));
 for (const r of results) {
   console.log(`${r.ok ? "PASS" : "FAIL"}  ${pad(r.id, 26)} ${r.name}${r.detail ? `  [${r.detail}]` : ""}`);
 }

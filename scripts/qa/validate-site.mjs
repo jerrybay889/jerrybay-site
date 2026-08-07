@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * JERRYBAY Phase 1 — Private Preview site validator.
+ * JERRYBAY — Public Production site validator.
  *
  * Deterministic, dependency-free. Run from the repo root:
  *   node scripts/qa/validate-site.mjs
@@ -81,17 +81,17 @@ const pages = ROUTES.filter((r) => existsSync(join(ROOT, r.file)))
   .map((p) => ({ ...p, text: visibleText(p.html) }));
 
 // ---------------------------------------------------------------------------
-// 2. Head contract: title, description, viewport, noindex/nofollow.
+// 2. Head contract: title, description, viewport, no noindex/nofollow.
 // ---------------------------------------------------------------------------
 for (const p of pages) {
   const hasTitle = /<title>\s*\S[\s\S]*?<\/title>/i.test(p.html);
   const hasDesc = /<meta\s+name="description"\s+content="[^"]{20,}"/i.test(p.html);
   const hasViewport = /<meta\s+name="viewport"\s+content="[^"]*width=device-width/i.test(p.html);
-  const hasNoindex = /<meta\s+name="robots"\s+content="noindex,\s*nofollow"/i.test(p.html);
-  check(`02:${p.route}`, `head 계약 (title/description/viewport/noindex)`,
-    hasTitle && hasDesc && hasViewport && hasNoindex,
+  const hasNoindex = /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(p.html);
+  check(`02:${p.route}`, `head 계약 (title/description/viewport/no-noindex)`,
+    hasTitle && hasDesc && hasViewport && !hasNoindex,
     [!hasTitle && "title", !hasDesc && "description", !hasViewport && "viewport",
-     !hasNoindex && "noindex"].filter(Boolean).join(", "));
+     hasNoindex && "noindex meta 잔존"].filter(Boolean).join(", "));
 }
 
 // ---------------------------------------------------------------------------
@@ -142,7 +142,11 @@ for (const p of pages) {
 
 // ---------------------------------------------------------------------------
 // 8. No invented privacy dates / retention / officer contact.
+// The approved Privacy effective date (released 2026-08-07) is the one
+// concrete date exempted from the fabrication scan; check 13b asserts it
+// appears verbatim instead of being flagged as invented.
 // ---------------------------------------------------------------------------
+const APPROVED_EFFECTIVE_DATE = "시행일: 2026년 8월 7일";
 const FABRICATED_LEGAL = [
   { re: /privacy@/i, label: "전용 privacy 이메일" },
   { re: /시행일\s*[::]\s*\S/, label: "시행일 값" },
@@ -154,8 +158,9 @@ const FABRICATED_LEGAL = [
   { re: /\d{4}\s*년\s*\d{1,2}\s*월\s*\d{1,2}\s*일/, label: "구체적 법률 날짜" },
 ];
 for (const p of pages) {
-  const hits = FABRICATED_LEGAL.filter((f) => f.re.test(p.text)).map((f) => f.label);
-  check(`08:${p.route}`, "임의 생성된 법률 정보 없음", hits.length === 0, hits.join(", "));
+  const scrubbed = p.text.split(APPROVED_EFFECTIVE_DATE).join(" ");
+  const hits = FABRICATED_LEGAL.filter((f) => f.re.test(scrubbed)).map((f) => f.label);
+  check(`08:${p.route}`, "임의 생성된 법률 정보 없음 (승인된 시행일 제외)", hits.length === 0, hits.join(", "));
 }
 
 // ---------------------------------------------------------------------------
@@ -245,9 +250,10 @@ for (const p of pages) {
     && /<nav class="nav" id="primary-nav"/.test(p.html);
   check(`12b:${p.route}`, "모바일 메뉴 버튼 aria 연결", navOk, "");
 
-  // Preview banner on every page.
-  check(`12c:${p.route}`, "PRIVATE PREVIEW 배너 노출",
-    p.text.includes("PRIVATE PREVIEW · NOT FOR PUBLIC RELEASE"), "");
+  // Preview banner must be gone in public production.
+  check(`12c:${p.route}`, "PRIVATE PREVIEW 배너 부재",
+    !p.html.includes('class="preview-banner"') &&
+    !p.text.includes("PRIVATE PREVIEW · NOT FOR PUBLIC RELEASE"), "");
 }
 
 // Every img needs alt text.
@@ -273,13 +279,33 @@ const privacyMissing = REQUIRED_PRIVACY_TERMS.filter((t) => !privacy?.text.inclu
 check("13", "Privacy 필수 공개 항목 존재 (개인정보처리자/필수항목/보유기간/외부처리자/국외이전/권리행사연락처)",
   !!privacy && privacyMissing.length === 0, privacyMissing.join(", "));
 
+check("13b", `Privacy가 승인된 시행일을 정확히 표기 ("${APPROVED_EFFECTIVE_DATE}")`,
+  !!privacy && privacy.text.includes(APPROVED_EFFECTIVE_DATE), "");
+
 // ---------------------------------------------------------------------------
-// 14. robots.txt disallows everything.
+// 14. robots.txt permits public crawling.
 // ---------------------------------------------------------------------------
 const robots = existsSync(join(ROOT, "robots.txt")) ? read("robots.txt") : "";
-check("14", "robots.txt가 전체 차단",
-  /User-agent:\s*\*/i.test(robots) && /^\s*Disallow:\s*\/\s*$/im.test(robots) &&
-  !/^\s*Allow:/im.test(robots), "");
+check("14", "robots.txt가 공개 크롤링을 허용 (Disallow: / 없음)",
+  /User-agent:\s*\*/i.test(robots) && /^\s*Allow:\s*\/\s*$/im.test(robots) &&
+  !/^\s*Disallow:\s*\/\s*$/im.test(robots), "");
+
+// ---------------------------------------------------------------------------
+// 14b. vercel.json carries no noindex/nofollow X-Robots-Tag header.
+// ---------------------------------------------------------------------------
+const vercelJson = existsSync(join(ROOT, "vercel.json")) ? read("vercel.json") : "";
+check("14b", "vercel.json에 X-Robots-Tag noindex/nofollow 없음",
+  !/X-Robots-Tag/i.test(vercelJson) || !/noindex|nofollow/i.test(vercelJson), "");
+
+// ---------------------------------------------------------------------------
+// 14c. Zero internal workflow markers in visible public copy.
+// ---------------------------------------------------------------------------
+const INTERNAL_MARKERS = ["PRIVATE PREVIEW", "NOT FOR PUBLIC RELEASE", "OWNER REVIEW REQUIRED", "Phase 1"];
+for (const p of pages) {
+  const hits = INTERNAL_MARKERS.filter((m) => p.text.includes(m) || p.html.includes(m));
+  check(`14c:${p.route}`, "내부 워크플로 마커 0개 (PRIVATE PREVIEW/NOT FOR PUBLIC RELEASE/OWNER REVIEW REQUIRED/Phase 1)",
+    hits.length === 0, hits.join(", "));
+}
 
 // ---------------------------------------------------------------------------
 // 15. Deferred scope must be absent.
@@ -346,7 +372,7 @@ check("17:site.css", "site.css에 외부 stylesheet/font 로딩 메커니즘 0�
 // Report
 // ---------------------------------------------------------------------------
 const pad = (s, n) => String(s).padEnd(n);
-console.log("\nJERRYBAY Phase 1 — Private Preview QA\n" + "=".repeat(72));
+console.log("\nJERRYBAY — Public Production QA\n" + "=".repeat(72));
 for (const r of results) {
   console.log(`${r.ok ? "PASS" : "FAIL"}  ${pad(r.id, 22)} ${r.name}${r.detail ? `  [${r.detail}]` : ""}`);
 }

@@ -6,15 +6,12 @@
 
 ---
 
-## ⚠️ This branch is a PRIVATE PREVIEW
+## Commercial site
 
 `build/jerrybay-phase1-commercial-v1` replaces the single-page site with the
-**Phase 1 Commercial private build**: 7 static routes, `noindex,nofollow` on every
-page, and `robots.txt` disallowing everything. It has not been pushed, deployed,
-or reviewed, and it must not be published as-is.
-
-The live single-page site at [www.jerrybay.kr](https://www.jerrybay.kr) is served
-from `main` and is untouched by this branch.
+**JERRYBAY commercial build**: 7 static public routes, indexable by search
+engines, describing the organization AI education and business/product design
+offer.
 
 Start with [docs/jerrybay-phase1-build/00_START_HERE.md](docs/jerrybay-phase1-build/00_START_HERE.md).
 
@@ -28,7 +25,7 @@ python -m http.server 4173      # from the repo root — root-absolute paths nee
 ### Verify
 
 ```bash
-node scripts/qa/validate-site.mjs        # 81 static contract checks
+node scripts/qa/validate-site.mjs        # static contract checks
 
 # browser QA needs a headless Chrome with CDP enabled:
 chrome --headless=new --remote-debugging-port=9222 --user-data-dir=<tmp> about:blank
@@ -36,7 +33,7 @@ node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 \
   docs/jerrybay-phase1-build/evidence/screenshots
 ```
 
-Both must exit 0. Last run on this branch: **81/81** static, **111/111** browser.
+Both must exit 0.
 
 ---
 

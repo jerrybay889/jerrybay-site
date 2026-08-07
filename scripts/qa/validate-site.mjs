@@ -407,9 +407,9 @@ check("18b", "V4 Hero positioning 문구 정확",
 check("18c", "실제 profile.jpg를 eager image로 사용",
   !!home && /<img\b[^>]*src="\/assets\/profile\.jpg"[^>]*alt="[^"]+"[^>]*loading="eager"/i.test(home.html), "");
 
-const HOME_ANCHORS = ["#projects", "#lectures", "#press"];
+const HOME_ANCHORS = ["#expertise", "#projects", "#lectures", "#press"];
 const missingHomeAnchors = HOME_ANCHORS.filter((href) => !home?.html.includes(`href="${href}"`));
-check("18d", "구축·강의·기사 보조 CTA가 홈 anchor로 연결",
+check("18d", "역량·구축·강의·기사 보조 CTA가 홈 anchor로 연결",
   !!home && missingHomeAnchors.length === 0,
   missingHomeAnchors.join(", "));
 
@@ -447,6 +447,22 @@ const g2ForbiddenHits = G2_FORBIDDEN.filter((term) => home?.text.includes(term))
 check("18h", "V4-G2 공개 copy에 내부 규모·민감 데이터·출시 과장 없음",
   !!home && g2ForbiddenHits.length === 0,
   g2ForbiddenHits.join(", "));
+
+const capabilityTerms = [
+  "AI 사업·제품 전략",
+  "AI 컨설팅·업무 전환",
+  "AI 교육·지식 전환",
+  "제품·프로토타입 구축",
+  "AI 에이전트·자동화",
+  "정부사업·컨소시엄 PM",
+  "Current Build Stack",
+];
+const missingCapabilityTerms = capabilityTerms.filter((term) => !home?.text.includes(term));
+const capabilityPillarCount = (home?.html.match(/class="capability-pillar"/g) || []).length;
+const stackGroupCount = (home?.html.match(/class="stack-group"/g) || []).length;
+check("18i", "홈 역량 섹션에 3개 핵심 역량과 실행 역량·현재 스택이 존재",
+  !!home && capabilityPillarCount === 3 && stackGroupCount === 5 && missingCapabilityTerms.length === 0,
+  `pillars=${capabilityPillarCount}, stackGroups=${stackGroupCount}, missing=${missingCapabilityTerms.join(" | ")}`);
 
 // ---------------------------------------------------------------------------
 // 19. G2-A-R1 content hub and individual project-detail contract.

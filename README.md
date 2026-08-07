@@ -4,7 +4,7 @@ JERRYBAY v4 restores the original long-form personal portfolio on top of the cur
 
 ## Current Gate
 
-`V4-G2 — Content & Project Expansion / G2-B Evidence Complete / Owner Visual UAT Pending`
+`V4-G2 — Content & Project Expansion / G2-B-R1 Capability & Stack Home Remediation`
 
 The canonical product/content source is the Notion page `JERRYBAY — Original-First Personal Revenue Portfolio · Master SSOT v4.0`. Repository state, exact SHAs, executable checks, and rendered output are implementation truth.
 

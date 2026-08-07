@@ -28,4 +28,5 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] Future SEO/GEO publishing shape is documented with source and approval gates; no unreviewed daily content is published.
 - [x] Historical commercial/project evidence is complete and role-context safe.
 - [x] External reference inventory is live rechecked.
+- [x] Home capability section makes the three core pillars, complementary execution capabilities, and five public-safe stack groups visible without increasing Hero scale or spacing.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.

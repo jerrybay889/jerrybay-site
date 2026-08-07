@@ -66,3 +66,11 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - Deepen historical commercial/project evidence with role-context wording.
 - Recheck the external reference inventory before calling the G2 gate complete.
 - Do not add Planning Breadth, expanded media inventory, or build-stack work assigned to later content slices without a contract update.
+
+### G2-B-R1 Owner capability feedback
+
+- Keep the capability section directly after Hero, before the Founder Story, as a compact Korean-first execution system rather than a short service list.
+- Make three core pillars visible: AI business/product strategy, AI consulting/business transformation, and AI education/knowledge transfer.
+- Make the complementary execution capabilities visible: product/prototype build, AI agent/automation, and government/consortium project PM.
+- Group the current public-safe stack into Product & Knowledge, Web & Mobile, Data & Security, AI & Automation, and Delivery & Quality. Use technology categories and named tools only where they are already Owner-approved; do not expose credentials, internal procedures, or unsupported performance claims.
+- Preserve accessible source order, 44px interactive targets, local system-font delivery, and the existing Content/Projects archive. This is a home-information architecture remediation only; it does not approve new daily content publication or a production release.

@@ -149,7 +149,7 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 - Active branch: `issue-2-quick-win`
 - Base SHA: `bdd80c0e97f0c611fd320bfa42c880f7ada06a09` (`main`)
-- Working tree scope: 1 file changed (`index.html` only)
+- Working tree scope: 2 files changed (`index.html`, `docs/jerrybay-v4/04_STATE.md`)
 - Execution rule: keep diff local, do not touch production/release states.
 
 ### Evidence
@@ -163,6 +163,7 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 ### Next Action
 
-- Commit the branch-only source change and open a Draft PR.
+- Commit the branch-only source + provenance/state update as one remediation commit.
+- Push the new SHA and run Vercel Preview/mobile evidence on that same branch+commit.
 - Run/collect fresh fixed-SHA Codex reviewer read-only review from the committed SHA.
 - STOP before any `Ready`, `Merge`, or `Production` action.

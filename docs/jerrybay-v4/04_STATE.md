@@ -173,10 +173,10 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 ### Current Gate
 
-- Gate: `B1 — B2B Conversion Foundation / Writer implementation complete locally`
-- Branch/worktree/base: `issue-5-b1-business` / `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`.
+- Gate: `B1 — B2B Conversion Foundation / Draft PR + authenticated Preview QA complete`
+- Branch/worktree/base/implementation commit: `issue-5-b1-business` / `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb` / `50989e2eb0487f296a4cda2c005065ad784551e4`.
 - `/business/` is implemented as the high-intent enterprise/institution landing. Homepage Primary CTA remains the exact Tally base link, and `/business/` is exposed as a contextual path.
-- No commit, push, PR, Preview, Merge, Production, Vercel, environment, domain, secret, Tally-admin, or ORCA mutation has occurred.
+- Site PM committed and pushed the B1 candidate and opened Draft PR `#6`. The exact-Head Vercel Preview succeeded and authenticated runtime QA is complete. No Merge, Production, domain, environment, secret, Tally-admin, or ORCA mutation has occurred.
 
 ### Evidence
 
@@ -187,9 +187,12 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 - Writer visually inspected `.qa-browser-b1/business-desktop.png` and `.qa-browser-b1/business-mobile.png`; the hero, CTA hierarchy, first solution block, typography, and responsive composition rendered without clipping or horizontal overflow.
 - `git diff --check` → PASS after the B1 implementation and record update.
 - Read-only Tally preflight: canonical base is `https://tally.so/r/Y5bypd`; a GET using `?source=jerrybay_site&content=business_primary` returned HTTP `200` and preserved the query URL. The parsed public form contained `39` blocks, `0` Hidden-field blocks, and no `utm_source` or `utm_content` fields. Submission attribution is therefore `UNVERIFIED / NOT CONFIGURED`; the site retains the exact base URL and makes no attribution claim.
+- Draft PR: `#6` (`https://github.com/jerrybay889/jerrybay-site/pull/6`), Base `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`, implementation commit `50989e2eb0487f296a4cda2c005065ad784551e4`.
+- Vercel GitHub deployment `5863445949`: environment `Preview`, state `success`, exact SHA `50989e2eb0487f296a4cda2c005065ad784551e4`, URL `https://jerrybay-site-hqn5yandw-jerrybay889s-projects.vercel.app`. Unauthenticated HTTP redirected to Vercel login and therefore remained `UNVERIFIED`; it is not used as runtime PASS evidence.
+- Authenticated Preview desktop QA at `1440×900`: exact title and H1, all required sections, exact `BUILD / LEARN / PLAN` tracks, two exact `프로젝트·컨설팅 문의` Primary CTAs targeting `https://tally.so/r/Y5bypd`, secondary Quick-Win CTA, no horizontal overflow, and `0` console errors.
+- Authenticated Preview mobile QA at `390×844`: visual render and no horizontal overflow confirmed; both Primary CTAs rendered at approximately `204.1×52.8px`; mobile menu opened with `aria-expanded="true"`, body scroll lock, and five links; Escape closed it with `aria-expanded="false"`, released scroll lock, and returned focus to the menu control; console errors were `0`.
 
 ### Next Action
 
-- Hand the locally verified, uncommitted Writer diff to the Site PM.
-- Site PM may perform the authorized commit/push/Draft PR and Preview workflow, followed by a fresh separate fixed-SHA Reviewer.
+- Push this evidence-only update, resolve Draft PR `#6`'s new exact Head, and then run one fresh separate Reviewer against that exact Head and the authenticated Preview evidence tied to implementation commit `50989e2eb0487f296a4cda2c005065ad784551e4`.
 - STOP before Merge. Under the current release configuration, Merge is Production-impacting approval.

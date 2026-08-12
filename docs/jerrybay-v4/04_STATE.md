@@ -154,15 +154,15 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 ### Evidence
 
-- Git provenance captured on remediation head: `git rev-parse --show-toplevel` → `C:/Users/jerry/JERRYBAY_SITE_CANONICAL`, `git remote get-url origin` → `https://github.com/jerrybay889/jerrybay-site.git`, branch `issue-2-quick-win`, HEAD `83118bb59f788c5f3c8df5698e60349229e99f32`.
+- Git provenance captured on remediation head: `git rev-parse --show-toplevel` → `C:/Users/jerry/JERRYBAY_SITE_CANONICAL`, `git remote get-url origin` → `https://github.com/jerrybay889/jerrybay-site.git`, branch `issue-2-quick-win`, HEAD `3ac37055de1de64112eff5f7a7f18c26c2ea3795`.
 - Static contract: `node scripts/qa/validate-site.mjs` → `206/206 PASS`.
 - External-style/font defense: `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS` (21 malicious + 8 allowed fixtures).
 - HTML validation: `npx --yes html-validate index.html` → `2 existing aria-label-misuse errors` (baseline/known; now not introduced by this issue scope).
-- Browser QA (local preview evidence): `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 ./.qa-browser-issue2-local` → `235/235 PASS` (desktop/mobile, skip-link, menu focus/close, scroll lock, filters, section checks).
+- Browser QA (local preview evidence): `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 ./.qa-browser-issue2-3ac3705` → `235/235 PASS` (desktop/mobile, skip-link, menu focus/close, scroll lock, filters, section checks).
 - Vercel Preview URL `https://jerrybay-site-git-issue-2-quick-win-jerrybay889s-projects.vercel.app` was protected by Vercel SSO on unauthenticated access (`302` redirect to `/sso-api`), so direct remote Preview-CDP verification is blocked without credentials.
-- Local QA assets: `./.qa-browser-issue2-local/` (desktop/mobile evidence).
+- Local QA assets: `./.qa-browser-issue2-3ac3705/` (desktop/mobile evidence).
 
 ### Next Action
 
-- Post fresh fixed-SHA Codex reviewer read-only review from `83118bb59f788c5f3c8df5698e60349229e99f32`.
+- Post fresh fixed-SHA Codex reviewer read-only review from `3ac37055de1de64112eff5f7a7f18c26c2ea3795`.
 - STOP before any `Ready`, `Merge`, or `Production` action.

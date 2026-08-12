@@ -142,3 +142,29 @@ Automated accessibility audit reported zero violations and one incomplete color-
 ## Next Action
 
 Jerry reviews the updated isolated protected checkpoint and provides either visual/story UAT feedback or a separate final-G2 freeze approval. Do not change `main` or publish the existing site without that direction.
+
+## Current Gate / Evidence / Next Action — Issue #2 quick-win block
+
+### Current Gate
+
+- Active branch: `issue-2-quick-win`
+- Base SHA: `bdd80c0e97f0c611fd320bfa42c880f7ada06a09` (`main`)
+- Working tree scope: 2 files changed (`index.html`, `docs/jerrybay-v4/04_STATE.md`)
+- Execution rule: keep diff local, do not touch production/release states.
+
+### Evidence
+
+- Git provenance captured on remediation head: `git rev-parse --show-toplevel` → `C:/Users/jerry/JERRYBAY_SITE_CANONICAL`, `git remote get-url origin` → `https://github.com/jerrybay889/jerrybay-site.git`, branch `issue-2-quick-win`, HEAD `f04a5f9f4fc879b616f151e1dc57acb2a946968a`.
+- Static contract: `node scripts/qa/validate-site.mjs` → `206/206 PASS`.
+- External-style/font defense: `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS` (21 malicious + 8 allowed fixtures).
+- HTML validation: `npx --yes html-validate index.html` → `2 existing aria-label-misuse errors` (baseline/known; now not introduced by this issue scope).
+- Browser QA (local preview evidence): `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 ./.qa-browser-issue2-17e28cc` → `235/235 PASS` (desktop/mobile, skip-link, menu focus/close, scroll lock, filters, section checks).
+- Authenticated Vercel Preview: deployment `dpl_C48669MxNT5ipRAtfRHboXbtu2uv` (`C48669MxN`) was `Ready`, branch `issue-2-quick-win`, exact source `f04a5f9f4fc879b616f151e1dc57acb2a946968a`, at `https://jerrybay-site-git-issue-2-quick-win-jerrybay889s-projects.vercel.app`.
+- Preview desktop QA at `1440×900`: `#quick-win` rendered with valid `aria-labelledby="quick-win-title"`, the Latpeed CTA rendered at approximately `237×53px`, and horizontal overflow was absent.
+- Preview mobile QA at `390×844`: horizontal overflow was absent; the menu control rendered at `48×48px`; opening it set `aria-expanded="true"` and exposed 8 navigation links at `350×52px` each; the Quick-Win block and CTA rendered; browser console errors were `0`.
+- Local QA assets: `./.qa-browser-issue2-17e28cc/` (local suite) and `./.qa-browser-issue2-f04a5f9-preview-auth/` (authenticated Preview screenshots).
+
+### Next Action
+
+- Commit and push this evidence-only state update, confirm the resulting exact Head Preview, then post one fresh fixed-SHA Codex reviewer read-only review.
+- STOP before any `Ready`, `Merge`, or `Production` action.

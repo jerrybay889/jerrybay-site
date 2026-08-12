@@ -166,17 +166,18 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 ### Next Action
 
-- Commit and push this evidence-only state update, confirm the resulting exact Head Preview, then post one fresh fixed-SHA Codex reviewer read-only review.
-- STOP before any `Ready`, `Merge`, or `Production` action.
+- Issue `#2` and PR `#3` are `CLOSED / MERGED` historical evidence. They are not the current authority and must not be reopened or resumed without contradictory evidence and a new Owner direction.
+- No further Quick-Win Gate action is active.
 
 ## Current Gate / Evidence / Next Action — Issue #5 B1
 
 ### Current Gate
 
-- Gate: `B1 — B2B Conversion Foundation / Draft PR + authenticated Preview QA complete`
-- Branch/worktree/base/implementation commit: `issue-5-b1-business` / `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb` / `50989e2eb0487f296a4cda2c005065ad784551e4`.
+- Gate: `B1 — B2B Conversion Foundation / PICKED_UP → RUNNING / fresh review pending`
+- Current authority: Issue `#5`, branch `issue-5-b1-business`, Draft PR `#6`.
+- Worktree/base/implementation commit: `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb` / `50989e2eb0487f296a4cda2c005065ad784551e4`. The pre-remediation Draft PR Head was `faa935ec965ab61df46b39d1b519478b5775a958`.
 - `/business/` is implemented as the high-intent enterprise/institution landing. Homepage Primary CTA remains the exact Tally base link, and `/business/` is exposed as a contextual path.
-- Site PM committed and pushed the B1 candidate and opened Draft PR `#6`. The exact-Head Vercel Preview succeeded and authenticated runtime QA is complete. No Merge, Production, domain, environment, secret, Tally-admin, or ORCA mutation has occurred.
+- Site PM committed and pushed the B1 candidate and opened Draft PR `#6`. Preview QA exists, but the prior Reviewer verdict remains `REQUEST CHANGES`; it is superseded only by a new separate fresh review at the next exact Head. B1 is not currently `PASS`.
 
 ### Evidence
 
@@ -191,8 +192,10 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 - Vercel GitHub deployment `5863445949`: environment `Preview`, state `success`, exact SHA `50989e2eb0487f296a4cda2c005065ad784551e4`, URL `https://jerrybay-site-hqn5yandw-jerrybay889s-projects.vercel.app`. Unauthenticated HTTP redirected to Vercel login and therefore remained `UNVERIFIED`; it is not used as runtime PASS evidence.
 - Authenticated Preview desktop QA at `1440×900`: exact title and H1, all required sections, exact `BUILD / LEARN / PLAN` tracks, two exact `프로젝트·컨설팅 문의` Primary CTAs targeting `https://tally.so/r/Y5bypd`, secondary Quick-Win CTA, no horizontal overflow, and `0` console errors.
 - Authenticated Preview mobile QA at `390×844`: visual render and no horizontal overflow confirmed; both Primary CTAs rendered at approximately `204.1×52.8px`; mobile menu opened with `aria-expanded="true"`, body scroll lock, and five links; Escape closed it with `aria-expanded="false"`, released scroll lock, and returned focus to the menu control; console errors were `0`.
+- During a read-only review, the prior Reviewer accidentally created GitHub Deployment API metadata record `5863526070` at ref/SHA `faa935ec965ab61df46b39d1b519478b5775a958`, with environment label `production` and `0` status records. The record is retained and was not deleted because no cleanup authority exists.
+- A read-only Vercel CLI deployment list after that metadata creation confirmed that it did not create a new actual Vercel Production deployment. The newest actual deployments are Preview deployments for branch `issue-5-b1-business`; the Production baseline remains deployment `dpl_83p2TaKntrzfcZU9z2w8QezNAUXC` from `main@324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`.
 
 ### Next Action
 
-- Push this evidence-only update, resolve Draft PR `#6`'s new exact Head, and then run one fresh separate Reviewer against that exact Head and the authenticated Preview evidence tied to implementation commit `50989e2eb0487f296a4cda2c005065ad784551e4`.
+- Site PM commits and pushes this documentation correction, resolves Draft PR `#6`'s new exact Head and exact-Head Preview, and then runs one new separate fresh Reviewer against that fixed Head.
 - STOP before Merge. Under the current release configuration, Merge is Production-impacting approval.

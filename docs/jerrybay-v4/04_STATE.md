@@ -2,15 +2,15 @@
 
 ## Current Gate
 
-`V4-G5 — OWNER-AUTHORIZED PRODUCTION PUBLISH / LIVE`
+`B1 — B2B CONVERSION FOUNDATION / WRITER IMPLEMENTATION`
 
 ## Active execution
 
-- Branch: `build/jerrybay-v4-original-first`
-- Worktree: `C:\Users\82103\jerrybay-site-worktrees\v4-original-first`
-- Base SHA: `d50f9dc85f4b0d0630d06e3df1b40cf404963d78`
+- Branch: `issue-5-b1-business`
+- Worktree: `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5`
+- Base SHA: `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
-- Active work order: `WO-V4-02`
+- Active work order: `Issue #5 — B1 B2B Conversion Foundation`
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## G2-B-R5 reference visibility remediation
@@ -166,5 +166,36 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 ### Next Action
 
-- Commit and push this evidence-only state update, confirm the resulting exact Head Preview, then post one fresh fixed-SHA Codex reviewer read-only review.
-- STOP before any `Ready`, `Merge`, or `Production` action.
+- Issue `#2` and PR `#3` are `CLOSED / MERGED` historical evidence. They are not the current authority and must not be reopened or resumed without contradictory evidence and a new Owner direction.
+- No further Quick-Win Gate action is active.
+
+## Current Gate / Evidence / Next Action — Issue #5 B1
+
+### Current Gate
+
+- Gate: `B1 — B2B Conversion Foundation / PICKED_UP → RUNNING / fresh review pending`
+- Current authority: Issue `#5`, branch `issue-5-b1-business`, Draft PR `#6`.
+- Worktree/base/implementation commit: `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb` / `50989e2eb0487f296a4cda2c005065ad784551e4`. The pre-remediation Draft PR Head was `faa935ec965ab61df46b39d1b519478b5775a958`.
+- `/business/` is implemented as the high-intent enterprise/institution landing. Homepage Primary CTA remains the exact Tally base link, and `/business/` is exposed as a contextual path.
+- Site PM committed and pushed the B1 candidate and opened Draft PR `#6`. Preview QA exists, but the prior Reviewer verdict remains `REQUEST CHANGES`; it is superseded only by a new separate fresh review at the next exact Head. B1 is not currently `PASS`.
+
+### Evidence
+
+- `node scripts/qa/validate-site.mjs` → `224/224 PASS`, including route count 14, internal-link resolution, B1 required blocks, exact Primary CTA label/base URL, Quick-Win secondary hierarchy, unsupported-claim guard, and public-copy boundary.
+- `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS` (`21` malicious fixtures rejected; `8` allowed fixtures accepted).
+- `npx --yes html-validate business/index.html` → `0 problems`. Repository-wide 14-route validation reports `30` pre-existing `aria-label-misuse` errors in `index.html` and `references/index.html`; B1 introduces `0` new findings.
+- `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 .qa-browser-b1` → `256/256 PASS` across desktop `1440×900` and mobile `390×844`. `/business/` passed exact CTA, required-block, Quick-Win hierarchy, overflow, console/network, 44px-target, mobile-menu, focus-return, and scroll-lock assertions.
+- Writer visually inspected `.qa-browser-b1/business-desktop.png` and `.qa-browser-b1/business-mobile.png`; the hero, CTA hierarchy, first solution block, typography, and responsive composition rendered without clipping or horizontal overflow.
+- `git diff --check` → PASS after the B1 implementation and record update.
+- Read-only Tally preflight: canonical base is `https://tally.so/r/Y5bypd`; a GET using `?source=jerrybay_site&content=business_primary` returned HTTP `200` and preserved the query URL. The parsed public form contained `39` blocks, `0` Hidden-field blocks, and no `utm_source` or `utm_content` fields. Submission attribution is therefore `UNVERIFIED / NOT CONFIGURED`; the site retains the exact base URL and makes no attribution claim.
+- Draft PR: `#6` (`https://github.com/jerrybay889/jerrybay-site/pull/6`), Base `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`, implementation commit `50989e2eb0487f296a4cda2c005065ad784551e4`.
+- Vercel GitHub deployment `5863445949`: environment `Preview`, state `success`, exact SHA `50989e2eb0487f296a4cda2c005065ad784551e4`, URL `https://jerrybay-site-hqn5yandw-jerrybay889s-projects.vercel.app`. Unauthenticated HTTP redirected to Vercel login and therefore remained `UNVERIFIED`; it is not used as runtime PASS evidence.
+- Authenticated Preview desktop QA at `1440×900`: exact title and H1, all required sections, exact `BUILD / LEARN / PLAN` tracks, two exact `프로젝트·컨설팅 문의` Primary CTAs targeting `https://tally.so/r/Y5bypd`, secondary Quick-Win CTA, no horizontal overflow, and `0` console errors.
+- Authenticated Preview mobile QA at `390×844`: visual render and no horizontal overflow confirmed; both Primary CTAs rendered at approximately `204.1×52.8px`; mobile menu opened with `aria-expanded="true"`, body scroll lock, and five links; Escape closed it with `aria-expanded="false"`, released scroll lock, and returned focus to the menu control; console errors were `0`.
+- During a read-only review, the prior Reviewer accidentally created GitHub Deployment API metadata record `5863526070` at ref/SHA `faa935ec965ab61df46b39d1b519478b5775a958`, with environment label `production` and `0` status records. The record is retained and was not deleted because no cleanup authority exists.
+- A read-only Vercel CLI deployment list after that metadata creation confirmed that it did not create a new actual Vercel Production deployment. The newest actual deployments are Preview deployments for branch `issue-5-b1-business`; the Production baseline remains deployment `dpl_83p2TaKntrzfcZU9z2w8QezNAUXC` from `main@324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`.
+
+### Next Action
+
+- Site PM commits and pushes this documentation correction, resolves Draft PR `#6`'s new exact Head and exact-Head Preview, and then runs one new separate fresh Reviewer against that fixed Head.
+- STOP before Merge. Under the current release configuration, Merge is Production-impacting approval.

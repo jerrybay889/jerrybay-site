@@ -45,3 +45,15 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] `/business/` adds zero HTML-validation findings; repository-wide HTML validation retains 30 pre-existing `aria-label-misuse` findings outside the new route.
 - [ ] Tally submission attribution is verified. Current state is `UNVERIFIED / NOT CONFIGURED` because the live form exposes no matching Hidden fields; no external Tally mutation or test submission is authorized in B1.
 - [ ] Draft PR, Preview QA, and fresh fixed-SHA review are complete. Writer implementation does not authorize commit, push, PR, Merge, or Production.
+
+## B2 — Search Foundation + Minimal `/insights/` Authority Surface
+
+- [x] `/insights/` is a static, crawlable hub with exactly three canonical seed authority pieces.
+- [x] The seed set contains one B2B Insight, one public-safe AIKUS Case, and one Build / How-to proof, each tied to a buyer stage and `/business/` route.
+- [x] The reusable static article contract fixes source, metadata, visible-copy, structured-data, link, safety, and release requirements.
+- [x] All 18 public HTML routes have unique title, description, canonical URL, and OG metadata.
+- [x] `robots.txt`, `sitemap.xml`, and `feed.xml` expose the intended canonical public surface; the feed contains exactly the three seed articles.
+- [x] Home, `/business/`, hub, articles, evidence, and inquiry paths form crawlable internal links.
+- [x] Google/Naver/Bing registration packet is prepare-only; no external search account or site verification mutation occurred.
+- [ ] Deterministic static/search QA, HTML validation, desktop/mobile browser QA, Draft PR, exact-Head Preview, and fresh separate fixed-SHA review PASS.
+- [ ] STOP before Merge; Merge is a retained production-impacting Owner decision.

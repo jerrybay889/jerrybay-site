@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>
+  <title>JERRYBAY Insights</title><link>https://www.jerrybay.kr/insights/</link>
+  <description>기업·기관의 AI 도입을 실제 실행으로 연결하는 인사이트, 사례, 구축 방법</description>
+  <language>ko-KR</language><lastBuildDate>Wed, 12 Aug 2026 00:00:00 +0900</lastBuildDate>
+  <atom:link href="https://www.jerrybay.kr/feed.xml" rel="self" type="application/rss+xml" />
+  <item><title>AI 파일럿을 운영 가능한 실행체계로 바꾸는 세 가지 질문</title><link>https://www.jerrybay.kr/insights/ai-pilot-to-operating-system/</link><guid isPermaLink="true">https://www.jerrybay.kr/insights/ai-pilot-to-operating-system/</guid><pubDate>Wed, 12 Aug 2026 00:00:00 +0900</pubDate><description>기업 AI 도입을 실제 업무 변화로 연결하기 위해 먼저 답해야 할 세 가지 질문.</description></item>
+  <item><title>AIKUS: 학습과 실제 업무 실행을 한 흐름으로 설계하기</title><link>https://www.jerrybay.kr/insights/aikus-learning-to-work-execution/</link><guid isPermaLink="true">https://www.jerrybay.kr/insights/aikus-learning-to-work-execution/</guid><pubDate>Wed, 12 Aug 2026 00:00:00 +0900</pubDate><description>학습, 업무 실행, 결과 축적을 하나의 제품 구조로 연결한 공개 가능한 설계 사례.</description></item>
+  <item><title>정적 사이트에 검색 기반을 만드는 최소 구현 순서</title><link>https://www.jerrybay.kr/insights/static-first-search-foundation/</link><guid isPermaLink="true">https://www.jerrybay.kr/insights/static-first-search-foundation/</guid><pubDate>Wed, 12 Aug 2026 00:00:00 +0900</pubDate><description>CMS 없이 canonical URL, crawl files, 내부 링크와 QA를 연결하는 static-first 구현 방법.</description></item>
+</channel></rss>

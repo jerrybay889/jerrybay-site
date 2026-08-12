@@ -55,5 +55,7 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] `robots.txt`, `sitemap.xml`, and `feed.xml` expose the intended canonical public surface; the feed contains exactly the three seed articles.
 - [x] Home, `/business/`, hub, articles, evidence, and inquiry paths form crawlable internal links.
 - [x] Google/Naver/Bing registration packet is prepare-only; no external search account or site verification mutation occurred.
-- [ ] Deterministic static/search QA, HTML validation, desktop/mobile browser QA, Draft PR, exact-Head Preview, and fresh separate fixed-SHA review PASS.
+- [x] Deterministic static/search QA, HTML validation, and desktop/mobile browser QA PASS on the B2 implementation source.
+- [x] Draft PR `#8` is open and the implementation commit `c6568a09ce924c0298feac44e0d98f82f5b0101f` has a READY Vercel Preview with authenticated desktop route/metadata/CTA/JSON-LD/overflow/console evidence.
+- [ ] The docs-only evidence update is committed and pushed, its new exact Head Preview is READY, and one fresh separate fixed-SHA review reports `P0=0 / P1=0 / P2=0`.
 - [ ] STOP before Merge; Merge is a retained production-impacting Owner decision.

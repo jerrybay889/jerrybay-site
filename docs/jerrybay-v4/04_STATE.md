@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`B2 — SEARCH FOUNDATION + MINIMAL /insights/ AUTHORITY SURFACE / WRITER QA PASS`
+`B2 — DRAFT PR + IMPLEMENTATION PREVIEW COMPLETE / EVIDENCE UPDATE PENDING`
 
 ## Active execution
 
@@ -12,6 +12,8 @@
 - Writer: sole delegated Writer `/root/b2_writer`
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
 - Active work order: `Issue #7 — B2 Search Foundation + Minimal /insights/ Authority Surface`
+- Implementation commit: `c6568a09ce924c0298feac44e0d98f82f5b0101f`
+- Draft PR: `#8` — `https://github.com/jerrybay889/jerrybay-site/pull/8`
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## G2-B-R5 reference visibility remediation
@@ -142,7 +144,7 @@ Automated accessibility audit reported zero violations and one incomplete color-
 
 ## Next Action
 
-Continue Issue `#7` B2 from the bounded Writer QA PASS: Site PM reviews the source diff, commits and pushes one candidate, opens a Draft PR, verifies the exact-Head Preview, and delegates one fresh separate fixed-SHA review. STOP before Merge because Merge is Production-impacting.
+Continue Issue `#7` B2 from Draft PR `#8`: commit and push the docs-only evidence update, resolve the new exact Head, wait for its exact-Head Preview to become READY, and delegate one fresh separate fixed-SHA review. STOP before Merge because Merge is Production-impacting.
 
 ## Current Gate / Evidence / Next Action — Issue #2 quick-win block
 
@@ -204,10 +206,11 @@ Continue Issue `#7` B2 from the bounded Writer QA PASS: Site PM reviews the sour
 
 ### Current Gate
 
-- Gate: `B2 — Search Foundation + Minimal /insights/ Authority Surface / WRITER QA PASS`.
+- Gate: `B2 — DRAFT PR + IMPLEMENTATION PREVIEW COMPLETE / DOCS-ONLY EVIDENCE UPDATE PENDING`.
 - Authority: GitHub Issue `#7`; Base `main@974ae38f31bc3480e879825fdf10d581fb0ff72c`.
 - Branch/worktree/Writer: `issue-7-b2-insights` / `C:\Users\jerry\JERRYBAY_SITE_B2_ISSUE7` / sole delegated Writer `/root/b2_writer`.
-- Source scope is complete but uncommitted: `/insights/` hub, exactly three seed articles, reusable article contract, all-public-route canonical/OG foundation, robots/sitemap/feed, internal links, prepare-only search-registration packet, and deterministic/browser QA updates.
+- Source scope is committed at `c6568a09ce924c0298feac44e0d98f82f5b0101f`: `/insights/` hub, exactly three seed articles, reusable article contract, all-public-route canonical/OG foundation, robots/sitemap/feed, internal links, prepare-only search-registration packet, and deterministic/browser QA updates.
+- Draft PR `#8` targets Base `974ae38f31bc3480e879825fdf10d581fb0ff72c`. The current uncommitted change is this evidence-only documentation update and will create a new exact Head after Site PM commit/push.
 - No CMS, DB, publishing automation, Tally/search-account/Vercel/domain/environment mutation, or Merge occurred.
 
 ### Evidence
@@ -219,8 +222,12 @@ Continue Issue `#7` B2 from the bounded Writer QA PASS: Site PM reviews the sour
 - Writer visually inspected `.qa-browser-b2/insights-desktop.png`, `.qa-browser-b2/insights-mobile.png`, and `.qa-browser-b2/insightsai-pilot-to-operating-system-desktop.png`; hierarchy, responsive composition, CTA order, and article layout render without clipping or overlap.
 - `git diff --check` → PASS. QA screenshots and Chrome profile remain untracked local artifacts and are outside the source diff.
 - External search registration status: `PREPARED / NOT SUBMITTED / NOT VERIFIED`.
+- Implementation-commit GitHub Vercel status: `SUCCESS` at exact commit `c6568a09ce924c0298feac44e0d98f82f5b0101f`.
+- Implementation-commit Preview: deployment `dpl_Wor6cpbbzh6K1NMzrVmwiFR64oe5`, target `preview`, state `READY`; immutable URL `https://jerrybay-site-hrxww3nxm-jerrybay889s-projects.vercel.app`; branch alias `https://jerrybay-site-git-issue-7-b2-insights-jerrybay889s-projects.vercel.app`.
+- Authenticated implementation-commit Preview desktop probe: `/insights/` and all three seed articles rendered exact title/H1, `canonical = og:url`, and the exact Primary CTA; hub seed count `3`; JSON-LD parsed; horizontal overflow `0`; console logs `0`.
+- The visible authenticated Preview hub screenshot was inspected. This evidence applies to implementation commit `c6568a09...`, not to the future docs-only evidence-update Head.
 
 ### Next Action
 
-- Site PM reviews the bounded Writer diff, commits and pushes one candidate, opens a Draft PR, verifies exact-Head Vercel Preview, and delegates one fresh separate read-only fixed-SHA review.
+- Site PM commits and pushes this docs-only evidence update, resolves the new exact Head, waits for that exact-Head Vercel Preview to become READY, and delegates one fresh separate read-only fixed-SHA review.
 - STOP before Merge. Under current Vercel integration, Merge is Production-impacting.

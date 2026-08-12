@@ -32,6 +32,8 @@ const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = 
 
 const ROUTES = [
   "/", "/business/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/",
+  "/insights/", "/insights/ai-pilot-to-operating-system/", "/insights/aikus-learning-to-work-execution/",
+  "/insights/static-first-search-foundation/",
   "/references/", "/references/projects/aikus/", "/references/projects/omyqt/", "/references/projects/invit/",
   "/references/projects/casper-electric-ai-drawing/", "/references/projects/renault-sm6-ai-drawing/",
   "/references/projects/fashion-ai-generator/",
@@ -44,8 +46,17 @@ const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
 const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/", "프로젝트·컨설팅 문의"],
   ["/business/", "프로젝트·컨설팅 문의"],
+  ["/insights/", "프로젝트·컨설팅 문의"],
+  ["/insights/ai-pilot-to-operating-system/", "프로젝트·컨설팅 문의"],
+  ["/insights/aikus-learning-to-work-execution/", "프로젝트·컨설팅 문의"],
+  ["/insights/static-first-search-foundation/", "프로젝트·컨설팅 문의"],
 ]);
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
+const ARTICLE_EVIDENCE_BY_ROUTE = new Map([
+  ["/insights/ai-pilot-to-operating-system/", "/references/?type=government"],
+  ["/insights/aikus-learning-to-work-execution/", "/references/projects/aikus/"],
+  ["/insights/static-first-search-foundation/", "/references/"],
+]);
 
 mkdirSync(OUT, { recursive: true });
 
@@ -168,6 +179,20 @@ const PROBE = `(() => {
       return link ? { text: link.textContent.trim(), secondary: link.classList.contains("btn--secondary"),
                       primary: link.classList.contains("btn--primary") } : null;
     })(),
+    insightSeedLinks: [...document.querySelectorAll('.insights-grid a[href^="/insights/"]')]
+      .map(a => a.getAttribute("href")),
+    articleContract: (() => {
+      if (!document.body.classList.contains("article-page")) return null;
+      return {
+        h1: document.querySelectorAll("h1").length,
+        h2: document.querySelectorAll(".article-body h2").length,
+        business: !!document.querySelector('a[href="/business/"]'),
+        hub: !!document.querySelector('a[href="/insights/"]'),
+        evidenceTargets: [...document.querySelectorAll('.article-body a[href^="/references/"]')]
+          .map(a => a.getAttribute("href")),
+        jsonLd: !!document.querySelector('script[type="application/ld+json"]'),
+      };
+    })(),
   };
 })()`;
 
@@ -189,8 +214,9 @@ const MENU_PROBE = `(async () => {
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
   const expectedLinkCount = document.body.classList.contains("home-v4")
-    ? 9
-    : (document.body.classList.contains("content-page") ? 5 : 7);
+    ? 10
+    : (document.body.classList.contains("business-page") ? 6
+      : (document.body.classList.contains("content-page") ? 5 : 7));
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
 })()`;
@@ -345,6 +371,21 @@ for (const vp of VIEWPORTS) {
         r.businessQuickWin?.text === "Quick-Win 상세페이지 보기" &&
         r.businessQuickWin.secondary && !r.businessQuickWin.primary,
         JSON.stringify(r.businessQuickWin));
+    }
+
+    if (route === "/insights/") {
+      record(`insights-seeds ${tag}`, "Authority hub가 canonical seed 3개를 렌더링",
+        new Set(r.insightSeedLinks).size === 3,
+        JSON.stringify(r.insightSeedLinks));
+    }
+
+    if (route.startsWith("/insights/") && route !== "/insights/") {
+      const expectedEvidence = ARTICLE_EVIDENCE_BY_ROUTE.get(route);
+      record(`article-contract ${tag}`, "Article H1/H2, structured data, hub/business/evidence link 렌더링",
+        r.articleContract?.h1 === 1 && r.articleContract?.h2 >= 4 &&
+          r.articleContract.business && r.articleContract.hub && r.articleContract.jsonLd &&
+          expectedEvidence && r.articleContract.evidenceTargets.includes(expectedEvidence),
+        JSON.stringify({ ...r.articleContract, expectedEvidence }));
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",

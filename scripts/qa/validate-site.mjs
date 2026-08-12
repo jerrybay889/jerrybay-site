@@ -19,6 +19,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const ROUTES = [
   { route: "/", file: "index.html" },
   { route: "/business/", file: "business/index.html" },
+  { route: "/insights/", file: "insights/index.html" },
+  { route: "/insights/ai-pilot-to-operating-system/", file: "insights/ai-pilot-to-operating-system/index.html" },
+  { route: "/insights/aikus-learning-to-work-execution/", file: "insights/aikus-learning-to-work-execution/index.html" },
+  { route: "/insights/static-first-search-foundation/", file: "insights/static-first-search-foundation/index.html" },
   { route: "/capabilities/", file: "capabilities/index.html" },
   { route: "/work/", file: "work/index.html" },
   { route: "/collaborate/", file: "collaborate/index.html" },
@@ -37,6 +41,10 @@ const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
 const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/", "프로젝트·컨설팅 문의"],
   ["/business/", "프로젝트·컨설팅 문의"],
+  ["/insights/", "프로젝트·컨설팅 문의"],
+  ["/insights/ai-pilot-to-operating-system/", "프로젝트·컨설팅 문의"],
+  ["/insights/aikus-learning-to-work-execution/", "프로젝트·컨설팅 문의"],
+  ["/insights/static-first-search-foundation/", "프로젝트·컨설팅 문의"],
 ]);
 
 const results = [];
@@ -73,17 +81,17 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 14 route entry HTML files, and no stray public HTML.
+// 1. Exactly 18 route entry HTML files, and no stray public HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "14개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "18개 route 파일이 모두 존재", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
 const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 14개 (stray 없음)",
-  allHtml.length === 14 && stray.length === 0,
+check("01b", "public HTML 파일이 정확히 18개 (stray 없음)",
+  allHtml.length === 18 && stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
 
 // Load every page once.
@@ -104,6 +112,27 @@ for (const p of pages) {
     [!hasTitle && "title", !hasDesc && "description", !hasViewport && "viewport",
      hasNoindex && "noindex meta 잔존"].filter(Boolean).join(", "));
 }
+
+// 2b. Search metadata is unique and canonical across the complete public surface.
+const titles = [];
+const descriptions = [];
+for (const p of pages) {
+  const title = p.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1].trim() || "";
+  const description = p.html.match(/<meta\s+name="description"\s+content="([^"]+)"/i)?.[1].trim() || "";
+  const canonical = p.html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/i)?.[1] || "";
+  const ogTitle = p.html.match(/<meta\s+property="og:title"\s+content="([^"]+)"/i)?.[1] || "";
+  const ogDescription = p.html.match(/<meta\s+property="og:description"\s+content="([^"]+)"/i)?.[1] || "";
+  const ogUrl = p.html.match(/<meta\s+property="og:url"\s+content="([^"]+)"/i)?.[1] || "";
+  const expectedCanonical = `https://www.jerrybay.kr${p.route}`;
+  titles.push(title);
+  descriptions.push(description);
+  check(`02b:${p.route}`, "canonical/title/description/OG 계약",
+    canonical === expectedCanonical && ogUrl === canonical && !!ogTitle && !!ogDescription,
+    JSON.stringify({ canonical, expectedCanonical, ogUrl, ogTitle, ogDescription }));
+}
+check("02c", "모든 public title과 description이 고유", new Set(titles).size === pages.length &&
+  new Set(descriptions).size === pages.length,
+  `titles=${new Set(titles).size}/${pages.length}; descriptions=${new Set(descriptions).size}/${pages.length}`);
 
 // ---------------------------------------------------------------------------
 // 3. Primary CTA wording is exact, and 4. nothing competes with it.
@@ -479,9 +508,8 @@ const BUSINESS_REQUIRED_COPY = [
   "프로젝트·컨설팅 문의",
 ];
 const missingBusinessCopy = BUSINESS_REQUIRED_COPY.filter((copy) => !business?.text.includes(copy));
-const businessEvidenceCards = business
-  ? (business.html.match(/<article class="content-card">/g) || []).length
-  : 0;
+const businessEvidenceSection = business?.html.match(/<section\b[^>]*\bid="evidence"[\s\S]*?<\/section>/)?.[0] || "";
+const businessEvidenceCards = (businessEvidenceSection.match(/<article class="content-card">/g) || []).length;
 check("20a", "B1 /business/ 필수 buyer-journey block 존재",
   !!business && missingBusinessSections.length === 0 && missingBusinessCopy.length === 0 && businessEvidenceCards === 5,
   `sections=${missingBusinessSections.join(", ")}; copy=${missingBusinessCopy.join(" | ")}; evidenceCards=${businessEvidenceCards}`);
@@ -625,6 +653,81 @@ check("19l", "기획 레퍼런스는 개인 브랜드명·원문 수집 기록 �
 
 check("19m", "홈 강의 섹션에 눈에 띄는 AIKUS 외부 홈페이지 링크가 존재",
   !!home && /id="lectures"[\s\S]*?class="lecture-platform-link"[\s\S]*?href="https:\/\/aikus\.kr\/"[\s\S]*?AIKUS 교육 플랫폼 홈페이지 열기/.test(home.html), "");
+
+// ---------------------------------------------------------------------------
+// 20. B2 Search Foundation + exactly three canonical seed articles.
+// ---------------------------------------------------------------------------
+const insightRoutes = pages.filter((p) => p.route.startsWith("/insights/"));
+const insightHub = pages.find((p) => p.route === "/insights/");
+const seedArticles = insightRoutes.filter((p) => p.route !== "/insights/");
+const expectedSeeds = [
+  "/insights/ai-pilot-to-operating-system/",
+  "/insights/aikus-learning-to-work-execution/",
+  "/insights/static-first-search-foundation/",
+];
+const expectedEvidenceBySeed = new Map([
+  ["/insights/ai-pilot-to-operating-system/", "/references/?type=government"],
+  ["/insights/aikus-learning-to-work-execution/", "/references/projects/aikus/"],
+  ["/insights/static-first-search-foundation/", "/references/"],
+]);
+check("20a", "B2 authority hub와 canonical seed article이 정확히 3개",
+  !!insightHub && seedArticles.length === 3 && expectedSeeds.every((route) => seedArticles.some((p) => p.route === route)),
+  seedArticles.map((p) => p.route).join(", "));
+
+const missingHubLinks = expectedSeeds.filter((route) => !insightHub?.html.includes(`href="${route}"`));
+const seedContractGaps = seedArticles.flatMap((p) => {
+  const articleBody = p.html.match(/<div class="article-body">([\s\S]*?)<\/div>/)?.[1] || "";
+  const expectedEvidence = expectedEvidenceBySeed.get(p.route);
+  const baseContract = p.html.includes('href="/business/"') && p.html.includes('href="/insights/"') &&
+    p.html.includes('href="https://tally.so/r/Y5bypd"') && p.text.includes("프로젝트·컨설팅 문의") &&
+    /<script type="application\/ld\+json">/.test(p.html);
+  const distinctEvidence = !!expectedEvidence && expectedEvidence !== "/business/" &&
+    expectedEvidence !== "/insights/" && articleBody.includes(`href="${expectedEvidence}"`);
+  return baseContract && distinctEvidence ? [] : [
+    `${p.route}:evidence=${expectedEvidence || "missing-map"}:present=${distinctEvidence}`,
+  ];
+});
+check("20b", "Hub→seed와 seed→evidence/business/inquiry 내부 전환 계약",
+  missingHubLinks.length === 0 && seedContractGaps.length === 0,
+  `hub=${missingHubLinks.join(",")}; seed=${seedContractGaps.join(",")}`);
+
+const structuredDataFailures = insightRoutes.flatMap((p) =>
+  [...p.html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap((m) => {
+    try { JSON.parse(m[1]); return []; } catch (error) { return [`${p.route}:${error.message}`]; }
+  }));
+check("20c", "Insights structured data JSON이 파싱 가능", structuredDataFailures.length === 0,
+  structuredDataFailures.join(" | "));
+
+const sitemap = read("sitemap.xml");
+const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+const expectedCanonicalUrls = ROUTES.map((r) => `https://www.jerrybay.kr${r.route}`);
+check("20d", "sitemap은 18개 canonical public URL만 노출",
+  sitemapUrls.length === 18 && new Set(sitemapUrls).size === 18 &&
+    expectedCanonicalUrls.every((url) => sitemapUrls.includes(url)) &&
+    sitemapUrls.every((url) => expectedCanonicalUrls.includes(url)),
+  `count=${sitemapUrls.length}`);
+
+const feed = read("feed.xml");
+const feedItems = [...feed.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
+check("20e", "RSS feed는 self-link와 canonical seed 3개를 정확히 포함",
+  /<rss\b/.test(feed) && feed.includes('href="https://www.jerrybay.kr/feed.xml"') && feedItems.length === 3 &&
+    expectedSeeds.every((route) => feedItems.some((item) => item.includes(`https://www.jerrybay.kr${route}`))),
+  `items=${feedItems.length}`);
+
+const b2Robots = read("robots.txt");
+check("20f", "robots가 crawl을 허용하고 canonical sitemap을 선언",
+  /User-agent:\s*\*/i.test(b2Robots) && /Allow:\s*\//i.test(b2Robots) &&
+    b2Robots.includes("Sitemap: https://www.jerrybay.kr/sitemap.xml"), "");
+
+const forbiddenB2Routes = ["daily", "topics", "videos"].filter((dir) => existsSync(join(ROOT, dir)));
+const forbiddenPublicCopy = ["PICKED_UP", "fixed-SHA", "Issue #7", "OMYQT prayer", "service_role"]
+  .flatMap((term) => insightRoutes.filter((p) => p.text.includes(term)).map((p) => `${p.route}:${term}`));
+check("20g", "금지 route와 내부·민감 공개 copy 없음",
+  forbiddenB2Routes.length === 0 && forbiddenPublicCopy.length === 0,
+  [...forbiddenB2Routes, ...forbiddenPublicCopy].join(", "));
+
+check("20h", "Home와 /business/가 /insights/를 crawlable link로 연결",
+  !!home?.html.includes('href="/insights/"') && !!business?.html.includes('href="/insights/'), "");
 
 // ---------------------------------------------------------------------------
 // Report

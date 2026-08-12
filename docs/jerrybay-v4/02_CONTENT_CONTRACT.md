@@ -112,3 +112,12 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - `/business/` supporting CTAs lead to in-page sections or existing References. The Latpeed Quick-Win link uses `btn--secondary` only.
 - Tally attribution storage is `UNVERIFIED / NOT CONFIGURED`: the live form currently exposes no Hidden fields, so query parameters must not be represented as recorded attribution. External Tally mutation is outside B1.
 - A later attribution contract may use case-sensitive Hidden fields `source` and `content` with non-PII route/placement tokens only, after separate form-admin authorization and an approved test/cleanup procedure.
+
+## B2 — Search Foundation + Minimal `/insights/` Surface
+
+- `/insights/` is the single static authority hub; `/daily/`, `/topics/`, and `/videos/` remain absent.
+- The reusable article contract is `07_INSIGHTS_ARTICLE_CONTRACT.md`.
+- B2 publishes exactly three canonical seeds: one buyer-problem Insight, one public-safe AIKUS Case, and one static-first Build / How-to proof.
+- Every seed serves one buyer stage, links to relevant evidence and `/business/`, and retains the exact existing Primary CTA without inventing price, product, customer outcome, or attribution.
+- Robots, sitemap, RSS, unique canonical/title/description/OG, truthful structured data, and crawlable internal links form one deterministic search contract.
+- Google, Naver, and Bing registration remains prepare-only in `08_SEARCH_REGISTRATION_PACKET.md`; no account, verification, DNS, environment, or tracking mutation is authorized.

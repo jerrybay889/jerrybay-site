@@ -31,7 +31,7 @@ const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = 
   process.argv;
 
 const ROUTES = [
-  "/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/",
+  "/", "/business/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/",
   "/references/", "/references/projects/aikus/", "/references/projects/omyqt/", "/references/projects/invit/",
   "/references/projects/casper-electric-ai-drawing/", "/references/projects/renault-sm6-ai-drawing/",
   "/references/projects/fashion-ai-generator/",
@@ -43,6 +43,7 @@ const VIEWPORTS = [
 const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
 const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/", "프로젝트·컨설팅 문의"],
+  ["/business/", "프로젝트·컨설팅 문의"],
 ]);
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 
@@ -157,6 +158,16 @@ const PROBE = `(() => {
       .filter(id => !document.getElementById(id)),
     profileLoaded: (() => { const img = document.querySelector('img[src="/assets/profile.jpg"]');
                             return !!img && img.complete && img.naturalWidth > 0; })(),
+    businessSections: ["solutions", "evidence", "scope", "fit", "contact"]
+      .filter(id => !document.getElementById(id)),
+    businessTracks: [...document.querySelectorAll("#solutions .capability-pillar__index")]
+      .map(el => el.textContent.trim()),
+    businessEvidenceCards: document.querySelectorAll("#evidence .content-card").length,
+    businessQuickWin: (() => {
+      const link = document.querySelector('a[href="https://www.latpeed.com/products/Jvss7"]');
+      return link ? { text: link.textContent.trim(), secondary: link.classList.contains("btn--secondary"),
+                      primary: link.classList.contains("btn--primary") } : null;
+    })(),
   };
 })()`;
 
@@ -178,7 +189,7 @@ const MENU_PROBE = `(async () => {
                  getComputedStyle(nav).display === "none";
   const focusReturned = document.activeElement === t;
   const expectedLinkCount = document.body.classList.contains("home-v4")
-    ? 8
+    ? 9
     : (document.body.classList.contains("content-page") ? 5 : 7);
   return { ok: opened && closed && focusReturned && linkCount === expectedLinkCount,
            opened, closed, focusReturned, linkCount, expectedLinkCount };
@@ -322,6 +333,18 @@ for (const vp of VIEWPORTS) {
       record(`profile ${tag}`, "실제 profile image 로드 완료", r.profileLoaded);
       record(`build-card-layout ${tag}`, "Featured Build label/status와 제목이 겹치지 않음",
         r.buildCardOverlaps.length === 0, r.buildCardOverlaps.join(", "));
+    }
+
+    if (route === "/business/") {
+      record(`business-blocks ${tag}`, "B1 buyer-journey block이 모두 렌더링",
+        r.businessSections.length === 0 &&
+        JSON.stringify(r.businessTracks) === JSON.stringify(["01 · BUILD", "02 · LEARN", "03 · PLAN"]) &&
+        r.businessEvidenceCards === 5,
+        JSON.stringify({ missing: r.businessSections, tracks: r.businessTracks, evidenceCards: r.businessEvidenceCards }));
+      record(`business-quick-win ${tag}`, "Quick-Win이 secondary contextual CTA로 렌더링",
+        r.businessQuickWin?.text === "Quick-Win 상세페이지 보기" &&
+        r.businessQuickWin.secondary && !r.businessQuickWin.primary,
+        JSON.stringify(r.businessQuickWin));
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",

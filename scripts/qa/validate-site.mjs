@@ -18,6 +18,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const ROUTES = [
   { route: "/", file: "index.html" },
+  { route: "/business/", file: "business/index.html" },
   { route: "/capabilities/", file: "capabilities/index.html" },
   { route: "/work/", file: "work/index.html" },
   { route: "/collaborate/", file: "collaborate/index.html" },
@@ -35,6 +36,7 @@ const ROUTES = [
 const DEFAULT_PRIMARY_CTA = "조직 AI 적용 상담 요청";
 const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/", "프로젝트·컨설팅 문의"],
+  ["/business/", "프로젝트·컨설팅 문의"],
 ]);
 
 const results = [];
@@ -63,7 +65,7 @@ function visibleText(html) {
 function walkHtml(dir, acc = []) {
   for (const entry of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
     const rel = posix.join(dir, entry.name);
-    if (entry.name === ".git" || entry.name === "node_modules" || entry.name === "docs") continue;
+    if (entry.name === ".git" || entry.name === "node_modules" || entry.name === "docs" || entry.name.startsWith(".qa-")) continue;
     if (entry.isDirectory()) walkHtml(rel, acc);
     else if (entry.name.endsWith(".html")) acc.push(rel.replace(/^\.\//, ""));
   }
@@ -71,17 +73,17 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 13 route entry HTML files, and no stray public HTML.
+// 1. Exactly 14 route entry HTML files, and no stray public HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "13개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "14개 route 파일이 모두 존재", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
 const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 13개 (stray 없음)",
-  allHtml.length === 13 && stray.length === 0,
+check("01b", "public HTML 파일이 정확히 14개 (stray 없음)",
+  allHtml.length === 14 && stray.length === 0,
   stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
 
 // Load every page once.
@@ -453,6 +455,58 @@ const stackGroupCount = (home?.html.match(/class="stack-group"/g) || []).length;
 check("18i", "홈 역량 섹션에 3개 핵심 역량과 실행 역량·현재 스택이 존재",
   !!home && capabilityPillarCount === 3 && stackGroupCount === 5 && missingCapabilityTerms.length === 0,
   `pillars=${capabilityPillarCount}, stackGroups=${stackGroupCount}, missing=${missingCapabilityTerms.join(" | ")}`);
+
+// ---------------------------------------------------------------------------
+// 18j/20. B1 business landing and homepage CTA taxonomy.
+// ---------------------------------------------------------------------------
+check("18j", "홈이 기업·기관 landing을 보조 경로로 연결",
+  !!home && home.html.includes('href="/business/"') && home.text.includes("기업·기관 협업 보기"), "");
+
+const business = pages.find((p) => p.route === "/business/");
+const BUSINESS_SECTION_IDS = ["solutions", "evidence", "scope", "fit", "contact"];
+const missingBusinessSections = BUSINESS_SECTION_IDS.filter(
+  (id) => !business || !new RegExp(`<section\\b[^>]*\\bid="${id}"`).test(business.html),
+);
+const BUSINESS_REQUIRED_COPY = [
+  "Executive Promise",
+  "BUILD / LEARN / PLAN",
+  "AIKUS",
+  "Globorder ORCA · JERRYBAY",
+  "기업·기관 AI 교육",
+  "정부사업",
+  "기사·외부 Reference",
+  "Engagement Scope Examples",
+  "프로젝트·컨설팅 문의",
+];
+const missingBusinessCopy = BUSINESS_REQUIRED_COPY.filter((copy) => !business?.text.includes(copy));
+const businessEvidenceCards = business
+  ? (business.html.match(/<article class="content-card">/g) || []).length
+  : 0;
+check("20a", "B1 /business/ 필수 buyer-journey block 존재",
+  !!business && missingBusinessSections.length === 0 && missingBusinessCopy.length === 0 && businessEvidenceCards === 5,
+  `sections=${missingBusinessSections.join(", ")}; copy=${missingBusinessCopy.join(" | ")}; evidenceCards=${businessEvidenceCards}`);
+
+const businessTallyLinks = business
+  ? [...business.html.matchAll(/<a\b[^>]*class="[^"]*\bbtn--primary\b[^"]*"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)]
+      .map((m) => ({ href: m[1], label: m[2].replace(/<[^>]+>/g, "").trim() }))
+  : [];
+check("20b", "B1 Primary CTA가 exact Tally base URL과 exact 문구만 사용",
+  businessTallyLinks.length >= 2 && businessTallyLinks.every(
+    (link) => link.href === "https://tally.so/r/Y5bypd" && link.label === "프로젝트·컨설팅 문의"
+  ), JSON.stringify(businessTallyLinks));
+
+const businessQuickWin = business?.html.match(
+  /<a\b[^>]*class="([^"]*)"[^>]*href="https:\/\/www\.latpeed\.com\/products\/Jvss7"[^>]*>([\s\S]*?)<\/a>/i,
+);
+check("20c", "Quick-Win은 /business/에서 secondary contextual CTA로만 노출",
+  !!businessQuickWin && /\bbtn--secondary\b/.test(businessQuickWin[1]) &&
+    !/\bbtn--primary\b/.test(businessQuickWin[1]) &&
+    businessQuickWin[2].replace(/<[^>]+>/g, "").trim() === "Quick-Win 상세페이지 보기", "");
+
+const businessForbidden = ["SSOT", "V4-G", "OWNER", "Gate", "Tally attribution", "Hidden field"];
+const businessForbiddenHits = businessForbidden.filter((term) => business?.text.includes(term));
+check("20d", "B1 공개 copy에 내부 release·attribution 용어 없음",
+  !!business && businessForbiddenHits.length === 0, businessForbiddenHits.join(", "));
 
 // ---------------------------------------------------------------------------
 // 19. G2-B-R2 reference hub and individual project-detail contract.

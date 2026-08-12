@@ -95,3 +95,20 @@ Supporting line: `AI Product Strategy · AI Consulting & Education · No-Code Pr
 - The planning category represents Notion collection work as public-safe planning domains, not raw titles, source records, private notes, scores, or client work. It does not imply an external client relationship.
 - Restore the historical government-project record set with clear role wording: MyData demonstration PM, Youth Experience AI Creator PM/instruction, startup/R&amp;D planning, aquaculture AI demonstration consulting, AI Voucher planning support, and startup-support planning consulting.
 - Remove the public-facing `JERRY’S QA OS` title; use `Quality Engineering OS` without changing its role or adding performance claims.
+
+## B1 — B2B Conversion Foundation
+
+### `/business/` buyer journey
+
+- Add one high-intent, Korean-first `/business/` landing page using the existing visual grammar and static architecture.
+- Within approximately 60–120 seconds, an enterprise or institution buyer must be able to understand the problem Jerry / Globorder addresses, the ability to move from strategy into implementation, selected truthful evidence, suitable engagement contexts, and the inquiry path.
+- Required blocks are Executive Promise; `BUILD / LEARN / PLAN`; selected AIKUS, public-safe ORCA/JERRYBAY, enterprise/institution education, government-project, and press/Reference evidence; engagement-scope examples; existing Reference links; fit guidance; and the exact Primary CTA.
+- Do not add new prices, outcomes, customer attribution, or internal operating detail. Quick-Win remains a smaller, contextual starting point and must not compete with the B2B Primary CTA.
+
+### B1 CTA taxonomy
+
+- Homepage and `/business/` Primary CTA: exact label `프로젝트·컨설팅 문의` and exact canonical base URL `https://tally.so/r/Y5bypd`.
+- Homepage contextual route: `기업·기관 협업 보기` → `/business/`; existing capability, project, lecture, press, and Quick-Win paths remain secondary.
+- `/business/` supporting CTAs lead to in-page sections or existing References. The Latpeed Quick-Win link uses `btn--secondary` only.
+- Tally attribution storage is `UNVERIFIED / NOT CONFIGURED`: the live form currently exposes no Hidden fields, so query parameters must not be represented as recorded attribution. External Tally mutation is outside B1.
+- A later attribution contract may use case-sensitive Hidden fields `source` and `content` with non-PII route/placement tokens only, after separate form-admin authorization and an approved test/cleanup procedure.

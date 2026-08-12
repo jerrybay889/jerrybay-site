@@ -33,3 +33,15 @@ V4-G2 requires a new Owner-approved work packet.
 - [x] Global navigation is consolidated on `레퍼런스`; `프로젝트` remains only as a Reference-internal content type and filter.
 - [x] Reference hub provides project, lecture, planning, and government-project categories with query filters, verified external evidence where available, and protected planning-source boundaries.
 - [ ] G2 completion SHA is frozen only after Owner review and the full G2 contract is green.
+
+## B1 — B2B Conversion Foundation
+
+- [x] `/business/` provides Executive Promise, BUILD/LEARN/PLAN, truthful selected evidence, engagement-scope examples, fit guidance, existing Reference links, and the exact Primary CTA.
+- [x] Homepage exposes `/business/` as a contextual B2B path while retaining exact `프로젝트·컨설팅 문의` as the Primary Tally CTA.
+- [x] AIKUS, public-safe ORCA/JERRYBAY, enterprise/institution education, government-project, and press/Reference claims stay within existing public evidence and role-attribution boundaries.
+- [x] Quick-Win appears only as a secondary/contextual CTA on `/business/`; no new price or outcome is introduced.
+- [x] Static validation covers the 14th route, B1 required blocks, CTA target/label, Quick-Win hierarchy, unsupported-claim guard, public-copy boundary, and broken internal links.
+- [x] Browser QA covers `/business/` at desktop 1440×900 and mobile 390×844, including render, exact CTA, overflow, console/network, 44px targets, menu behavior, and B1 block assertions.
+- [x] `/business/` adds zero HTML-validation findings; repository-wide HTML validation retains 30 pre-existing `aria-label-misuse` findings outside the new route.
+- [ ] Tally submission attribution is verified. Current state is `UNVERIFIED / NOT CONFIGURED` because the live form exposes no matching Hidden fields; no external Tally mutation or test submission is authorized in B1.
+- [ ] Draft PR, Preview QA, and fresh fixed-SHA review are complete. Writer implementation does not authorize commit, push, PR, Merge, or Production.

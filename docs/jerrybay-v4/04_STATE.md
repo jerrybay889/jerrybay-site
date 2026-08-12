@@ -2,15 +2,15 @@
 
 ## Current Gate
 
-`V4-G5 — OWNER-AUTHORIZED PRODUCTION PUBLISH / LIVE`
+`B1 — B2B CONVERSION FOUNDATION / WRITER IMPLEMENTATION`
 
 ## Active execution
 
-- Branch: `build/jerrybay-v4-original-first`
-- Worktree: `C:\Users\82103\jerrybay-site-worktrees\v4-original-first`
-- Base SHA: `d50f9dc85f4b0d0630d06e3df1b40cf404963d78`
+- Branch: `issue-5-b1-business`
+- Worktree: `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5`
+- Base SHA: `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
-- Active work order: `WO-V4-02`
+- Active work order: `Issue #5 — B1 B2B Conversion Foundation`
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## G2-B-R5 reference visibility remediation
@@ -168,3 +168,28 @@ Jerry reviews the updated isolated protected checkpoint and provides either visu
 
 - Commit and push this evidence-only state update, confirm the resulting exact Head Preview, then post one fresh fixed-SHA Codex reviewer read-only review.
 - STOP before any `Ready`, `Merge`, or `Production` action.
+
+## Current Gate / Evidence / Next Action — Issue #5 B1
+
+### Current Gate
+
+- Gate: `B1 — B2B Conversion Foundation / Writer implementation complete locally`
+- Branch/worktree/base: `issue-5-b1-business` / `C:\Users\jerry\JERRYBAY_SITE_B1_ISSUE5` / `324ece1966ad9fafc7cb4a6c4ef51ca9d0488cdb`.
+- `/business/` is implemented as the high-intent enterprise/institution landing. Homepage Primary CTA remains the exact Tally base link, and `/business/` is exposed as a contextual path.
+- No commit, push, PR, Preview, Merge, Production, Vercel, environment, domain, secret, Tally-admin, or ORCA mutation has occurred.
+
+### Evidence
+
+- `node scripts/qa/validate-site.mjs` → `224/224 PASS`, including route count 14, internal-link resolution, B1 required blocks, exact Primary CTA label/base URL, Quick-Win secondary hierarchy, unsupported-claim guard, and public-copy boundary.
+- `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS` (`21` malicious fixtures rejected; `8` allowed fixtures accepted).
+- `npx --yes html-validate business/index.html` → `0 problems`. Repository-wide 14-route validation reports `30` pre-existing `aria-label-misuse` errors in `index.html` and `references/index.html`; B1 introduces `0` new findings.
+- `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 .qa-browser-b1` → `256/256 PASS` across desktop `1440×900` and mobile `390×844`. `/business/` passed exact CTA, required-block, Quick-Win hierarchy, overflow, console/network, 44px-target, mobile-menu, focus-return, and scroll-lock assertions.
+- Writer visually inspected `.qa-browser-b1/business-desktop.png` and `.qa-browser-b1/business-mobile.png`; the hero, CTA hierarchy, first solution block, typography, and responsive composition rendered without clipping or horizontal overflow.
+- `git diff --check` → PASS after the B1 implementation and record update.
+- Read-only Tally preflight: canonical base is `https://tally.so/r/Y5bypd`; a GET using `?source=jerrybay_site&content=business_primary` returned HTTP `200` and preserved the query URL. The parsed public form contained `39` blocks, `0` Hidden-field blocks, and no `utm_source` or `utm_content` fields. Submission attribution is therefore `UNVERIFIED / NOT CONFIGURED`; the site retains the exact base URL and makes no attribution claim.
+
+### Next Action
+
+- Hand the locally verified, uncommitted Writer diff to the Site PM.
+- Site PM may perform the authorized commit/push/Draft PR and Preview workflow, followed by a fresh separate fixed-SHA Reviewer.
+- STOP before Merge. Under the current release configuration, Merge is Production-impacting approval.

@@ -142,3 +142,27 @@ Automated accessibility audit reported zero violations and one incomplete color-
 ## Next Action
 
 Jerry reviews the updated isolated protected checkpoint and provides either visual/story UAT feedback or a separate final-G2 freeze approval. Do not change `main` or publish the existing site without that direction.
+
+## Current Gate / Evidence / Next Action — Issue #2 quick-win block
+
+### Current Gate
+
+- Active branch: `issue-2-quick-win`
+- Base SHA: `bdd80c0e97f0c611fd320bfa42c880f7ada06a09` (`main`)
+- Working tree scope: 1 file changed (`index.html` only)
+- Execution rule: keep diff local, do not touch production/release states.
+
+### Evidence
+
+- Git provenance captured before edits: `git rev-parse --show-toplevel` → `C:/Users/jerry/JERRYBAY_SITE_CANONICAL`, `git remote get-url origin` → `https://github.com/jerrybay889/jerrybay-site.git`, branch `issue-2-quick-win`, HEAD `bdd80c0e97f0c611fd320bfa42c880f7ada06a09`.
+- Static contract: `node scripts/qa/validate-site.mjs` → `206/206 PASS`.
+- External-style/font defense: `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS` (21 malicious + 8 allowed fixtures).
+- HTML validation: `npx --yes html-validate index.html` → 2 existing aria-label misuse errors (not introduced by this issue edit).
+- Browser QA: `node scripts/qa/browser-qa.mjs http://127.0.0.1:9222 http://127.0.0.1:4173 ./.qa-browser-issue2` → `235/235 PASS` (desktop/mobile, skip-link, nav focus, scroll lock, project filters).
+- Local QA assets: `./.qa-browser-issue2/` (generated during this run).
+
+### Next Action
+
+- Commit the branch-only source change and open a Draft PR.
+- Run/collect fresh fixed-SHA Codex reviewer read-only review from the committed SHA.
+- STOP before any `Ready`, `Merge`, or `Production` action.

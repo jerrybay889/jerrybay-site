@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`B2 — NARROW REMEDIATION COMMITTED/PUSHED / EXACT-HEAD PREVIEW READY / FRESH SEPARATE FIXED-SHA RE-REVIEW PENDING`
+`B2 — CURRENT PR HEAD PREVIEW READY / FRESH SEPARATE FIXED-SHA RE-REVIEW PENDING`
 
 ## Active execution
 
@@ -13,10 +13,10 @@
 - Source baseline: `cb9da0ee5b318cfd33b83b6283babdb0d9e9e7fe`
 - Active work order: `Issue #7 — B2 Search Foundation + Minimal /insights/ Authority Surface`
 - Implementation commit: `c6568a09ce924c0298feac44e0d98f82f5b0101f`
-- Narrow remediation commit: `495eca57f7e445315163ae3ca172d22ff61e13a3`
+- Historical narrow remediation commit: `495eca57f7e445315163ae3ca172d22ff61e13a3`
 - Draft PR: `#8` — `https://github.com/jerrybay889/jerrybay-site/pull/8`
 - Reviewed exact Head: `b6861d799b0c92ba8384872747a03b0b21dadbee`
-- Current exact Head: `495eca57f7e445315163ae3ca172d22ff61e13a3`
+- Current PR Head: the exact HEAD of `issue-7-b2-insights` after this State commit; resolve via `git rev-parse HEAD` and PR `#8` metadata.
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## G2-B-R5 reference visibility remediation
@@ -147,7 +147,7 @@ Automated accessibility audit reported zero violations and one incomplete color-
 
 ## Next Action
 
-Fresh separate exact-Head fixed-SHA review at current Head `495eca57f7e445315163ae3ca172d22ff61e13a3` → if `P0/P1/P2 = 0`, STOP before Merge because Merge is Production-impacting.
+Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `P0/P1/P2 = 0`, STOP before Merge because Merge is Production-impacting.
 
 ## Current Gate / Evidence / Next Action — Issue #2 quick-win block
 
@@ -209,13 +209,15 @@ Fresh separate exact-Head fixed-SHA review at current Head `495eca57f7e445315163
 
 ### Current Gate
 
-- Gate: `B2 — NARROW REMEDIATION COMMITTED/PUSHED / EXACT-HEAD PREVIEW READY / FRESH SEPARATE FIXED-SHA RE-REVIEW PENDING`.
+- Gate: `B2 — CURRENT PR HEAD PREVIEW READY / FRESH SEPARATE FIXED-SHA RE-REVIEW PENDING`.
 - Authority: GitHub Issue `#7`; Base `main@974ae38f31bc3480e879825fdf10d581fb0ff72c`.
 - Branch/worktree/Writer: `issue-7-b2-insights` / `C:\Users\jerry\JERRYBAY_SITE_B2_ISSUE7` / sole delegated Writer `/root/b2_writer`.
-- Implementation commit: `c6568a09ce924c0298feac44e0d98f82f5b0101f`; narrow remediation commit/current exact Head: `495eca57f7e445315163ae3ca172d22ff61e13a3`.
+- Implementation commit: `c6568a09ce924c0298feac44e0d98f82f5b0101f`; historical narrow remediation commit: `495eca57f7e445315163ae3ca172d22ff61e13a3`.
 - Draft PR `#8` targets Base `974ae38f31bc3480e879825fdf10d581fb0ff72c`; exact Head `b6861d799b0c92ba8384872747a03b0b21dadbee` had a READY exact-Head Vercel Preview.
 - Fresh separate fixed-SHA review at `b6861d7...` returned `REQUEST CHANGES`: the Insight and Build / How-to seed articles lacked a contextual, distinct public evidence link, and QA did not assert a per-seed evidence target.
-- Current exact Head `495eca57f7e445315163ae3ca172d22ff61e13a3` is committed/pushed and its exact-Head Preview is `READY`; fresh separate fixed-SHA re-review is pending.
+- Historical remediation Preview evidence: exact Head `495eca57f7e445315163ae3ca172d22ff61e13a3` had an exact-Head Preview `READY`; this remains retained provenance.
+- Historical handoff Preview evidence: exact Head `68dfc4cacb98c4015d0a1cd9b1112a9eb524161e3`, Vercel status `SUCCESS`, and deployment `dpl_DPq6VZvsxTybFK1wUCW7YHvdMqen` (`READY`) remain retained provenance; they are not the current Head authority after this State commit.
+- Current Preview: the `READY` Vercel Preview attached to that exact PR Head; current branch alias `https://jerrybay-site-git-issue-7-b2-insights-jerrybay889s-projects.vercel.app`. Fresh separate fixed-SHA review is pending at that resolved Head.
 - Current Writer scope is only that remediation in the two affected articles, static/browser QA contracts, and this State record. It does not reopen B1 or expand B2.
 - No CMS, DB, publishing automation, Tally/search-account/Vercel/domain/environment mutation, or Merge occurred.
 
@@ -228,14 +230,14 @@ Fresh separate exact-Head fixed-SHA review at current Head `495eca57f7e445315163
 - Writer visually inspected `.qa-browser-b2/insights-desktop.png`, `.qa-browser-b2/insights-mobile.png`, and `.qa-browser-b2/insightsai-pilot-to-operating-system-desktop.png`; hierarchy, responsive composition, CTA order, and article layout render without clipping or overlap.
 - `git diff --check` → PASS. QA screenshots and Chrome profile remain untracked local artifacts and are outside the source diff.
 - External search registration status: `PREPARED / NOT SUBMITTED / NOT VERIFIED`.
-- Implementation-commit GitHub Vercel status: `SUCCESS` at exact commit `c6568a09ce924c0298feac44e0d98f82f5b0101f`.
-- Implementation-commit Preview: deployment `dpl_Wor6cpbbzh6K1NMzrVmwiFR64oe5`, target `preview`, state `READY`; immutable URL `https://jerrybay-site-hrxww3nxm-jerrybay889s-projects.vercel.app`; branch alias `https://jerrybay-site-git-issue-7-b2-insights-jerrybay889s-projects.vercel.app`.
-- Authenticated implementation-commit Preview desktop probe: `/insights/` and all three seed articles rendered exact title/H1, `canonical = og:url`, and the exact Primary CTA; hub seed count `3`; JSON-LD parsed; horizontal overflow `0`; console logs `0`.
-- The visible authenticated Preview hub screenshot was inspected for implementation commit `c6568a09...`; the current exact-Head Preview is `READY` at remediation commit `495eca57...`.
+- Historical implementation-commit GitHub Vercel status: `SUCCESS` at exact commit `c6568a09ce924c0298feac44e0d98f82f5b0101f`.
+- Historical implementation-commit Preview: deployment `dpl_Wor6cpbbzh6K1NMzrVmwiFR64oe5`, target `preview`, state `READY`; immutable URL `https://jerrybay-site-hrxww3nxm-jerrybay889s-projects.vercel.app`; branch alias `https://jerrybay-site-git-issue-7-b2-insights-jerrybay889s-projects.vercel.app`.
+- Historical authenticated implementation-commit Preview desktop probe: `/insights/` and all three seed articles rendered exact title/H1, `canonical = og:url`, and the exact Primary CTA; hub seed count `3`; JSON-LD parsed; horizontal overflow `0`; console logs `0`.
+- The visible authenticated Preview hub screenshot was inspected for implementation commit `c6568a09...`; the historical remediation Preview at `495eca57...` was `READY`. Historical handoff Preview evidence is recorded above; current Preview authority is the `READY` deployment attached to the resolved Current PR Head.
 - Narrow remediation adds the contextual evidence targets `/references/?type=government`, `/references/projects/aikus/`, and `/references/` to the three respective seed article contracts. Static and browser QA now compare each route against its exact expected evidence target inside the article body.
-- Remediation local evidence: static/search `303/303 PASS`; external style/font guard `29/29 PASS`; `html-validate` on the two changed articles `0 findings`; Chrome/CDP desktop/mobile full-route browser QA `332/332 PASS`; `git diff --check` PASS.
+- Historical remediation local evidence: static/search `303/303 PASS`; external style/font guard `29/29 PASS`; `html-validate` on the two changed articles `0 findings`; Chrome/CDP desktop/mobile full-route browser QA `332/332 PASS`; `git diff --check` PASS.
 
 ### Next Action
 
-- Fresh separate exact-Head fixed-SHA review at current Head `495eca57f7e445315163ae3ca172d22ff61e13a3` → if `P0/P1/P2 = 0`, STOP before Merge.
+- Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `P0/P1/P2 = 0`, STOP before Merge.
 - STOP before Merge. Under current Vercel integration, Merge is Production-impacting.

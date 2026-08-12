@@ -2,7 +2,7 @@
 
 ## Current Gate
 
-`B2 — DRAFT PR + IMPLEMENTATION PREVIEW COMPLETE / EVIDENCE UPDATE PENDING`
+`B2 — FRESH REVIEW REQUEST CHANGES / NARROW REMEDIATION QA PASS / COMMIT PENDING`
 
 ## Active execution
 
@@ -14,6 +14,7 @@
 - Active work order: `Issue #7 — B2 Search Foundation + Minimal /insights/ Authority Surface`
 - Implementation commit: `c6568a09ce924c0298feac44e0d98f82f5b0101f`
 - Draft PR: `#8` — `https://github.com/jerrybay889/jerrybay-site/pull/8`
+- Reviewed exact Head: `b6861d799b0c92ba8384872747a03b0b21dadbee`
 - V4-G1 baseline SHA: `cab7459e865adfb9c892a636d7a3710179965802`
 
 ## G2-B-R5 reference visibility remediation
@@ -144,7 +145,7 @@ Automated accessibility audit reported zero violations and one incomplete color-
 
 ## Next Action
 
-Continue Issue `#7` B2 from Draft PR `#8`: commit and push the docs-only evidence update, resolve the new exact Head, wait for its exact-Head Preview to become READY, and delegate one fresh separate fixed-SHA review. STOP before Merge because Merge is Production-impacting.
+Continue Issue `#7` B2 by committing and pushing the QA-passed narrow remediation, resolving its new exact Head, waiting for exact-Head Preview READY, and running one fresh separate fixed-SHA re-review. STOP before Merge because Merge is Production-impacting.
 
 ## Current Gate / Evidence / Next Action — Issue #2 quick-win block
 
@@ -206,11 +207,12 @@ Continue Issue `#7` B2 from Draft PR `#8`: commit and push the docs-only evidenc
 
 ### Current Gate
 
-- Gate: `B2 — DRAFT PR + IMPLEMENTATION PREVIEW COMPLETE / DOCS-ONLY EVIDENCE UPDATE PENDING`.
+- Gate: `B2 — FRESH FIXED-SHA REVIEW REQUEST CHANGES / NARROW REMEDIATION QA PASS / COMMIT PENDING`.
 - Authority: GitHub Issue `#7`; Base `main@974ae38f31bc3480e879825fdf10d581fb0ff72c`.
 - Branch/worktree/Writer: `issue-7-b2-insights` / `C:\Users\jerry\JERRYBAY_SITE_B2_ISSUE7` / sole delegated Writer `/root/b2_writer`.
-- Source scope is committed at `c6568a09ce924c0298feac44e0d98f82f5b0101f`: `/insights/` hub, exactly three seed articles, reusable article contract, all-public-route canonical/OG foundation, robots/sitemap/feed, internal links, prepare-only search-registration packet, and deterministic/browser QA updates.
-- Draft PR `#8` targets Base `974ae38f31bc3480e879825fdf10d581fb0ff72c`. The current uncommitted change is this evidence-only documentation update and will create a new exact Head after Site PM commit/push.
+- Draft PR `#8` targets Base `974ae38f31bc3480e879825fdf10d581fb0ff72c`; exact Head `b6861d799b0c92ba8384872747a03b0b21dadbee` had a READY exact-Head Vercel Preview.
+- Fresh separate fixed-SHA review at `b6861d7...` returned `REQUEST CHANGES`: the Insight and Build / How-to seed articles lacked a contextual, distinct public evidence link, and QA did not assert a per-seed evidence target.
+- Current Writer scope is only that remediation in the two affected articles, static/browser QA contracts, and this State record. It is not an uncommitted docs handoff and does not reopen B1 or expand B2.
 - No CMS, DB, publishing automation, Tally/search-account/Vercel/domain/environment mutation, or Merge occurred.
 
 ### Evidence
@@ -226,8 +228,10 @@ Continue Issue `#7` B2 from Draft PR `#8`: commit and push the docs-only evidenc
 - Implementation-commit Preview: deployment `dpl_Wor6cpbbzh6K1NMzrVmwiFR64oe5`, target `preview`, state `READY`; immutable URL `https://jerrybay-site-hrxww3nxm-jerrybay889s-projects.vercel.app`; branch alias `https://jerrybay-site-git-issue-7-b2-insights-jerrybay889s-projects.vercel.app`.
 - Authenticated implementation-commit Preview desktop probe: `/insights/` and all three seed articles rendered exact title/H1, `canonical = og:url`, and the exact Primary CTA; hub seed count `3`; JSON-LD parsed; horizontal overflow `0`; console logs `0`.
 - The visible authenticated Preview hub screenshot was inspected. This evidence applies to implementation commit `c6568a09...`, not to the future docs-only evidence-update Head.
+- Narrow remediation adds the contextual evidence targets `/references/?type=government`, `/references/projects/aikus/`, and `/references/` to the three respective seed article contracts. Static and browser QA now compare each route against its exact expected evidence target inside the article body.
+- Remediation local evidence: static/search `303/303 PASS`; external style/font guard `29/29 PASS`; `html-validate` on the two changed articles `0 findings`; Chrome/CDP desktop/mobile full-route browser QA `332/332 PASS`; `git diff --check` PASS.
 
 ### Next Action
 
-- Site PM commits and pushes this docs-only evidence update, resolves the new exact Head, waits for that exact-Head Vercel Preview to become READY, and delegates one fresh separate read-only fixed-SHA review.
+- Site PM commits and pushes only this QA-passed remediation, resolves the new exact Head, waits for exact-Head Preview READY, and requests one fresh separate fixed-SHA re-review.
 - STOP before Merge. Under current Vercel integration, Merge is Production-impacting.

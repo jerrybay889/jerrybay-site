@@ -52,6 +52,11 @@ const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/insights/static-first-search-foundation/", "프로젝트·컨설팅 문의"],
 ]);
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
+const ARTICLE_EVIDENCE_BY_ROUTE = new Map([
+  ["/insights/ai-pilot-to-operating-system/", "/references/?type=government"],
+  ["/insights/aikus-learning-to-work-execution/", "/references/projects/aikus/"],
+  ["/insights/static-first-search-foundation/", "/references/"],
+]);
 
 mkdirSync(OUT, { recursive: true });
 
@@ -183,6 +188,8 @@ const PROBE = `(() => {
         h2: document.querySelectorAll(".article-body h2").length,
         business: !!document.querySelector('a[href="/business/"]'),
         hub: !!document.querySelector('a[href="/insights/"]'),
+        evidenceTargets: [...document.querySelectorAll('.article-body a[href^="/references/"]')]
+          .map(a => a.getAttribute("href")),
         jsonLd: !!document.querySelector('script[type="application/ld+json"]'),
       };
     })(),
@@ -373,10 +380,12 @@ for (const vp of VIEWPORTS) {
     }
 
     if (route.startsWith("/insights/") && route !== "/insights/") {
-      record(`article-contract ${tag}`, "Article H1/H2, structured data, hub/business link 렌더링",
+      const expectedEvidence = ARTICLE_EVIDENCE_BY_ROUTE.get(route);
+      record(`article-contract ${tag}`, "Article H1/H2, structured data, hub/business/evidence link 렌더링",
         r.articleContract?.h1 === 1 && r.articleContract?.h2 >= 4 &&
-          r.articleContract.business && r.articleContract.hub && r.articleContract.jsonLd,
-        JSON.stringify(r.articleContract));
+          r.articleContract.business && r.articleContract.hub && r.articleContract.jsonLd &&
+          expectedEvidence && r.articleContract.evidenceTargets.includes(expectedEvidence),
+        JSON.stringify({ ...r.articleContract, expectedEvidence }));
     }
 
     record(`touch ${tag}`, "모든 visible a[href]/button 44x44px 이상 (width+height)",

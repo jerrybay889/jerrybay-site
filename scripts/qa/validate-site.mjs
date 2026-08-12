@@ -665,15 +665,28 @@ const expectedSeeds = [
   "/insights/aikus-learning-to-work-execution/",
   "/insights/static-first-search-foundation/",
 ];
+const expectedEvidenceBySeed = new Map([
+  ["/insights/ai-pilot-to-operating-system/", "/references/?type=government"],
+  ["/insights/aikus-learning-to-work-execution/", "/references/projects/aikus/"],
+  ["/insights/static-first-search-foundation/", "/references/"],
+]);
 check("20a", "B2 authority hub와 canonical seed article이 정확히 3개",
   !!insightHub && seedArticles.length === 3 && expectedSeeds.every((route) => seedArticles.some((p) => p.route === route)),
   seedArticles.map((p) => p.route).join(", "));
 
 const missingHubLinks = expectedSeeds.filter((route) => !insightHub?.html.includes(`href="${route}"`));
-const seedContractGaps = seedArticles.filter((p) =>
-  !p.html.includes('href="/business/"') || !p.html.includes('href="/insights/"') ||
-  !p.html.includes('href="https://tally.so/r/Y5bypd"') || !p.text.includes("프로젝트·컨설팅 문의") ||
-  !/<script type="application\/ld\+json">/.test(p.html)).map((p) => p.route);
+const seedContractGaps = seedArticles.flatMap((p) => {
+  const articleBody = p.html.match(/<div class="article-body">([\s\S]*?)<\/div>/)?.[1] || "";
+  const expectedEvidence = expectedEvidenceBySeed.get(p.route);
+  const baseContract = p.html.includes('href="/business/"') && p.html.includes('href="/insights/"') &&
+    p.html.includes('href="https://tally.so/r/Y5bypd"') && p.text.includes("프로젝트·컨설팅 문의") &&
+    /<script type="application\/ld\+json">/.test(p.html);
+  const distinctEvidence = !!expectedEvidence && expectedEvidence !== "/business/" &&
+    expectedEvidence !== "/insights/" && articleBody.includes(`href="${expectedEvidence}"`);
+  return baseContract && distinctEvidence ? [] : [
+    `${p.route}:evidence=${expectedEvidence || "missing-map"}:present=${distinctEvidence}`,
+  ];
+});
 check("20b", "Hub→seed와 seed→evidence/business/inquiry 내부 전환 계약",
   missingHubLinks.length === 0 && seedContractGaps.length === 0,
   `hub=${missingHubLinks.join(",")}; seed=${seedContractGaps.join(",")}`);

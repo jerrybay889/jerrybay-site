@@ -3,8 +3,9 @@
   if (!root) return;
   const search = root.querySelector('[data-editorial-search]');
   const filters = [...root.querySelectorAll('[data-editorial-filter]')];
-  const items = [...root.querySelectorAll('[data-editorial-item]')];
   const result = root.querySelector('[data-editorial-result]');
+  const itemScope = result?.parentElement || root;
+  const items = [...itemScope.querySelectorAll('[data-editorial-item]')];
   const paramName = root.dataset.filterParam || 'category';
   const params = new URLSearchParams(window.location.search);
   let active = params.get(paramName) || params.get('type') || params.get('category') || 'all';

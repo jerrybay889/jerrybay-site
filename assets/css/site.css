@@ -207,6 +207,35 @@ ul.ticks li { margin-bottom: 0.45rem; }
   margin-top: 2rem;
 }
 
+/* One restrained, site-wide consultation entry point. The form itself and
+   its visible title remain owned by Tally. */
+.tally-floating-trigger {
+  position: fixed;
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(76, 215, 246, 0.5);
+  border-radius: 999px;
+  background: rgba(27, 27, 32, 0.94);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.28);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.tally-floating-trigger:hover { color: var(--secondary); background: var(--surface-high); }
+.tally-floating-trigger > span[aria-hidden="true"] { color: var(--secondary); }
+
 /* In-content links (inline within paragraphs/definition lists) get an
    invisible 44x44 hit box without breaking sentence flow. inline-flex keeps
    each link as a single atomic unit on the line — it still wraps to a new

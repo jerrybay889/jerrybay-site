@@ -241,3 +241,30 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 - Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `P0/P1/P2 = 0`, STOP before Merge.
 - STOP before Merge. Under current Vercel integration, Merge is Production-impacting.
+
+## Current Gate / Evidence / Next Action — P08 inquiry popup parity
+
+### Current Gate
+
+- Gate: `WRITER CANDIDATE — INQUIRY POPUP PARITY / REVIEW PENDING`.
+- Branch: `codex/p08-inquiry-popup-parity-20260907`.
+- Fresh base: `origin/main@5f096f1bac8e600b612f98ee8f138937cf8442a6`.
+- Scope is limited to the shared Tally popup helper, inquiry destinations, the restrained floating trigger, removal of the standalone `/contact/` route, and matching deterministic QA contracts.
+- PR `#11` editorial lineage and public-truth copy are not reused or changed. This Writer result does not represent Reviewer approval, Ready, Merge, Production, or Publish.
+
+### Evidence
+
+- Static contract: `node scripts/qa/validate-site.mjs` → `292/292 PASS`.
+- External style/font adversarial fixtures: `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS`.
+- JavaScript syntax: `node --check` for the popup helper and both QA scripts → PASS.
+- HTML validation: the repository-wide 17-route run reproduces only the existing `30 aria-label-misuse` findings in Home (`2`) and References (`28`); changed inquiry implementation introduces no new HTML finding.
+- Chrome/CDP browser QA: `384/384 PASS` across 17 routes at desktop `1440×900` and mobile `390×844`. The suite verifies canonical form `Y5bypd`, modal layout, `540px` width, overlay, popup-title option absence, focus return, 44px targets, one floating trigger, menu behavior, overflow, console/network, and safe source/page/CTA/UTM attribution.
+- Rendered evidence: `C:\Users\jerry\AppData\Local\Temp\jerrybay-p08-browser-20260907-r2` (`35 PNG`); Home desktop/mobile and mobile-menu-open frames were visually inspected.
+- Visible-copy comparison against `origin/main`: all 17 retained route files match (`visibleCopyChanged=[]`).
+- External provider boundary: the site does not set a popup title. The required visible title remains a published Tally form setting for `Y5bypd` and must be reverified in Preview after that external setting is updated.
+
+### Next Action
+
+- Commit and push this bounded branch only.
+- Expected Preview evidence: `/`, `/business/`, and `/references/` render the shared popup from primary/navigation/floating triggers at both target viewports; `/contact/` is absent; no canonical Tally link opens a new tab; the modal shows the externally published Tally-owned title.
+- Require a fresh separate exact-SHA reviewer and STOP before Ready, Merge, Production, or Publish.

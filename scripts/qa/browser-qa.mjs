@@ -31,7 +31,7 @@ const [, , CDP = "http://127.0.0.1:9222", BASE = "http://127.0.0.1:4173", OUT = 
   process.argv;
 
 const ROUTES = [
-  "/", "/business/", "/capabilities/", "/work/", "/collaborate/", "/about/", "/contact/",
+  "/", "/business/", "/capabilities/", "/work/", "/collaborate/", "/about/",
   "/insights/", "/insights/ai-pilot-to-operating-system/", "/insights/aikus-learning-to-work-execution/",
   "/insights/static-first-search-foundation/",
   "/references/", "/references/projects/aikus/", "/references/projects/omyqt/", "/references/projects/invit/",
@@ -126,6 +126,8 @@ const PROBE = `(() => {
   }
   const primaries = [...document.querySelectorAll("a.btn--primary")]
     .map(a => ({ text: a.textContent.trim(), href: a.getAttribute("href"),
+                 popup: a.hasAttribute("data-tally-popup"),
+                 target: a.getAttribute("target"),
                  h: Math.round(a.getBoundingClientRect().height) }));
   const buildCardOverlaps = [...document.querySelectorAll(".build-card")]
     .filter((card) => {
@@ -157,6 +159,20 @@ const PROBE = `(() => {
                "(" + Math.round(r.width) + "x" + Math.round(r.height) + "px)");
   return {
     overflow, widest, primaries, smallTargets, buildCardOverlaps,
+    popupContract: (() => {
+      const triggers = [...document.querySelectorAll("[data-tally-popup]")];
+      const floating = document.querySelector("[data-tally-floating]");
+      const box = floating ? floating.getBoundingClientRect() : null;
+      return {
+        helperFormId: window.JerrybayTallyPopup?.formId || null,
+        triggerCount: triggers.length,
+        invalidTriggers: triggers
+          .filter(el => el.getAttribute("href") !== "https://tally.so/r/Y5bypd" || el.target === "_blank")
+          .map(el => el.textContent.trim()),
+        floatingCount: document.querySelectorAll("[data-tally-floating]").length,
+        floatingSize: box ? [Math.round(box.width), Math.round(box.height)] : null,
+      };
+    })(),
     innerWidth: window.innerWidth,
     scrollWidth: doc.scrollWidth,
     toggleVisible: !!toggleBox && toggleBox.width > 0 &&
@@ -194,6 +210,30 @@ const PROBE = `(() => {
       };
     })(),
   };
+})()`;
+
+const POPUP_PROBE = `(async () => {
+  const trigger = document.querySelector("a.btn--primary[data-tally-popup]");
+  if (!trigger) return { ok: false, why: "primary popup trigger missing" };
+  let call = null;
+  window.Tally = {
+    openPopup(formId, options) {
+      call = {
+        formId,
+        layout: options.layout,
+        width: options.width,
+        overlay: options.overlay,
+        hiddenFields: options.hiddenFields,
+        hasTitleOption: Object.prototype.hasOwnProperty.call(options, "title") ||
+          Object.prototype.hasOwnProperty.call(options, "hideTitle"),
+      };
+      options.onClose();
+      call.focusReturned = document.activeElement === trigger;
+    },
+  };
+  trigger.click();
+  await new Promise(r => setTimeout(r, 20));
+  return call || { ok: false, why: "openPopup not called" };
 })()`;
 
 // Opens the mobile menu, presses Escape, reports whether focus returned.
@@ -350,8 +390,28 @@ for (const vp of VIEWPORTS) {
       ctas.length > 0 &&
       ctas.every((c) => c.text === expectedCta) &&
       ctas.every((c) => c.href === CANONICAL_TALLY_URL) &&
+      ctas.every((c) => c.popup && c.target !== "_blank") &&
       ctas.every((c) => c.h >= 44),
       JSON.stringify(ctas));
+
+    record(`popup-static ${tag}`, "shared popup trigger/form/floating 계약 렌더링",
+      r.popupContract.helperFormId === "Y5bypd" &&
+      r.popupContract.triggerCount > 1 && r.popupContract.invalidTriggers.length === 0 &&
+      r.popupContract.floatingCount === 1 &&
+      r.popupContract.floatingSize?.[0] >= 44 && r.popupContract.floatingSize?.[1] >= 44,
+      JSON.stringify(r.popupContract));
+
+    const { result: popup } = await cdp.send("Runtime.evaluate", {
+      expression: POPUP_PROBE, returnByValue: true, awaitPromise: true,
+    });
+    const popupResult = popup.value;
+    record(`popup-open ${tag}`, "Tally modal 540px/overlay + safe attribution + focus return",
+      popupResult.formId === "Y5bypd" && popupResult.layout === "modal" &&
+      popupResult.width === 540 && popupResult.overlay === true && !popupResult.hasTitleOption &&
+      popupResult.hiddenFields?.source === "jerrybay" &&
+      popupResult.hiddenFields?.source_page === route &&
+      !!popupResult.hiddenFields?.cta && popupResult.focusReturned,
+      JSON.stringify(popupResult));
 
     if (route === "/") {
       record(`v4-sections ${tag}`, "V4-G1 홈 8개 section이 DOM에 존재",
@@ -421,6 +481,45 @@ for (const vp of VIEWPORTS) {
     }
   }
 }
+
+// The helper must forward only the fixed source, pathname, CTA and five
+// allowlisted UTM fields. Arbitrary query values are stripped while Tally
+// creates the popup, then the visitor's address bar is restored unchanged.
+await cdp.send("Emulation.setDeviceMetricsOverride", {
+  width: 1440, height: 900, deviceScaleFactor: 1, mobile: false,
+});
+const attributionQuery =
+  "?utm_source=linkedin&utm_medium=paid-social&utm_campaign=launch_2026" +
+  "&utm_content=hero-a&utm_term=ai-consulting&email=person%40example.com&phone=01012345678";
+await cdp.send("Page.navigate", { url: BASE + "/" + attributionQuery });
+await sleep(700);
+const { result: attribution } = await cdp.send("Runtime.evaluate", {
+  expression: `(async () => {
+    let call = null;
+    window.Tally = { openPopup(formId, options) {
+      call = {
+        formId,
+        fields: options.hiddenFields,
+        searchDuringOpen: window.location.search,
+      };
+    } };
+    document.querySelector("a.btn--primary[data-tally-popup]").click();
+    await new Promise(r => setTimeout(r, 20));
+    return { ...call, searchAfterOpen: window.location.search };
+  })()`,
+  returnByValue: true,
+  awaitPromise: true,
+});
+const attributionResult = attribution.value;
+const attributionKeys = Object.keys(attributionResult.fields || {}).sort();
+record("popup safe-attribution", "source/page/CTA/UTM allowlist만 전달하고 host URL 복원",
+  attributionResult.formId === "Y5bypd" && attributionResult.searchDuringOpen === "" &&
+  attributionResult.searchAfterOpen === attributionQuery &&
+  JSON.stringify(attributionKeys) === JSON.stringify([
+    "cta", "source", "source_page", "utm_campaign", "utm_content", "utm_medium", "utm_source", "utm_term",
+  ]) && attributionResult.fields.source === "jerrybay" && attributionResult.fields.source_page === "/" &&
+  !Object.hasOwn(attributionResult.fields, "email") && !Object.hasOwn(attributionResult.fields, "phone"),
+  JSON.stringify(attributionResult));
 
 // F-002: resizing past the desktop breakpoint while the menu is open must
 // release the scroll lock too, not just Escape/link-click/toggle-click.

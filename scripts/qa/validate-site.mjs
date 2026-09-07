@@ -27,7 +27,6 @@ const ROUTES = [
   { route: "/work/", file: "work/index.html" },
   { route: "/collaborate/", file: "collaborate/index.html" },
   { route: "/about/", file: "about/index.html" },
-  { route: "/contact/", file: "contact/index.html" },
   { route: "/references/", file: "references/index.html" },
   { route: "/references/projects/aikus/", file: "references/projects/aikus/index.html" },
   { route: "/references/projects/omyqt/", file: "references/projects/omyqt/index.html" },
@@ -81,18 +80,20 @@ function walkHtml(dir, acc = []) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Exactly 18 route entry HTML files, and no stray public HTML.
+// 1. Exactly 17 route entry HTML files, and no stray public HTML.
 // ---------------------------------------------------------------------------
 const missing = ROUTES.filter((r) => !existsSync(join(ROOT, r.file)));
-check("01a", "18개 route 파일이 모두 존재", missing.length === 0,
+check("01a", "17개 route 파일이 모두 존재", missing.length === 0,
   missing.map((r) => r.file).join(", "));
 
 const allHtml = walkHtml(".").sort();
 const expected = ROUTES.map((r) => r.file).sort();
-const stray = allHtml.filter((f) => !expected.includes(f));
-check("01b", "public HTML 파일이 정확히 18개 (stray 없음)",
-  allHtml.length === 18 && stray.length === 0,
-  stray.length ? `stray: ${stray.join(", ")}` : `count=${allHtml.length}`);
+const allowedVerificationFiles = ["naver380921eb1234dc3b8a91569b2b9096a4.html"];
+const stray = allHtml.filter((f) => !expected.includes(f) && !allowedVerificationFiles.includes(f));
+check("01b", "public route HTML 17개 + 소유권 확인 파일만 존재",
+  expected.every((f) => allHtml.includes(f)) &&
+    allowedVerificationFiles.every((f) => allHtml.includes(f)) && stray.length === 0,
+  stray.length ? `stray: ${stray.join(", ")}` : `routes=${expected.length}; verification=${allowedVerificationFiles.length}`);
 
 // Load every page once.
 const pages = ROUTES.filter((r) => existsSync(join(ROOT, r.file)))
@@ -352,10 +353,47 @@ const deferredLinks = pages.flatMap((p) =>
 );
 check("15b", "Ideas Lab 등 이연 라우트 링크 없음", deferredLinks.length === 0, deferredLinks.join(", "));
 
-// Contact must not collect data in-page.
-const contact = pages.find((p) => p.route === "/contact/");
-check("15c", "Contact에 데이터 수집 form 없음",
-  !!contact && !/<form\b/i.test(contact.html) && !/<input\b/i.test(contact.html), "");
+// Inquiry is popup-only: no standalone Contact route or legacy destination.
+const legacyContactLinks = pages.flatMap((p) =>
+  [...p.html.matchAll(/<a\b[^>]*href="([^"]*\/contact\/?(?:[?#][^"]*)?)"[^>]*>/gi)]
+    .map((m) => `${p.route}:${m[1]}`)
+);
+check("15c", "standalone /contact/ route와 public destination이 없음",
+  !existsSync(join(ROOT, "contact", "index.html")) && legacyContactLinks.length === 0,
+  legacyContactLinks.join(", "));
+
+const popupHelper = read("assets/js/tally-popup.js");
+const popupLoadGaps = pages
+  .filter((p) => (p.html.match(/src="\/assets\/js\/tally-popup\.js"/g) || []).length !== 1)
+  .map((p) => p.route);
+check("15d", "모든 public page가 shared Tally popup helper를 정확히 한 번 로드",
+  popupLoadGaps.length === 0, popupLoadGaps.join(", "));
+
+const popupLinkGaps = pages.flatMap((p) =>
+  [...p.html.matchAll(/<a\b[^>]*href="https:\/\/tally\.so\/r\/Y5bypd"[^>]*>/gi)]
+    .filter((m) => !/\bdata-tally-popup(?:\s|=|>)/i.test(m[0]) || /\btarget="_blank"/i.test(m[0]))
+    .map((m) => `${p.route}:${m[0]}`)
+);
+const semanticInquiryGaps = pages.flatMap((p) =>
+  [...p.html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)]
+    .filter((m) => /(?:상담|문의|Contact)/i.test(m[2].replace(/<[^>]+>/g, "")))
+    .filter((m) => !/href="https:\/\/tally\.so\/r\/Y5bypd"/i.test(m[1]) || !/\bdata-tally-popup\b/i.test(m[1]))
+    .map((m) => `${p.route}:${m[2].replace(/<[^>]+>/g, "").trim()}`)
+);
+check("15e", "모든 상담·문의 trigger가 canonical form popup이며 새 탭을 열지 않음",
+  popupLinkGaps.length === 0 && semanticInquiryGaps.length === 0,
+  [...popupLinkGaps, ...semanticInquiryGaps].join(" | "));
+
+const popupContract = popupHelper.includes('var FORM_ID = "Y5bypd"') &&
+  popupHelper.includes('layout: "modal"') && popupHelper.includes("width: 540") &&
+  popupHelper.includes("overlay: true") && popupHelper.includes('source: "jerrybay"') &&
+  popupHelper.includes("source_page:") && popupHelper.includes("hiddenFields: fields") &&
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]
+    .every((key) => popupHelper.includes(`"${key}"`));
+const popupTitleOwnedByTally = !/\b(?:title|hideTitle)\s*:/.test(popupHelper) &&
+  !popupHelper.includes("상담및문의");
+check("15f", "modal/form/attribution 계약 고정 및 site-code popup title 부재",
+  popupContract && popupTitleOwnedByTally, "");
 
 // ---------------------------------------------------------------------------
 // 16. Zero external font/icon-font network dependency (F-003 remediation).
@@ -518,7 +556,7 @@ const businessTallyLinks = business
   ? [...business.html.matchAll(/<a\b[^>]*class="[^"]*\bbtn--primary\b[^"]*"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)]
       .map((m) => ({ href: m[1], label: m[2].replace(/<[^>]+>/g, "").trim() }))
   : [];
-check("20b", "B1 Primary CTA가 exact Tally base URL과 exact 문구만 사용",
+check("20b", "B1 Primary CTA가 exact Tally popup과 exact 문구만 사용",
   businessTallyLinks.length >= 2 && businessTallyLinks.every(
     (link) => link.href === "https://tally.so/r/Y5bypd" && link.label === "프로젝트·컨설팅 문의"
   ), JSON.stringify(businessTallyLinks));
@@ -679,7 +717,7 @@ const seedContractGaps = seedArticles.flatMap((p) => {
   const articleBody = p.html.match(/<div class="article-body">([\s\S]*?)<\/div>/)?.[1] || "";
   const expectedEvidence = expectedEvidenceBySeed.get(p.route);
   const baseContract = p.html.includes('href="/business/"') && p.html.includes('href="/insights/"') &&
-    p.html.includes('href="https://tally.so/r/Y5bypd"') && p.text.includes("프로젝트·컨설팅 문의") &&
+    p.html.includes('href="https://tally.so/r/Y5bypd" data-tally-popup') && p.text.includes("프로젝트·컨설팅 문의") &&
     /<script type="application\/ld\+json">/.test(p.html);
   const distinctEvidence = !!expectedEvidence && expectedEvidence !== "/business/" &&
     expectedEvidence !== "/insights/" && articleBody.includes(`href="${expectedEvidence}"`);
@@ -701,8 +739,8 @@ check("20c", "Insights structured data JSON이 파싱 가능", structuredDataFai
 const sitemap = read("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 const expectedCanonicalUrls = ROUTES.map((r) => `https://www.jerrybay.kr${r.route}`);
-check("20d", "sitemap은 18개 canonical public URL만 노출",
-  sitemapUrls.length === 18 && new Set(sitemapUrls).size === 18 &&
+check("20d", "sitemap은 17개 canonical public URL만 노출",
+  sitemapUrls.length === 17 && new Set(sitemapUrls).size === 17 &&
     expectedCanonicalUrls.every((url) => sitemapUrls.includes(url)) &&
     sitemapUrls.every((url) => expectedCanonicalUrls.includes(url)),
   `count=${sitemapUrls.length}`);

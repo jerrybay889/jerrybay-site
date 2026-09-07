@@ -14,9 +14,10 @@ Start with [`docs/jerrybay-v4/00_GOAL.md`](docs/jerrybay-v4/00_GOAL.md) and [`do
 
 - Static HTML, CSS, and progressive JavaScript; no build step
 - `/` is the canonical Korean-first long-form portfolio
-- Six original supporting routes are preserved; no dedicated `/privacy/` route is exposed; `/references/` and six project-detail routes provide the Reference/Projects archive
+- Public inquiry uses one button-triggered Tally modal; no standalone `/contact/` or `/privacy/` route is exposed
+- `/references/` and six project-detail routes provide the Reference/Projects archive
 - Local system fonts only; no remote stylesheet, font, or icon-font dependency
-- Approved Tally intake remains an outbound link; no in-page collection or tracking
+- Approved Tally intake uses the shared popup helper with public-safe source-page, CTA, and UTM attribution; no in-page form collection or analytics tracking
 
 ## Run locally
 
@@ -31,7 +32,7 @@ Open `http://127.0.0.1:4173/`.
 ```bash
 node scripts/qa/validate-site.mjs
 node scripts/qa/test-external-style-font-policy.mjs
-npx --yes html-validate index.html capabilities/index.html work/index.html collaborate/index.html about/index.html contact/index.html references/index.html references/projects/aikus/index.html references/projects/omyqt/index.html references/projects/invit/index.html references/projects/casper-electric-ai-drawing/index.html references/projects/renault-sm6-ai-drawing/index.html references/projects/fashion-ai-generator/index.html
+npx --yes html-validate index.html capabilities/index.html work/index.html collaborate/index.html about/index.html business/index.html insights/index.html insights/ai-pilot-to-operating-system/index.html insights/aikus-learning-to-work-execution/index.html insights/static-first-search-foundation/index.html references/index.html references/projects/aikus/index.html references/projects/omyqt/index.html references/projects/invit/index.html references/projects/casper-electric-ai-drawing/index.html references/projects/renault-sm6-ai-drawing/index.html references/projects/fashion-ai-generator/index.html
 ```
 
 Browser QA uses Node 22 or later and an already-running Chromium browser with CDP enabled:

@@ -79,6 +79,14 @@
     return widgetPromise;
   }
 
+  function getCloseFocusTarget(trigger) {
+    var navToggle = document.querySelector("[data-nav-toggle]");
+    var openedFromPrimaryNav = !!trigger.closest("#primary-nav");
+    var toggleIsVisible = navToggle && navToggle.getClientRects().length > 0;
+
+    return openedFromPrimaryNav && toggleIsVisible ? navToggle : trigger;
+  }
+
   function openPopup(trigger) {
     if (opening) return;
     opening = true;
@@ -97,7 +105,7 @@
           width: 540,
           overlay: true,
           hiddenFields: fields,
-          onClose: function () { trigger.focus(); },
+          onClose: function () { getCloseFocusTarget(trigger).focus(); },
         });
       } finally {
         if (strippedQuery) window.history.replaceState(window.history.state, "", originalUrl);

@@ -236,6 +236,59 @@ const POPUP_PROBE = `(async () => {
   return call || { ok: false, why: "openPopup not called" };
 })()`;
 
+// Regression: a popup launched from the 390px primary navigation closes that
+// menu first, so focus must return to the still-visible menu toggle rather
+// than the now-hidden inquiry link.
+const MOBILE_NAV_POPUP_FOCUS_PROBE = `(async () => {
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const nav = document.getElementById("primary-nav");
+  const trigger = nav?.querySelector("[data-tally-popup]");
+  if (!toggle || !nav || !trigger) {
+    return { ok: false, why: "mobile inquiry menu elements missing" };
+  }
+
+  let closePopup = null;
+  let formId = null;
+  window.Tally = {
+    openPopup(id, options) {
+      formId = id;
+      closePopup = options.onClose;
+    },
+  };
+
+  toggle.click();
+  await new Promise(r => setTimeout(r, 60));
+  const menuOpened = nav.getAttribute("data-open") === "true" &&
+    toggle.getAttribute("aria-expanded") === "true" &&
+    getComputedStyle(nav).display !== "none";
+
+  trigger.click();
+  await new Promise(r => setTimeout(r, 20));
+  const menuClosed = nav.getAttribute("data-open") !== "true" &&
+    toggle.getAttribute("aria-expanded") === "false" &&
+    getComputedStyle(nav).display === "none";
+  const triggerHidden = trigger.getClientRects().length === 0;
+  const toggleBox = toggle.getBoundingClientRect();
+  const toggleVisible = toggle.getClientRects().length > 0 &&
+    toggleBox.width >= 44 && toggleBox.height >= 44;
+
+  if (typeof closePopup === "function") closePopup();
+  await new Promise(r => setTimeout(r, 20));
+  const focusReturnedToToggle = document.activeElement === toggle;
+
+  return {
+    ok: window.innerWidth === 390 && menuOpened && menuClosed && triggerHidden &&
+      toggleVisible && formId === "Y5bypd" && focusReturnedToToggle,
+    innerWidth: window.innerWidth,
+    menuOpened,
+    menuClosed,
+    triggerHidden,
+    toggleVisible,
+    formId,
+    focusReturnedToToggle,
+  };
+})()`;
+
 // Opens the mobile menu, presses Escape, reports whether focus returned.
 const MENU_PROBE = `(async () => {
   const t = document.querySelector("[data-nav-toggle]");
@@ -465,6 +518,17 @@ for (const vp of VIEWPORTS) {
       });
       record(`menu ${tag}`, "메뉴 open → ESC close → focus 복귀",
         menu.value.ok, JSON.stringify(menu.value));
+
+      if (route === "/") {
+        const { result: mobilePopupFocus } = await cdp.send("Runtime.evaluate", {
+          expression: MOBILE_NAV_POPUP_FOCUS_PROBE,
+          returnByValue: true,
+          awaitPromise: true,
+        });
+        record("popup mobile-nav focus home-mobile",
+          "390px 메뉴 문의 → popup close → visible menu toggle focus 복귀",
+          mobilePopupFocus.value.ok, JSON.stringify(mobilePopupFocus.value));
+      }
 
       await testScrollLock(cdp, vp, tag, record);
 

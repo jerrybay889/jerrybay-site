@@ -246,10 +246,11 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 ### Current Gate
 
-- Gate: `WRITER CANDIDATE — INQUIRY POPUP PARITY / REVIEW PENDING`.
+- Gate: `WRITER REMEDIATION CANDIDATE — MOBILE POPUP FOCUS / REVIEW PENDING`.
 - Branch: `codex/p08-inquiry-popup-parity-20260907`.
 - Fresh base: `origin/main@5f096f1bac8e600b612f98ee8f138937cf8442a6`.
 - Implementation commit: `b514aaee870f6068ebcb7be4111bf853198c331a`.
+- Source-owned P1 remediation base: `5e544710200321b7ff1d02acff71ed5a764984d0`.
 - Current branch Head: the exact HEAD after this State record commit; resolve with `git rev-parse HEAD` and remote branch metadata.
 - Scope is limited to the shared Tally popup helper, inquiry destinations, the restrained floating trigger, removal of the standalone `/contact/` route, and matching deterministic QA contracts.
 - PR `#11` editorial lineage and public-truth copy are not reused or changed. This Writer result does not represent Reviewer approval, Ready, Merge, Production, or Publish.
@@ -260,14 +261,14 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 - External style/font adversarial fixtures: `node scripts/qa/test-external-style-font-policy.mjs` → `29/29 PASS`.
 - JavaScript syntax: `node --check` for the popup helper and both QA scripts → PASS.
 - HTML validation: the repository-wide 17-route run reproduces only the existing `30 aria-label-misuse` findings in Home (`2`) and References (`28`); changed inquiry implementation introduces no new HTML finding.
-- Chrome/CDP browser QA: `384/384 PASS` across 17 routes at desktop `1440×900` and mobile `390×844`. The suite verifies canonical form `Y5bypd`, modal layout, `540px` width, overlay, popup-title option absence, focus return, 44px targets, one floating trigger, menu behavior, overflow, console/network, and safe source/page/CTA/UTM attribution.
-- Rendered evidence: `C:\Users\jerry\AppData\Local\Temp\jerrybay-p08-browser-20260907-r2` (`35 PNG`); Home desktop/mobile and mobile-menu-open frames were visually inspected.
+- Chrome/CDP browser QA: `385/385 PASS` across 17 routes at desktop `1440×900` and mobile `390×844`. The added 390px regression proves that a popup opened from `#primary-nav` closes the menu, leaves its invoking link hidden, keeps the 48px menu toggle visible, and restores `document.activeElement` to that toggle on close. Existing desktop and non-menu popup probes still restore focus to their original invoking trigger.
+- Rendered evidence: `C:\Users\jerry\AppData\Local\Temp\jerrybay-p08-focus-browser-20260907` (`35 PNG`); Home desktop/mobile and mobile-menu-open frames were visually inspected.
 - Visible-copy comparison against `origin/main`: all 17 retained route files match (`visibleCopyChanged=[]`).
-- External provider boundary: the site does not set a popup title. The required visible title remains a published Tally form setting for `Y5bypd` and must be reverified in Preview after that external setting is updated.
+- External provider boundary is unchanged: site code does not set a popup title. Reviewer-observed Tally title remains `JERRYBAY 상담 요청`; the Owner-required published visible title remains `상담및문의` (`U+C0C1 U+B2F4 U+BC0F U+BB38 U+C758`). The eight attribution hidden fields and close-control accessible name also remain provider-owned and unresolved; no provider mutation or form submission occurred.
 - GitHub deployment `6304152815` for the implementation commit reported `Preview / success` at `https://jerrybay-site-d6qho8vco-jerrybay889s-projects.vercel.app`. Unauthenticated checks of `/`, `/business/`, `/references/`, and `/contact/` each redirect to Vercel SSO, so no served-route or popup claim is made from that protected response.
 
 ### Next Action
 
-- The bounded branch is committed and pushed. Resolve final branch Head and its attached Preview status from current Git/GitHub metadata.
+- The bounded source-owned P1 remediation is included in the current branch Head; resolve the exact commit and remote state from current Git metadata.
 - Required authenticated Preview evidence: `/`, `/business/`, and `/references/` render the shared popup from primary/navigation/floating triggers at both target viewports; `/contact/` is absent; no canonical Tally link opens a new tab; the modal shows the externally published Tally-owned title.
 - Require a fresh separate exact-SHA reviewer and STOP before Ready, Merge, Production, or Publish.

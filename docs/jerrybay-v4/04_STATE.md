@@ -249,6 +249,8 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 - Gate: `WRITER CANDIDATE — INQUIRY POPUP PARITY / REVIEW PENDING`.
 - Branch: `codex/p08-inquiry-popup-parity-20260907`.
 - Fresh base: `origin/main@5f096f1bac8e600b612f98ee8f138937cf8442a6`.
+- Implementation commit: `b514aaee870f6068ebcb7be4111bf853198c331a`.
+- Current branch Head: the exact HEAD after this State record commit; resolve with `git rev-parse HEAD` and remote branch metadata.
 - Scope is limited to the shared Tally popup helper, inquiry destinations, the restrained floating trigger, removal of the standalone `/contact/` route, and matching deterministic QA contracts.
 - PR `#11` editorial lineage and public-truth copy are not reused or changed. This Writer result does not represent Reviewer approval, Ready, Merge, Production, or Publish.
 
@@ -262,9 +264,10 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 - Rendered evidence: `C:\Users\jerry\AppData\Local\Temp\jerrybay-p08-browser-20260907-r2` (`35 PNG`); Home desktop/mobile and mobile-menu-open frames were visually inspected.
 - Visible-copy comparison against `origin/main`: all 17 retained route files match (`visibleCopyChanged=[]`).
 - External provider boundary: the site does not set a popup title. The required visible title remains a published Tally form setting for `Y5bypd` and must be reverified in Preview after that external setting is updated.
+- GitHub deployment `6304152815` for the implementation commit reported `Preview / success` at `https://jerrybay-site-d6qho8vco-jerrybay889s-projects.vercel.app`. Unauthenticated checks of `/`, `/business/`, `/references/`, and `/contact/` each redirect to Vercel SSO, so no served-route or popup claim is made from that protected response.
 
 ### Next Action
 
-- Commit and push this bounded branch only.
-- Expected Preview evidence: `/`, `/business/`, and `/references/` render the shared popup from primary/navigation/floating triggers at both target viewports; `/contact/` is absent; no canonical Tally link opens a new tab; the modal shows the externally published Tally-owned title.
+- The bounded branch is committed and pushed. Resolve final branch Head and its attached Preview status from current Git/GitHub metadata.
+- Required authenticated Preview evidence: `/`, `/business/`, and `/references/` render the shared popup from primary/navigation/floating triggers at both target viewports; `/contact/` is absent; no canonical Tally link opens a new tab; the modal shows the externally published Tally-owned title.
 - Require a fresh separate exact-SHA reviewer and STOP before Ready, Merge, Production, or Publish.

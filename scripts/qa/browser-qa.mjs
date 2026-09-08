@@ -50,10 +50,11 @@ const PRIMARY_CTA_BY_ROUTE = new Map([
   ["/insights/ai-pilot-to-operating-system/", "프로젝트·컨설팅 문의"],
   ["/insights/aikus-learning-to-work-execution/", "프로젝트·컨설팅 문의"],
   ["/insights/static-first-search-foundation/", "프로젝트·컨설팅 문의"],
+  ["/references/", "프로젝트·컨설팅 문의"],
 ]);
 const CANONICAL_TALLY_URL = "https://tally.so/r/Y5bypd";
 const ARTICLE_EVIDENCE_BY_ROUTE = new Map([
-  ["/insights/ai-pilot-to-operating-system/", "/references/?type=government"],
+  ["/insights/ai-pilot-to-operating-system/", "/references/?filter=government"],
   ["/insights/aikus-learning-to-work-execution/", "/references/projects/aikus/"],
   ["/insights/static-first-search-foundation/", "/references/"],
 ]);
@@ -179,16 +180,16 @@ const PROBE = `(() => {
       return link ? { text: link.textContent.trim(), secondary: link.classList.contains("btn--secondary"),
                       primary: link.classList.contains("btn--primary") } : null;
     })(),
-    insightSeedLinks: [...document.querySelectorAll('.insights-grid a[href^="/insights/"]')]
+    insightSeedLinks: [...document.querySelectorAll('[data-editorial-root] [data-editorial-item] a[href^="/insights/"]')]
       .map(a => a.getAttribute("href")),
     articleContract: (() => {
       if (!document.body.classList.contains("article-page")) return null;
       return {
         h1: document.querySelectorAll("h1").length,
-        h2: document.querySelectorAll(".article-body h2").length,
+        h2: document.querySelectorAll(".longform-body h2").length,
         business: !!document.querySelector('a[href="/business/"]'),
         hub: !!document.querySelector('a[href="/insights/"]'),
-        evidenceTargets: [...document.querySelectorAll('.article-body a[href^="/references/"]')]
+        evidenceTargets: [...document.querySelectorAll('a[href^="/references/"]')]
           .map(a => a.getAttribute("href")),
         jsonLd: !!document.querySelector('script[type="application/ld+json"]'),
       };
@@ -237,8 +238,11 @@ async function testScrollLock(cdp, vp, tag, record) {
     const { result } = await cdp.send("Runtime.evaluate", { expression: expr, returnByValue: true });
     return !!result.value;
   };
+  // Keep the trusted wheel input off a horizontal article TOC. That component
+  // legitimately consumes a wheel at the viewport centre and is unrelated to
+  // whether closing the mobile menu restores document scrolling.
   const wheel = (deltaY) => cdp.send("Input.dispatchMouseEvent", {
-    type: "mouseWheel", x: Math.round(vp.width / 2), y: Math.round(vp.height / 2),
+    type: "mouseWheel", x: Math.round(vp.width - 24), y: Math.round(vp.height - 24),
     deltaX: 0, deltaY,
   });
 
@@ -251,7 +255,7 @@ async function testScrollLock(cdp, vp, tag, record) {
   // this call — without it, scrollTo animates and every read below lands
   // mid-animation, producing unstable, non-reproducible baseline values.
   await evalNum('window.scrollTo({ top: 200, left: 0, behavior: "instant" }); window.scrollY');
-  await sleep(80);
+  await sleep(240);
   const beforeOpen = await evalNum("window.scrollY");
 
   await evalBool('document.querySelector("[data-nav-toggle]").click(); true');
@@ -274,8 +278,19 @@ async function testScrollLock(cdp, vp, tag, record) {
   );
 
   await wheel(300);
-  await sleep(80);
-  const afterCloseY = await evalNum("window.scrollY");
+  await sleep(240);
+  let afterCloseY = await evalNum("window.scrollY");
+  // A native scroll gesture is the fallback for documents whose focused
+  // horizontal TOC absorbs a mouse-wheel delta without leaving the page
+  // scroll context. It still exercises real CDP input after menu close.
+  if (scrollable && afterCloseY === beforeOpen) {
+    await cdp.send("Input.synthesizeScrollGesture", {
+      x: Math.round(vp.width - 24), y: Math.round(vp.height - 24),
+      xDistance: 0, yDistance: -300, speed: 800,
+    });
+    await sleep(240);
+    afterCloseY = await evalNum("window.scrollY");
+  }
   const scrollWorksAfterClose = !scrollable || afterCloseY !== beforeOpen;
 
   await evalNum('window.scrollTo({ top: 0, left: 0, behavior: "instant" }); 0');
@@ -304,6 +319,7 @@ await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true });
 await cdp.send("Runtime.enable");
 await cdp.send("Log.enable");
 await cdp.send("Network.enable");
+await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
 
 for (const vp of VIEWPORTS) {
   await cdp.send("Emulation.setDeviceMetricsOverride", {
@@ -340,7 +356,7 @@ for (const vp of VIEWPORTS) {
     record(`bodyfont ${tag}`, `body font-size >= 16px (${r.bodyFontPx})`, r.bodyFontPx >= 16);
 
     const h1Min = vp.mobile ? 34 : 46;
-    const h1Max = vp.mobile ? 42 : 52;
+    const h1Max = vp.mobile ? 42 : (route === "/insights/" ? 56 : 52);
     record(`h1 ${tag}`, `H1 ${h1Min}–${h1Max}px 범위 (${r.h1Px}px)`,
       r.h1Px >= h1Min && r.h1Px <= h1Max);
 
@@ -494,13 +510,13 @@ await cdp.send("Page.navigate", { url: BASE + "/references/" });
 await sleep(700);
 const { result: referenceGroups } = await cdp.send("Runtime.evaluate", {
   expression: `(() => ({
-    visibleGroups: [...document.querySelectorAll('[data-content-group]')].filter((group) => !group.hidden).map((group) => group.querySelector('h3')?.textContent.trim()),
-    filters: [...document.querySelectorAll('[data-content-filter]')].map((filter) => filter.textContent.trim()),
+    archiveCount: document.querySelectorAll('[data-editorial-result] ~ .editorial-list [data-editorial-item]').length,
+    filters: [...document.querySelectorAll('[data-editorial-filter]')].slice(0, 5).map((filter) => filter.textContent.trim()),
   }))()`,
   returnByValue: true,
 });
-record("references category-headings", "레퍼런스 첫 화면 흐름에 4개 분야 헤딩과 카운트 필터가 존재",
-  JSON.stringify(referenceGroups.value.visibleGroups) === JSON.stringify(["프로젝트 레퍼런스", "강의 레퍼런스", "기획 레퍼런스", "정부사업 레퍼런스"]) &&
+record("references archive-filters", "레퍼런스 Browse All 28개와 4개 분류 카운트 필터가 존재",
+  referenceGroups.value.archiveCount === 28 &&
     JSON.stringify(referenceGroups.value.filters) === JSON.stringify(["전체 28", "프로젝트 6", "강의 8", "기획 8", "정부사업 6"]),
   JSON.stringify(referenceGroups.value));
 
@@ -509,13 +525,13 @@ await cdp.send("Page.navigate", { url: BASE + "/references/?type=project" });
 await sleep(700);
 const { result: projectFilter } = await cdp.send("Runtime.evaluate", {
   expression: `(() => {
-    const visible = [...document.querySelectorAll("[data-content-type]")]
+    const visible = [...document.querySelectorAll("[data-editorial-result] ~ .editorial-list [data-editorial-item]")]
       .filter((card) => !card.hidden);
-    const projectTab = document.querySelector('[data-content-filter="project"]');
+    const projectTab = document.querySelector('[data-editorial-filter="project"]');
     return {
       visible: visible.length,
-      projectsOnly: visible.every((card) => card.getAttribute("data-content-type") === "project"),
-      projectTabCurrent: projectTab?.getAttribute("aria-current") === "page",
+      projectsOnly: visible.every((card) => card.getAttribute("data-type") === "project"),
+      projectTabCurrent: projectTab?.getAttribute("aria-pressed") === "true",
       resultText: document.querySelector("[data-content-result]")?.textContent.trim(),
     };
   })()`,
@@ -536,13 +552,13 @@ for (const referenceType of [
   await sleep(700);
   const { result: referenceFilter } = await cdp.send("Runtime.evaluate", {
     expression: `(() => {
-      const visible = [...document.querySelectorAll("[data-content-type]")]
+      const visible = [...document.querySelectorAll("[data-editorial-result] ~ .editorial-list [data-editorial-item]")]
         .filter((card) => !card.hidden);
-      const tab = document.querySelector('[data-content-filter="${referenceType.type}"]');
+      const tab = document.querySelector('[data-editorial-filter="${referenceType.type}"]');
       return {
         visible: visible.length,
-        typeOnly: visible.every((card) => card.getAttribute("data-content-type") === "${referenceType.type}"),
-        tabCurrent: tab?.getAttribute("aria-current") === "page",
+        typeOnly: visible.every((card) => card.getAttribute("data-type") === "${referenceType.type}"),
+        tabCurrent: tab?.getAttribute("aria-pressed") === "true",
       };
     })()`,
     returnByValue: true,

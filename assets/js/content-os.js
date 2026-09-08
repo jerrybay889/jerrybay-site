@@ -6,16 +6,23 @@
   const result = root.querySelector('[data-editorial-result]');
   const itemScope = result?.parentElement || root;
   const items = [...itemScope.querySelectorAll('[data-editorial-item]')];
+  const groupNotes = [...itemScope.querySelectorAll('[data-editorial-group-note]')];
   const paramName = root.dataset.filterParam || 'category';
   const params = new URLSearchParams(window.location.search);
   let active = params.get(paramName) || params.get('type') || params.get('category') || 'all';
   const normalize = value => (value || '').toLocaleLowerCase('ko-KR').trim();
   const tokensFor = item => [item.dataset.category,item.dataset.type,item.dataset.topics,item.dataset.tags].filter(Boolean).join(' ').split(/[\s,|]+/).map(normalize);
-  const itemMatchesFilter = item => active === 'all' || tokensFor(item).includes(normalize(active));
+  const filterTokens = value => normalize(value).split(/[|,]+/).map(normalize).filter(Boolean);
+  const itemMatchesFilter = item => {
+    if (active === 'all') return true;
+    const selected = filterTokens(active);
+    if (paramName === 'filter') return selected.includes(normalize(item.dataset.type));
+    return selected.some(token => tokensFor(item).includes(token));
+  };
   const itemMatchesSearch = item => { const q=normalize(search?.value); return !q || normalize(item.textContent).includes(q); };
-  const syncFilterState = () => filters.forEach(button => { const on=normalize(button.dataset.editorialFilter||'all')===normalize(active); button.setAttribute('aria-pressed',String(on)); button.classList.toggle('is-active',on); });
+  const syncFilterState = () => filters.forEach(button => { const value=button.dataset.editorialFilter||'all'; const on=normalize(value)===normalize(active)||filterTokens(value).includes(normalize(active)); button.setAttribute('aria-pressed',String(on)); button.classList.toggle('is-active',on); });
   const updateUrl = () => { const url=new URL(window.location.href); url.searchParams.delete('type'); url.searchParams.delete('category'); if(active==='all') url.searchParams.delete(paramName); else url.searchParams.set(paramName,active); history.replaceState({},'',`${url.pathname}${url.search}${url.hash}`); };
-  const render = () => { let visible=0; items.forEach(item=>{ const show=itemMatchesFilter(item)&&itemMatchesSearch(item); item.hidden=!show; if(show)visible++; }); if(result) result.textContent=`현재 조건에서 ${visible}개의 레퍼런스를 볼 수 있습니다.`.replace('레퍼런스를',root.dataset.resultNoun||'콘텐츠를'); syncFilterState(); };
+  const render = () => { let visible=0; items.forEach(item=>{ const show=itemMatchesFilter(item)&&itemMatchesSearch(item); item.hidden=!show; if(show)visible++; }); groupNotes.forEach(note=>{ const type=normalize(note.dataset.editorialGroupNote); note.hidden=!!search?.value || (active!=='all' && !filterTokens(active).includes(type)); }); if(result) result.textContent=`현재 조건에서 ${visible}개의 레퍼런스를 볼 수 있습니다.`.replace('레퍼런스를',root.dataset.resultNoun||'콘텐츠를'); syncFilterState(); };
   filters.forEach(button=>button.addEventListener('click',event=>{ if(button.tagName==='A')event.preventDefault(); active=button.dataset.editorialFilter||'all'; updateUrl(); render(); }));
   search?.addEventListener('input',render); syncFilterState(); render();
 })();

@@ -1,4 +1,4 @@
-/* JERRYBAY preview — progressive enhancement plus bounded owner-review cleanup. */
+/* JERRYBAY source-finalized progressive enhancement. */
 (function () {
   "use strict";
 
@@ -153,27 +153,6 @@
     });
   }
 
-  function applyOwnerPreviewCleanup() {
-    var quickWin = document.getElementById("quick-win");
-    if (quickWin) quickWin.remove();
-
-    document.querySelectorAll(".section__label").forEach(function (label) {
-      if (label.textContent.trim() === "Detail Migration") {
-        var section = label.closest("section");
-        if (section) section.remove();
-      }
-    });
-
-    document.querySelectorAll("a").forEach(function (anchor) {
-      var text = anchor.textContent.trim();
-      if (text === "실행 근거 확인") {
-        anchor.textContent = "프로젝트 상세 보기";
-        anchor.href = "/references/?type=project";
-      }
-      if (text === "외부 기록 보기") anchor.textContent = "언론 기사 보기";
-    });
-  }
-
   document.addEventListener("click", function (event) {
     var trigger = event.target.closest("a[data-tally-popup]");
     if (!trigger) return;
@@ -182,7 +161,6 @@
   });
 
   function init() {
-    applyOwnerPreviewCleanup();
     normalizeInquiryLinks();
   }
 

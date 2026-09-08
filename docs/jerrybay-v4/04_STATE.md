@@ -241,3 +241,51 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 - Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `P0/P1/P2 = 0`, STOP before Merge.
 - STOP before Merge. Under current Vercel integration, Merge is Production-impacting.
+
+## Current Gate / Evidence / Next Action — P08 independent UX/UI · visual design · IA audit remediation
+
+### Current Gate
+
+- Gate: `WRITER CANDIDATE READY / OWNER RELEASE AUTHORITY RETAINED`.
+- V3 route: `JERRY → P08 ASTRA PROJECT PM → TE03 Design Experience`, with `TE04 Content Intelligence + TE09 Korean Market` limited to factual copy correction; Codex/source and Browser were pulled only for the accepted audit findings.
+- Base: `origin/main@46202e9c430672526724e881c0a9fc0678be613d`.
+- Branch/worktree: `fix/p08-ux-ia-remediation-20260908` / `C:\Users\jerry\orca\workspaces\JERRYBAY_SITE\p08-ux-ia-remediation-20260908`.
+- No new content, unsupported claim, claim-boundary expansion, commit, push, Preview deployment, Production mutation, social send, or email send occurred.
+
+### Evidence
+
+- Audit remediation contract: `node scripts/qa/validate-ux-remediation.mjs` → `29/29 PASS`.
+- Browser matrix: all `14` canonical pages passed at desktop `1440×900`, tablet `768×1024`, and mobile `390×844` (`42/42` route-viewport checks): one H1, exact global navigation order, no horizontal overflow, and no broken rendered image.
+- Interaction QA: mobile menu opens/closes with `aria-expanded`, Escape returns focus; the Tally inquiry opens as a modal without URL navigation, renders one iframe, closes cleanly, and returns focus.
+- Reference filters: `프로젝트 6` renders exactly `6`; `기획·정부사업 14` renders exactly `14` using one content-type axis.
+- Casper responsive contracts: 4-item scope becomes `2×2` on tablet and one column on mobile; 5-step flow becomes a balanced tablet grid and one column on mobile. Claim-boundary statements remain unchanged.
+- `git diff --check` → PASS; JavaScript syntax checks → PASS; external-style/font adversarial suite → `29/29 PASS`.
+- Current HTML validation reports `61` existing/scoped findings versus `65` on the Production baseline; the remediation introduced no net increase. The legacy all-site validator is stale because it still requires the audit-rejected legacy IA routes and labels, so it is not a release gate for this candidate.
+
+### Next Action
+
+- Present the local completed screen to Jerry. Do not commit, push, deploy, merge, or mutate Production until Jerry gives an explicit release instruction for this exact remediation candidate.
+
+## Current Gate / Evidence / Next Action — P08 Korean B2B content and claim-integrity audit remediation
+
+### Current Gate
+
+- Gate: `CONTENT WRITER CANDIDATE READY / EXTERNAL TALLY COPY PENDING / OWNER RELEASE AUTHORITY RETAINED`.
+- V3 route: `JERRY → P08 ASTRA PROJECT PM → TE04 Content Intelligence + TE09 Korean Market`, with Claim/QA support. TE03 was not reopened because the supplied audit did not require a new visual direction.
+- Same branch/worktree/base as the accepted UX/IA remediation: `fix/p08-ux-ia-remediation-20260908` / `C:\Users\jerry\orca\workspaces\JERRYBAY_SITE\p08-ux-ia-remediation-20260908` / `origin/main@46202e9c430672526724e881c0a9fc0678be613d`.
+- No new offer, unsupported KPI, client-delivery claim, commit, push, Preview deployment, Production mutation, social send, or email send occurred.
+
+### Evidence
+
+- Content/claim contract: `node scripts/qa/validate-content-claim-remediation.mjs` → `19/19 PASS`.
+- Existing UX/IA contract after canonical CTA and claim-label update: `node scripts/qa/validate-ux-remediation.mjs` → `29/29 PASS`.
+- Browser matrix: the 13 audited pages passed desktop `1440×900`, tablet `768×1024`, and mobile `390×844` (`39/39`): one H1, exact five-item shared navigation, no horizontal overflow, no broken images, no retired/corrupted audit strings, and canonical Tally CTA labels.
+- Visual inspection PASS: Home, Business, References and Casper hero layouts render without clipping or hierarchy breakage. The References planning disclaimer is filter-aware and appears with exactly the planning records.
+- Popup behavior PASS: the site keeps the current URL and opens the Tally form as one modal iframe. The public Tally form itself still exposes the provider-owned title `상담및문의`, old intro, `AI Work Transformation Sprint`, and `Fit Call 준비`; those four provider-side fields are outside this source candidate.
+- Claim truth retained: AIKUS and OMYQT remain current products without customer-outcome claims; INVIT is globally `HOLD · 가설 검증 대기`; Casper/Renault/Fashion explicitly separate external project evidence from `개인 경력 기술`; Casper project/company award and `6일·1,164회` evidence are not converted into Jerry personal performance.
+- JavaScript syntax checks and `git diff --check` → PASS. The older `validate-site.mjs` is not a current gate because it encodes the superseded 18-route IA, retired CTA labels and deleted Quick-Win contract.
+
+### Next Action
+
+- External Tally builder: apply only the four supplied microcopy replacements, then re-open the modal and verify the saved public form. Do not submit test personal data.
+- After external Tally verification, present this combined UX/IA + content/claim candidate for Jerry's exact release decision. Do not commit, push, deploy, merge, or mutate Production under this gate.

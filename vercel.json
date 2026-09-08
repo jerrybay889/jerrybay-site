@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/capabilities/", "destination": "/about/#capabilities", "permanent": true },
+    { "source": "/work/", "destination": "/references/", "permanent": true },
+    { "source": "/collaborate/", "destination": "/business/", "permanent": true }
+  ]
 }

@@ -2,6 +2,54 @@
 (function () {
   "use strict";
 
+  var FORM_URL = "https://tally.so/r/Y5bypd";
+  var pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  var links = [
+    { key: "about", label: "소개", href: "/about/" },
+    { key: "business", label: "기업·기관", href: "/business/" },
+    { key: "insights", label: "인사이트", href: "/insights/" },
+    { key: "references", label: "레퍼런스", href: "/references/" },
+    { key: "inquiry", label: "협업 문의", href: FORM_URL, popup: true },
+  ];
+
+  function isCurrent(key) {
+    if (key === "about") return pathname === "/about";
+    if (key === "business") return pathname === "/business";
+    if (key === "insights") return pathname === "/insights" || pathname.indexOf("/insights/") === 0;
+    if (key === "references") return pathname === "/references" || pathname.indexOf("/references/") === 0;
+    return false;
+  }
+
+  function appendLinks(nav) {
+    var fragment = document.createDocumentFragment();
+    links.forEach(function (item) {
+      var anchor = document.createElement("a");
+      anchor.href = item.href;
+      anchor.textContent = item.label;
+      if (item.popup) anchor.setAttribute("data-tally-popup", "");
+      if (isCurrent(item.key)) anchor.setAttribute("aria-current", "page");
+      fragment.appendChild(anchor);
+    });
+    nav.replaceChildren(fragment);
+  }
+
+  var headerNav = document.getElementById("primary-nav");
+  if (headerNav) {
+    headerNav.setAttribute("aria-label", "주 메뉴");
+    appendLinks(headerNav);
+  }
+  document.querySelectorAll(".site-footer nav").forEach(function (nav) { appendLinks(nav); });
+
+  var brand = document.querySelector(".site-header .brand");
+  if (brand) {
+    if (pathname === "/") brand.setAttribute("aria-current", "page");
+    else brand.removeAttribute("aria-current");
+  }
+})();
+
+(function () {
+  "use strict";
+
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.getElementById("primary-nav");
   if (!toggle || !nav) return;
@@ -150,6 +198,7 @@
       anchor.href = FORM_URL;
       anchor.removeAttribute("target");
       anchor.removeAttribute("rel");
+      anchor.textContent = anchor.closest("nav") ? "협업 문의" : "기업·기관 협업 문의";
     });
   }
 

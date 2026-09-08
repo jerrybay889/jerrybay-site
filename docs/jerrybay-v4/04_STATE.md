@@ -246,11 +246,11 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 ### Current Gate
 
-- Gate: `WRITER CANDIDATE READY / OWNER RELEASE AUTHORITY RETAINED`.
+- Gate: `OWNER RELEASE AUTHORITY CONSUMED / FINAL REVIEW REMEDIATION IN PROGRESS`.
 - V3 route: `JERRY → P08 ASTRA PROJECT PM → TE03 Design Experience`, with `TE04 Content Intelligence + TE09 Korean Market` limited to factual copy correction; Codex/source and Browser were pulled only for the accepted audit findings.
 - Base: `origin/main@46202e9c430672526724e881c0a9fc0678be613d`.
 - Branch/worktree: `fix/p08-ux-ia-remediation-20260908` / `C:\Users\jerry\orca\workspaces\JERRYBAY_SITE\p08-ux-ia-remediation-20260908`.
-- No new content, unsupported claim, claim-boundary expansion, commit, push, Preview deployment, Production mutation, social send, or email send occurred.
+- Initial audit implementation commit=`32262c47decc99a160379dc8d49c3c976af55fe8`. No new content, unsupported claim, claim-boundary expansion, push, Preview deployment, Production mutation, social send, or email send occurred at this checkpoint.
 
 ### Evidence
 
@@ -264,21 +264,21 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 ### Next Action
 
-- Present the local completed screen to Jerry. Do not commit, push, deploy, merge, or mutate Production until Jerry gives an explicit release instruction for this exact remediation candidate.
+- Jerry supplied the explicit final deployment instruction. Close only the fresh Reviewer findings for fallback navigation, duplicated Casper copy, and this state receipt; then freeze a new exact Head, re-review, and continue through the normal PR → Production path without another intermediate Owner approval.
 
 ## Current Gate / Evidence / Next Action — P08 Korean B2B content and claim-integrity audit remediation
 
 ### Current Gate
 
-- Gate: `CONTENT WRITER CANDIDATE READY / EXTERNAL TALLY COPY PENDING / OWNER RELEASE AUTHORITY RETAINED`.
+- Gate: `OWNER RELEASE AUTHORITY CONSUMED / SOURCE RELEASE ACTIVE / EXTERNAL TALLY COPY SEPARATE`.
 - V3 route: `JERRY → P08 ASTRA PROJECT PM → TE04 Content Intelligence + TE09 Korean Market`, with Claim/QA support. TE03 was not reopened because the supplied audit did not require a new visual direction.
 - Same branch/worktree/base as the accepted UX/IA remediation: `fix/p08-ux-ia-remediation-20260908` / `C:\Users\jerry\orca\workspaces\JERRYBAY_SITE\p08-ux-ia-remediation-20260908` / `origin/main@46202e9c430672526724e881c0a9fc0678be613d`.
-- No new offer, unsupported KPI, client-delivery claim, commit, push, Preview deployment, Production mutation, social send, or email send occurred.
+- Initial audit implementation commit=`32262c47decc99a160379dc8d49c3c976af55fe8`. No new offer, unsupported KPI, client-delivery claim, push, Preview deployment, Production mutation, social send, or email send occurred at this checkpoint.
 
 ### Evidence
 
-- Content/claim contract: `node scripts/qa/validate-content-claim-remediation.mjs` → `19/19 PASS`.
-- Existing UX/IA contract after canonical CTA and claim-label update: `node scripts/qa/validate-ux-remediation.mjs` → `29/29 PASS`.
+- Content/claim contract before final-review correction: `node scripts/qa/validate-content-claim-remediation.mjs` → `19/19 PASS`; the corrected contract adds the duplicated Casper-copy regression check.
+- Existing UX/IA contract before final-review correction: `node scripts/qa/validate-ux-remediation.mjs` → `29/29 PASS`; the corrected contract extends fallback-navigation coverage to all canonical content pages.
 - Browser matrix: the 13 audited pages passed desktop `1440×900`, tablet `768×1024`, and mobile `390×844` (`39/39`): one H1, exact five-item shared navigation, no horizontal overflow, no broken images, no retired/corrupted audit strings, and canonical Tally CTA labels.
 - Visual inspection PASS: Home, Business, References and Casper hero layouts render without clipping or hierarchy breakage. The References planning disclaimer is filter-aware and appears with exactly the planning records.
 - Popup behavior PASS: the site keeps the current URL and opens the Tally form as one modal iframe. The public Tally form itself still exposes the provider-owned title `상담및문의`, old intro, `AI Work Transformation Sprint`, and `Fit Call 준비`; those four provider-side fields are outside this source candidate.
@@ -287,5 +287,5 @@ Fresh separate fixed-SHA review pending at the resolved Current PR Head → if `
 
 ### Next Action
 
-- External Tally builder: apply only the four supplied microcopy replacements, then re-open the modal and verify the saved public form. Do not submit test personal data.
-- After external Tally verification, present this combined UX/IA + content/claim candidate for Jerry's exact release decision. Do not commit, push, deploy, merge, or mutate Production under this gate.
+- The external Tally builder's four provider-owned microcopy fields remain a separate residual; they do not change this static source candidate and no test personal data may be submitted.
+- Jerry's exact release decision has been received. After the bounded Reviewer corrections pass on a new fixed Head, continue through PR, Production deployment, public smoke, and terminal Notion receipt.

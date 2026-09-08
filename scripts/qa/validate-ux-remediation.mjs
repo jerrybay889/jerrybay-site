@@ -32,7 +32,25 @@ const navLabels = [...siteJs.matchAll(/key: "[^"]+", label: "([^"]+)"/g)].map((m
 check("P08-UX-001 global nav has one exact label order", JSON.stringify(navLabels) === JSON.stringify(["소개", "기업·기관", "인사이트", "레퍼런스", "협업 문의"]));
 check("P08-UX-001 global nav has one shared renderer", siteJs.includes("appendLinks(headerNav)") && siteJs.includes('document.querySelectorAll(".site-footer nav")'));
 
-for (const [name, html] of [["Home", home], ["Business", business], ["About", about], ["Contact fallback", contact]]) {
+const fallbackPages = [
+  ["Home", home],
+  ["Business", business],
+  ["About", about],
+  ["Contact fallback", contact],
+  ["Insights", read("insights/index.html")],
+  ["AI pilot Insight", read("insights/ai-pilot-to-operating-system/index.html")],
+  ["AIKUS Insight", read("insights/aikus-learning-to-work-execution/index.html")],
+  ["Static Search Insight", read("insights/static-first-search-foundation/index.html")],
+  ["References", references],
+  ["AIKUS Project", read("references/projects/aikus/index.html")],
+  ["OMYQT Project", read("references/projects/omyqt/index.html")],
+  ["INVIT Project", invit],
+  ["Casper Project", casper],
+  ["Renault Project", read("references/projects/renault-sm6-ai-drawing/index.html")],
+  ["Fashion Project", read("references/projects/fashion-ai-generator/index.html")],
+];
+
+for (const [name, html] of fallbackPages) {
   const header = html.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0] || "";
   const labels = [...header.matchAll(/<a[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim()).slice(1);
   check(`P08-UX-001 ${name} fallback header`, JSON.stringify(labels) === JSON.stringify(navLabels), labels.join(" / "));

@@ -190,4 +190,30 @@ ensureSingleInsertion(
   "<p class=\"claim-note\"><strong>근거 경계:</strong> 이 역할 설명은 배제협의 개인 경력 기술입니다. 외부 자료가 개인의 세부 업무 분장을 직접 증명한다는 의미는 아닙니다.</p>",
 );
 
+const canonicalContentPages = [
+  "insights/index.html",
+  "insights/ai-pilot-to-operating-system/index.html",
+  "insights/aikus-learning-to-work-execution/index.html",
+  "insights/static-first-search-foundation/index.html",
+  "references/index.html",
+  "references/projects/aikus/index.html",
+  "references/projects/omyqt/index.html",
+  "references/projects/invit/index.html",
+  "references/projects/casper-electric-ai-drawing/index.html",
+  "references/projects/renault-sm6-ai-drawing/index.html",
+  "references/projects/fashion-ai-generator/index.html",
+];
+
+for (const file of canonicalContentPages) {
+  updateOptional(file, [
+    ['<nav class="nav" id="primary-nav"><a href="/">홈</a>', '<nav class="nav" id="primary-nav" aria-label="주 메뉴"><a href="/about/">소개</a>'],
+    ['<nav class="nav" id="primary-nav" aria-label="주 메뉴"><a href="/">홈</a>', '<nav class="nav" id="primary-nav" aria-label="주 메뉴"><a href="/about/">소개</a>'],
+    ['<a href="#contact">협업 문의</a></nav>', '<a href="https://tally.so/r/Y5bypd" data-tally-popup>협업 문의</a></nav>'],
+  ]);
+}
+
+updateOptional("references/projects/casper-electric-ai-drawing/index.html", [
+  ["재사용 가능한 재사용 가능한 경험 구조", "재사용 가능한 경험 구조"],
+]);
+
 console.log("Content and claim audit replacements applied.");

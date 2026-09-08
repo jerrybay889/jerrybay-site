@@ -51,6 +51,7 @@ check("INVIT HOLD is canonical", invit.includes("현재 상태는 <strong>HOLD �
 
 check("Casper attribution note", (casper.match(/class="claim-note"/g) || []).length === 1 && casper.includes("배제협 개인의 세부 역할은 개인 경력 기술로 구분합니다."));
 check("Casper claim boundary preserved", casper.includes("재직 조직 프로젝트 참여 ≠ 개인 직계 고객 사례 ≠ ㈜글로보더 수행실적") && casper.includes("6일") && casper.includes("1,164"));
+check("Casper duplicate wording removed", !casper.includes("재사용 가능한 재사용 가능한 경험 구조"));
 check("Renault attribution note", (renault.match(/class="claim-note"/g) || []).length === 1 && renault.includes("배제협 개인의 세부 역할을 직접 증명하는 자료는 아닙니다."));
 check("Fashion attribution note", (fashion.match(/class="claim-note"/g) || []).length === 1 && fashion.includes("외부 자료가 개인의 세부 업무 분장을 직접 증명한다는 의미는 아닙니다."));
 
